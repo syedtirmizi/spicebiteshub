@@ -103,7 +103,32 @@ export default function Home() {
           </a>
         </div>
       </section>
+{/* MENU SECTION */}
+<section className="py-16 bg-black text-white text-center">
+  <h2 className="text-5xl font-bold mb-10 text-yellow-400">
+    Our Menu
+  </h2>
 
+  <div className="space-y-10">
+    <img
+      src="/menu1.png"
+      alt="Menu 1"
+      className="mx-auto rounded-xl shadow-2xl"
+    />
+
+    <img
+      src="/menu2.png"
+      alt="Menu 2"
+      className="mx-auto rounded-xl shadow-2xl"
+    />
+
+    <img
+      src="/menu3.png"
+      alt="Menu 3"
+      className="mx-auto rounded-xl shadow-2xl"
+    />
+  </div>
+</section>
     </main>
   );
 }
