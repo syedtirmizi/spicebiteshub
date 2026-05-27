@@ -129,3 +129,32 @@ export default function SpiceBitesHubWebsite() {
     </div>
   );
 }
+<section className="bg-black text-white py-16 px-6">
+  <div className="max-w-4xl mx-auto text-center">
+    
+    <h2 className="text-4xl font-bold text-red-500 mb-8">
+      Contact Us
+    </h2>
+
+    <p className="text-xl mb-4">
+      📍 7233 Fishers Landing Dr, Fishers, IN 46038
+    </p>
+
+    <p className="text-xl mb-4">
+      📞 951-454-6896
+    </p>
+
+    <p className="text-xl mb-8">
+      💬 WhatsApp: 951-454-6896 / 317-845-6574
+    </p>
+
+    <h3 className="text-3xl font-bold text-red-500 mb-4">
+      Hours of Operation
+    </h3>
+
+    <p className="text-xl">
+      Monday – Sunday: 11:00 AM – 12:00 AM
+    </p>
+
+  </div>
+</section>
