@@ -1,160 +1,109 @@
-export default function SpiceBitesHubWebsite() {
-  const menuItems = [
-    {
-      name: "Butter Chicken Bowl",
-      price: "$12.99",
-      image:
-        "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?q=80&w=1200&auto=format&fit=crop",
-    },
-    {
-      name: "Loaded Smash Burger",
-      price: "$10.99",
-      image:
-        "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1200&auto=format&fit=crop",
-    },
-    {
-      name: "Chicken Tikka Wrap",
-      price: "$9.99",
-      image:
-        "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?q=80&w=1200&auto=format&fit=crop",
-    },
-    {
-      name: "Masala Fries",
-      price: "$5.99",
-      image:
-        "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?q=80&w=1200&auto=format&fit=crop",
-    },
-  ];
-
+export default function Home() {
   return (
-    <div className="min-h-screen bg-black text-white font-sans">
-      {/* Header */}
-      <header className="bg-red-700 sticky top-0 z-50 shadow-lg">
-        <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-          <div>
-            <h1 className="text-3xl font-bold">Spice & Bites Hub</h1>
-            <p className="text-sm text-red-100">
-              Desi & American Fusion Food
+    <main className="min-h-screen bg-black text-white">
+
+      {/* Hero Section */}
+      <section className="text-center py-20 px-6 bg-gradient-to-b from-red-700 to-black">
+        <h1 className="text-6xl font-bold mb-6">
+          Spice & Bites Hub
+        </h1>
+
+        <p className="text-2xl mb-8">
+          Fresh Desi & American Fusion Food
+        </p>
+
+        <a
+          href="#menu"
+          className="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-full text-xl font-bold"
+        >
+          View Menu
+        </a>
+      </section>
+
+      {/* Menu Section */}
+      <section id="menu" className="py-20 px-6">
+        <h2 className="text-5xl font-bold text-center text-red-500 mb-12">
+          Our Menu
+        </h2>
+
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+          <div className="bg-gray-900 p-6 rounded-2xl">
+            <h3 className="text-2xl font-bold mb-2">
+              Chicken Biryani
+            </h3>
+            <p className="text-gray-300 mb-4">
+              Traditional flavorful biryani rice with chicken.
+            </p>
+            <p className="text-red-400 text-xl font-bold">
+              $14.99
             </p>
           </div>
-        </div>
-      </header>
 
-      {/* Hero */}
-      <section className="relative h-[80vh] flex items-center justify-center text-center">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop')",
-          }}
-        ></div>
-        <div className="absolute inset-0 bg-black/70"></div>
+          <div className="bg-gray-900 p-6 rounded-2xl">
+            <h3 className="text-2xl font-bold mb-2">
+              Zinger Burger
+            </h3>
+            <p className="text-gray-300 mb-4">
+              Crispy spicy chicken burger with fries.
+            </p>
+            <p className="text-red-400 text-xl font-bold">
+              $10.99
+            </p>
+          </div>
 
-        <div className="relative z-10 px-6">
-          <h2 className="text-5xl font-extrabold mb-4">
-            Fresh Flavor. <span className="text-red-500">Fast Order.</span>
-          </h2>
-          <p className="text-lg mb-6">
-            Order your favorite meals online from Spice & Bites Hub
-          </p>
+          <div className="bg-gray-900 p-6 rounded-2xl">
+            <h3 className="text-2xl font-bold mb-2">
+              Loaded Fries
+            </h3>
+            <p className="text-gray-300 mb-4">
+              Fries topped with cheese and sauces.
+            </p>
+            <p className="text-red-400 text-xl font-bold">
+              $8.99
+            </p>
+          </div>
+
         </div>
       </section>
 
-      {/* Menu */}
-      <section id="menu" className="py-16 px-6">
-        <h2 className="text-4xl text-red-500 font-bold text-center mb-10">
-          Menu
+      {/* Contact Section */}
+      <section className="bg-gray-950 py-20 px-6 text-center">
+        <h2 className="text-5xl font-bold text-red-500 mb-10">
+          Contact Us
         </h2>
 
-        <div className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto">
-          {menuItems.map((item, i) => (
-            <div
-              key={i}
-              className="bg-zinc-900 rounded-2xl overflow-hidden"
-            >
-              <img
-                src={item.image}
-                className="h-48 w-full object-cover"
-                alt={item.name}
-              />
-              <div className="p-4">
-                <h3 className="text-xl font-bold">{item.name}</h3>
-                <p className="text-red-400 font-semibold">{item.price}</p>
+        <p className="text-2xl mb-4">
+          📍 7233 Fishers Landing Dr, Fishers, IN 46038
+        </p>
 
-                <button className="mt-3 w-full bg-red-600 py-2 rounded-xl">
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-          ))}
+        <p className="text-2xl mb-4">
+          📞 951-454-6896
+        </p>
+
+        <p className="text-2xl mb-4">
+          💬 WhatsApp: 951-454-6896 / 317-845-6574
+        </p>
+
+        <h3 className="text-3xl font-bold text-red-400 mt-10 mb-4">
+          Hours of Operation
+        </h3>
+
+        <p className="text-2xl">
+          Monday – Sunday: 11:00 AM – 12:00 AM
+        </p>
+
+        <div className="mt-10">
+          <a
+            href="https://maps.google.com/?q=7233+Fishers+Landing+Dr+Fishers+IN+46038"
+            target="_blank"
+            className="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-full text-xl font-bold"
+          >
+            View Location
+          </a>
         </div>
       </section>
 
-      {/* Order Form */}
-      <section className="py-16 px-6 bg-zinc-950">
-        <h2 className="text-4xl text-center text-red-500 font-bold mb-8">
-          Place Order
-        </h2>
-
-        <form className="max-w-xl mx-auto grid gap-4">
-          <input
-            placeholder="Name"
-            className="p-3 rounded bg-black border border-gray-700"
-          />
-          <input
-            placeholder="Phone"
-            className="p-3 rounded bg-black border border-gray-700"
-          />
-          <input
-            placeholder="Address"
-            className="p-3 rounded bg-black border border-gray-700"
-          />
-          <textarea
-            placeholder="Your Order"
-            className="p-3 rounded bg-black border border-gray-700"
-            rows="4"
-          ></textarea>
-
-          <button className="bg-red-600 py-3 rounded-xl font-bold">
-            Submit Order
-          </button>
-        </form>
-      </section>
-
-      {/* Footer */}
-      <footer className="text-center py-6 bg-red-700">
-        © 2026 Spice & Bites Hub
-      </footer>
-    </div>
+    </main>
   );
 }
-<section className="bg-black text-white py-16 px-6">
-  <div className="max-w-4xl mx-auto text-center">
-    
-    <h2 className="text-4xl font-bold text-red-500 mb-8">
-      Contact Us
-    </h2>
-
-    <p className="text-xl mb-4">
-      📍 7233 Fishers Landing Dr, Fishers, IN 46038
-    </p>
-
-    <p className="text-xl mb-4">
-      📞 951-454-6896
-    </p>
-
-    <p className="text-xl mb-8">
-      💬 WhatsApp: 951-454-6896 / 317-845-6574
-    </p>
-
-    <h3 className="text-3xl font-bold text-red-500 mb-4">
-      Hours of Operation
-    </h3>
-
-    <p className="text-xl">
-      Monday – Sunday: 11:00 AM – 12:00 AM
-    </p>
-
-  </div>
-</section>
