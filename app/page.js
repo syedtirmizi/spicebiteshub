@@ -1,213 +1,172 @@
 export default function Home() {
+  const foods = [
+    {
+      title: "Spicy Supreme Pizza",
+      desc: "Loaded with spicy chicken, veggies and mozzarella cheese.",
+      image:
+        "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1200&auto=format&fit=crop",
+    },
+    {
+      title: "Chicken Gyro",
+      desc: "Grilled chicken, fresh veggies, garlic sauce wrapped in pita.",
+      image:
+        "https://images.unsplash.com/photo-1645189394192-5f6f4b1ef0f4?q=80&w=1200&auto=format&fit=crop",
+    },
+    {
+      title: "Buffalo Wings",
+      desc: "Juicy wings tossed in our signature spicy sauce.",
+      image:
+        "https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=1200&auto=format&fit=crop",
+    },
+    {
+      title: "Signature Biryani",
+      desc: "Aromatic basmati rice layered with rich spices and tender meat.",
+      image:
+        "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?q=80&w=1200&auto=format&fit=crop",
+    },
+    {
+      title: "Beef Nihari",
+      desc: "Slow-cooked traditional desi curry packed with bold authentic flavor.",
+      image:
+        "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop",
+    },
+  ];
+
   return (
-    <main className="bg-black text-white">
+    <main className="bg-black text-white overflow-hidden">
 
-      {/* HERO SECTION */}
-      <section className="relative min-h-screen bg-black text-white overflow-hidden">
+      {/* HERO */}
+      <section className="relative min-h-screen">
 
-        {/* Background Image */}
+        {/* Background */}
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-40"
+          className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=2070&auto=format&fit=crop')",
+              "url('https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=2070&auto=format&fit=crop')",
           }}
         />
 
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/60" />
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/70" />
 
         {/* Navbar */}
-        <nav className="relative z-10 flex items-center justify-between px-6 py-5">
+        <nav className="relative z-20 flex items-center justify-between px-6 md:px-14 py-6">
 
-          {/* Logo Left */}
-          <div className="flex items-center gap-3">
+          {/* Logo */}
+          <div className="flex items-center gap-4">
             <img
               src="/logo.png"
-              alt="Spice Bites Hub"
-              className="h-16 w-auto object-contain"
+              alt="Logo"
+              className="h-20 object-contain"
             />
 
             <div>
-              <h1 className="text-3xl font-extrabold text-red-600">
+              <h1 className="text-2xl md:text-4xl font-black text-red-600 leading-none">
                 SPICE & BITES HUB
               </h1>
 
-              <p className="text-sm text-gray-300">
+              <p className="text-gray-300 text-sm mt-1">
                 American • Mediterranean • Desi
               </p>
             </div>
           </div>
 
-          {/* Menu Links */}
-          <div className="hidden md:flex gap-8 text-lg font-semibold">
-            <a href="#menu" className="hover:text-red-500">Menu</a>
-            <a href="#favorites" className="hover:text-red-500">Favorites</a>
-            <a href="#contact" className="hover:text-red-500">Contact</a>
+          {/* Menu */}
+          <div className="hidden md:flex gap-10 font-bold text-lg">
+            <a href="#" className="hover:text-red-500">HOME</a>
+            <a href="#menu" className="hover:text-red-500">MENU</a>
+            <a href="#favorites" className="hover:text-red-500">FEATURES</a>
+            <a href="#contact" className="hover:text-red-500">CONTACT</a>
           </div>
+
+          {/* Button */}
+          <a
+            href="tel:9514546896"
+            className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-xl font-bold"
+          >
+            ORDER NOW
+          </a>
         </nav>
 
         {/* Hero Content */}
-        <div className="relative z-10 flex flex-col justify-center px-6 md:px-16 pt-24 pb-32 max-w-4xl">
+        <div className="relative z-10 px-6 md:px-16 pt-20 md:pt-32 max-w-3xl">
 
-          <h1 className="text-6xl md:text-8xl font-black leading-none text-red-600">
+          <h1 className="text-6xl md:text-8xl font-black text-red-600 leading-none">
             SPICE &
             <br />
             BITES HUB
           </h1>
 
-          <p className="mt-6 text-2xl md:text-3xl text-gray-200 italic leading-relaxed">
-  Pizza • Gyro • Wings • Desi
-  <br />
-  All Under One Roof
-  <br />
-  <span className="text-yellow-400 text-xl md:text-2xl font-semibold">
-    Where Every Bite Tells A Story
-  </span>
-</p>
-
-          <p className="mt-6 text-lg text-gray-300 max-w-2xl">
-            Fresh pizza, juicy wings, authentic biryani,
-            sizzling gyros and bold desi flavors made fresh every day.
+          <p className="mt-6 text-3xl md:text-5xl italic text-white">
+            Where Every Bite Tells A Story
           </p>
 
-          <div className="mt-10 flex gap-4">
+          <div className="mt-10">
             <a
               href="#menu"
-              className="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-full text-lg font-bold"
+              className="bg-red-600 hover:bg-red-700 px-10 py-5 rounded-2xl text-xl font-bold inline-block"
             >
-              View Menu
-            </a>
-
-            <a
-              href="tel:9514546896"
-              className="border border-white px-8 py-4 rounded-full text-lg font-bold hover:bg-white hover:text-black"
-            >
-              Call Now
+              ORDER NOW
             </a>
           </div>
         </div>
       </section>
 
-      {/* FEATURED ITEMS */}
+      {/* FEATURED */}
       <section
         id="favorites"
-        className="py-20 bg-zinc-900 px-6"
+        className="bg-black py-20 px-4 md:px-10"
       >
-        <h2 className="text-5xl font-bold text-center text-yellow-400 mb-14">
-          Featured Favorites
-        </h2>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-10 max-w-7xl mx-auto">
+        <div className="text-center mb-14">
+          <p className="text-red-500 font-bold tracking-[4px]">
+            OUR BEST PICKS
+          </p>
 
-          {/* Pizza */}
-          <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1400&auto=format&fit=crop"
-              alt="Pizza"
-              className="h-72 w-full object-cover"
-            />
+          <h2 className="text-5xl md:text-7xl font-black text-white mt-3">
+            FEATURED FAVORITES
+          </h2>
+        </div>
 
-            <div className="p-6">
-              <h3 className="text-3xl font-bold mb-3 text-yellow-400">
-                Signature Pizza
-              </h3>
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
 
-              <p className="text-gray-300">
-                Loaded with fresh toppings and melted mozzarella cheese.
-              </p>
+          {foods.map((food, index) => (
+            <div
+              key={index}
+              className="bg-zinc-900 rounded-3xl overflow-hidden border border-yellow-500/40 hover:scale-105 transition duration-300"
+            >
+              <img
+                src={food.image}
+                alt={food.title}
+                className="h-72 w-full object-cover"
+              />
+
+              <div className="p-6 text-center">
+                <h3 className="text-3xl font-black text-yellow-400 mb-4">
+                  {food.title}
+                </h3>
+
+                <p className="text-gray-300">
+                  {food.desc}
+                </p>
+              </div>
             </div>
-          </div>
-
-          {/* Gyro */}
-          <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1645189394192-5f6f4b1ef0f4?q=80&w=1200&auto=format&fit=crop"
-              alt="Chicken Gyro"
-              className="h-72 w-full object-cover"
-            />
-
-            <div className="p-6">
-              <h3 className="text-3xl font-bold mb-3 text-yellow-400">
-                Chicken Gyro
-              </h3>
-
-              <p className="text-gray-300">
-                Served with fresh lettuce, tomatoes, and white sauce.
-              </p>
-            </div>
-          </div>
-
-          {/* Biryani */}
-          <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0?q=80&w=1200&auto=format&fit=crop"
-              alt="Biryani"
-              className="h-72 w-full object-cover"
-            />
-
-            <div className="p-6">
-              <h3 className="text-3xl font-bold mb-3 text-yellow-400">
-                Signature Biryani
-              </h3>
-
-              <p className="text-gray-300">
-                Aromatic basmati rice layered with rich spices and tender meat.
-              </p>
-            </div>
-          </div>
-
-          {/* Nihari */}
-          <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop"
-              alt="Lamb Nihari"
-              className="h-72 w-full object-cover"
-            />
-
-            <div className="p-6">
-              <h3 className="text-3xl font-bold mb-3 text-yellow-400">
-                Lamb Nihari
-              </h3>
-
-              <p className="text-gray-300">
-                Slow-cooked traditional desi curry packed with bold authentic flavor.
-              </p>
-            </div>
-          </div>
-
-          {/* Wings */}
-          <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=1200&auto=format&fit=crop"
-              alt="Wings"
-              className="h-72 w-full object-cover"
-            />
-
-            <div className="p-6">
-              <h3 className="text-3xl font-bold mb-3 text-yellow-400">
-                Bone-In Wings
-              </h3>
-
-              <p className="text-gray-300">
-                Crispy wings tossed in your favorite flavors.
-              </p>
-            </div>
-          </div>
+          ))}
 
         </div>
       </section>
 
-      {/* HOURS + LOCATION */}
+      {/* CONTACT */}
       <section
         id="contact"
-        className="py-20 px-6 text-center"
+        className="bg-zinc-950 py-20 text-center px-6"
       >
-        <h2 className="text-5xl font-bold text-yellow-400 mb-10">
+        <h2 className="text-5xl font-black text-yellow-400 mb-10">
           Visit Us
         </h2>
 
-        <div className="space-y-6 text-xl text-gray-300">
+        <div className="space-y-5 text-xl text-gray-300">
           <p>📍 7233 Fishers Landing Dr, Fishers, IN 46038</p>
 
           <p>📞 951-454-6896</p>
@@ -219,13 +178,13 @@ export default function Home() {
       {/* MENU */}
       <section
         id="menu"
-        className="py-20 bg-zinc-900 text-center px-6"
+        className="bg-black py-20 px-6"
       >
-        <h2 className="text-5xl font-bold text-yellow-400 mb-12">
-          Our Menu
+        <h2 className="text-center text-5xl font-black text-yellow-400 mb-14">
+          FULL MENU
         </h2>
 
-        <div className="space-y-10 max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto space-y-10">
           <img
             src="/menu1.png"
             alt="Menu 1"
@@ -245,17 +204,6 @@ export default function Home() {
           />
         </div>
       </section>
-
-      {/* FOOTER */}
-      <footer className="bg-black py-10 text-center border-t border-zinc-800">
-        <h3 className="text-3xl font-bold text-yellow-400 mb-4">
-          Spice & Bites Hub
-        </h3>
-
-        <p className="text-gray-400">
-          Fresh Flavor • Family Friendly • Late Night Dining
-        </p>
-      </footer>
 
     </main>
   );
