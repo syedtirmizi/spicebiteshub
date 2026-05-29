@@ -1,41 +1,87 @@
 export default function Home() {
   return (
-    <main className="bg-black text-white min-h-screen">
+    <main className="bg-black text-white">
 
       {/* HERO SECTION */}
-      <section
-        className="h-screen bg-cover bg-center flex flex-col justify-center items-center text-center px-6"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2070&auto=format&fit=crop')",
-        }}
-      >
-        <div className="bg-black/70 p-8 rounded-2xl">
-        <img
-             src="/logo.png"
-             alt="Spice & Bites Hub Logo"
-             className="w-56 mx-auto mb-6"
+      <section className="relative min-h-screen bg-black text-white overflow-hidden">
+
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-40"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=2070&auto=format&fit=crop')",
+          }}
+        />
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/60" />
+
+        {/* Navbar */}
+        <nav className="relative z-10 flex items-center justify-between px-6 py-5">
+
+          {/* Logo Left */}
+          <div className="flex items-center gap-3">
+            <img
+              src="/logo.png"
+              alt="Spice Bites Hub"
+              className="h-16 w-auto object-contain"
             />
-          <h1 className="text-6xl md:text-8xl font-extrabold text-red-400 mb-4">
-            Spice & Bites Hub
+
+            <div>
+              <h1 className="text-3xl font-extrabold text-red-600">
+                SPICE & BITES HUB
+              </h1>
+
+              <p className="text-sm text-gray-300">
+                American • Mediterranean • Desi
+              </p>
+            </div>
+          </div>
+
+          {/* Menu Links */}
+          <div className="hidden md:flex gap-8 text-lg font-semibold">
+            <a href="#menu" className="hover:text-red-500">Menu</a>
+            <a href="#favorites" className="hover:text-red-500">Favorites</a>
+            <a href="#contact" className="hover:text-red-500">Contact</a>
+          </div>
+        </nav>
+
+        {/* Hero Content */}
+        <div className="relative z-10 flex flex-col justify-center px-6 md:px-16 pt-24 pb-32 max-w-4xl">
+
+          <h1 className="text-6xl md:text-8xl font-black leading-none text-red-600">
+            SPICE &
+            <br />
+            BITES HUB
           </h1>
 
-          <p className="text-xl md:text-2xl mb-6">
-              American • Mediterranean • Desi — All Under One Roof
-            </p>
-          
+          <p className="mt-6 text-2xl md:text-3xl text-gray-200 italic leading-relaxed">
+  Pizza • Gyro • Wings • Desi
+  <br />
+  All Under One Roof
+  <br />
+  <span className="text-yellow-400 text-xl md:text-2xl font-semibold">
+    Where Every Bite Tells A Story
+  </span>
+</p>
 
-          <div className="flex gap-4 justify-center flex-wrap">
+          <p className="mt-6 text-lg text-gray-300 max-w-2xl">
+            Fresh pizza, juicy wings, authentic biryani,
+            sizzling gyros and bold desi flavors made fresh every day.
+          </p>
+
+          <div className="mt-10 flex gap-4">
             <a
               href="#menu"
-              className="bg-yellow-400 text-black px-8 py-4 rounded-full font-bold hover:bg-yellow-300 transition"
+              className="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-full text-lg font-bold"
             >
               View Menu
             </a>
 
             <a
               href="tel:9514546896"
-              className="border border-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-black transition"
+              className="border border-white px-8 py-4 rounded-full text-lg font-bold hover:bg-white hover:text-black"
             >
               Call Now
             </a>
@@ -43,30 +89,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ABOUT */}
-      <section className="py-20 px-6 text-center max-w-5xl mx-auto">
-        <h2 className="text-5xl font-bold text-yellow-400 mb-8">
-          Welcome to Spice & Bites Hub
-        </h2>
-
-        <p className="text-xl text-gray-300 leading-9">
-          Serving delicious pizzas, juicy gyros, crispy wings, signature biryani,
-          wraps, desserts, and more in Fishers, Indiana. Fresh ingredients,
-          bold flavors, and late-night dining all week long.
-        </p>
-      </section>
-
       {/* FEATURED ITEMS */}
-      <section className="py-20 bg-zinc-900 px-6">
+      <section
+        id="favorites"
+        className="py-20 bg-zinc-900 px-6"
+      >
         <h2 className="text-5xl font-bold text-center text-yellow-400 mb-14">
           Featured Favorites
         </h2>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-10 max-w-7xl mx-auto">
 
+          {/* Pizza */}
           <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
             <img
-              src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1200&auto=format&fit=crop"
+              src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1400&auto=format&fit=crop"
               alt="Pizza"
               className="h-72 w-full object-cover"
             />
@@ -82,12 +119,13 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Gyro */}
           <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
             <img
-             src="/gyro.jpg"
-  alt="Chicken Gyro"
-  className="h-72 w-full object-cover"
-/>
+              src="https://images.unsplash.com/photo-1645189394192-5f6f4b1ef0f4?q=80&w=1200&auto=format&fit=crop"
+              alt="Chicken Gyro"
+              className="h-72 w-full object-cover"
+            />
 
             <div className="p-6">
               <h3 className="text-3xl font-bold mb-3 text-yellow-400">
@@ -99,40 +137,46 @@ export default function Home() {
               </p>
             </div>
           </div>
-<div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
-  <img
-    src="https://images.unsplash.com/photo-1701579231349-d7459c40919d?q=80&w=1200&auto=format&fit=crop"
-    alt="Biryani"
-    className="h-72 w-full object-cover"
-  />
 
-  <div className="p-6">
-    <h3 className="text-3xl font-bold mb-3 text-yellow-400">
-      Signature Biryani
-    </h3>
+          {/* Biryani */}
+          <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
+            <img
+              src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0?q=80&w=1200&auto=format&fit=crop"
+              alt="Biryani"
+              className="h-72 w-full object-cover"
+            />
 
-    <p className="text-gray-300">
-      Aromatic basmati rice layered with rich spices and tender meat.
-    </p>
-  </div>
-</div>
-<div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
-  <img
-  src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?q=80&w=1200&auto=format&fit=crop"
-  alt="Lamb Nihari"
-  className="h-72 w-full object-cover"
-/>
+            <div className="p-6">
+              <h3 className="text-3xl font-bold mb-3 text-yellow-400">
+                Signature Biryani
+              </h3>
 
-  <div className="p-6">
-    <h3 className="text-3xl font-bold mb-3 text-yellow-400">
-      Lamb Nihari
-    </h3>
+              <p className="text-gray-300">
+                Aromatic basmati rice layered with rich spices and tender meat.
+              </p>
+            </div>
+          </div>
 
-    <p className="text-gray-300">
-      Slow-cooked traditional desi curry packed with bold authentic flavor.
-    </p>
-  </div>
-</div>
+          {/* Nihari */}
+          <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
+            <img
+              src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop"
+              alt="Lamb Nihari"
+              className="h-72 w-full object-cover"
+            />
+
+            <div className="p-6">
+              <h3 className="text-3xl font-bold mb-3 text-yellow-400">
+                Lamb Nihari
+              </h3>
+
+              <p className="text-gray-300">
+                Slow-cooked traditional desi curry packed with bold authentic flavor.
+              </p>
+            </div>
+          </div>
+
+          {/* Wings */}
           <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
             <img
               src="https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=1200&auto=format&fit=crop"
@@ -155,7 +199,10 @@ export default function Home() {
       </section>
 
       {/* HOURS + LOCATION */}
-      <section className="py-20 px-6 text-center">
+      <section
+        id="contact"
+        className="py-20 px-6 text-center"
+      >
         <h2 className="text-5xl font-bold text-yellow-400 mb-10">
           Visit Us
         </h2>
