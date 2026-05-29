@@ -142,7 +142,7 @@ export default function Home() {
 
       <div className="p-5 text-center">
         <h3 className="text-3xl font-bold text-yellow-400">
-          Spicy Supreme Pizza
+          Signature Pizza
         </h3>
 
         <p className="text-gray-300 mt-3">
