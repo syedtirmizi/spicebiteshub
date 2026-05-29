@@ -84,7 +84,7 @@ export default function Home() {
 
           <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
             <img
-  src="https://images.unsplash.com/photo-1643076491138-30d3e1f06f58?q=80&w=1200&auto=format&fit=crop"
+             src="/gyro.jpg"
   alt="Chicken Gyro"
   className="h-72 w-full object-cover"
 />
