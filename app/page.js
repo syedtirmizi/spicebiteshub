@@ -3,7 +3,7 @@ export default function Home() {
     <main className="bg-black text-white overflow-x-hidden">
 
       {/* HERO SECTION */}
-      <section className="relative min-h-screen overflow-hidden">
+      <section className="relative h-[700px] overflow-hidden">
 
         {/* Background Image */}
         <div
@@ -22,12 +22,22 @@ export default function Home() {
 
           {/* Logo */}
           <div className="flex items-center gap-4">
-            <img
-              src="/logo.png"
-              alt="Spice & Bites Hub"
-              className="h-20 w-auto"
-            />
-          </div>
+
+  <img
+    src="/logo.png"
+    alt="Spice & Bites Hub"
+    className="h-20 w-auto"
+  />
+
+  <div>
+      <p className="text-sm text-gray-300 mt-1">
+      American • Mediterranean • Desi
+      <br />
+      All Under One Roof
+    </p>
+  </div>
+
+</div>
 
           {/* Menu Links */}
           <div className="hidden md:flex items-center gap-12 text-lg font-bold">
@@ -65,7 +75,7 @@ export default function Home() {
         </nav>
 
         {/* HERO CONTENT */}
-        <div className="relative z-10 px-8 md:px-16 pt-24 pb-32 max-w-3xl">
+        <div className="relative z-10 px-8 md:px-16 pt-12 pb-32 max-w-3xl">
 
           <h1 className="text-7xl md:text-9xl font-black leading-none text-red-600 uppercase">
             Spice &
@@ -84,12 +94,7 @@ export default function Home() {
 
           <p className="mt-8 text-xl text-gray-300 leading-relaxed">
             Pizza • Gyro • Wings • Biryani • Nihari
-            <br />
-            American • Mediterranean • Desi
-            <br />
-            All Under One Roof
-          </p>
-
+            </p>
           <div className="mt-10">
             <a
               href="tel:9514546896"
@@ -102,153 +107,298 @@ export default function Home() {
       </section>
 
       {/* FEATURED FAVORITES */}
-      <section
-        id="favorites"
-        className="bg-black py-20 px-6"
-      >
+      {/* FEATURED FAVORITES */}
+<section
+  id="favorites"
+  className="bg-black py-20 px-6"
+>
 
-        <div className="text-center mb-14">
-          <p className="text-red-600 uppercase tracking-[5px] font-bold">
-            Our Best Picks
-          </p>
+  <div className="text-center mb-14">
+    <p className="text-red-600 uppercase tracking-[5px] font-bold">
+      Our Best Picks
+    </p>
 
-          <h2 className="text-6xl font-black text-white mt-3 uppercase">
-            Featured Favorites
-          </h2>
-        </div>
+    <h2 className="text-6xl font-black text-white mt-3 uppercase">
+      Featured Favorites
+    </h2>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
+    <p className="text-gray-400 mt-4 text-lg">
+      Click any item to jump directly to its menu section
+    </p>
+  </div>
 
-          {/* Pizza */}
-          <div className="bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-500">
-            <img
-              src="signature pizza.jpg"
-              alt="Pizza"
-              className="h-64 w-full object-cover"
-            />
+  <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
 
-            <div className="p-5 text-center">
-              <h3 className="text-3xl font-bold text-yellow-400">
-                Signature Pizza
-              </h3>
+    {/* Pizza */}
+    <a
+      href="#american-menu"
+      className="bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-500 hover:scale-105 transition duration-300 block"
+    >
+      <img
+        src="signature pizza.jpg"
+        alt="Pizza"
+        className="h-64 w-full object-cover"
+      />
 
-              <p className="text-gray-300 mt-3">
-                Loaded with pepperoni, sausage, mushrooms, green peppers, black olive and mozzarella cheese.
-              </p>
-            </div>
-          </div>
+      <div className="p-5 text-center">
+        <h3 className="text-3xl font-bold text-yellow-400">
+          Spicy Supreme Pizza
+        </h3>
 
-          {/* Gyro */}
-          <div className="bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-500">
-            <img
-              src="gyro.jpg"
-              alt="Chicken Gyro"
-              className="h-64 w-full object-cover"
-            />
+        <p className="text-gray-300 mt-3">
+          Loaded with spicy chicken, veggies and mozzarella cheese.
+        </p>
 
-            <div className="p-5 text-center">
-              <h3 className="text-3xl font-bold text-yellow-400">
-                Chicken Gyro
-              </h3>
+        <p className="mt-5 text-red-500 font-bold text-lg">
+          View American Menu →
+        </p>
+      </div>
+    </a>
 
-              <p className="text-gray-300 mt-3">
-                Grilled chicken, fresh veggies, garlic sauce wrapped in pita.
-              </p>
-            </div>
-          </div>
+    {/* Gyro */}
+    <a
+      href="#mediterranean-menu"
+      className="bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-500 hover:scale-105 transition duration-300 block"
+    >
+      <img
+        src="gyro.jpg"
+        alt="Chicken Gyro"
+        className="h-64 w-full object-cover"
+      />
 
-          {/* Wings */}
-          <div className="bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-500">
-            <img
-              src="buffalo wings.jpg"
-              alt="Buffalo Wings"
-              className="h-64 w-full object-cover"
-            />
+      <div className="p-5 text-center">
+        <h3 className="text-3xl font-bold text-yellow-400">
+          Chicken Gyro
+        </h3>
 
-            <div className="p-5 text-center">
-              <h3 className="text-3xl font-bold text-yellow-400">
-                Buffalo Wings
-              </h3>
+        <p className="text-gray-300 mt-3">
+          Grilled chicken, fresh veggies, garlic sauce wrapped in pita.
+        </p>
 
-              <p className="text-gray-300 mt-3">
-                Juicy wings tossed in our signature spicy sauce.
-              </p>
-            </div>
-          </div>
+        <p className="mt-5 text-red-500 font-bold text-lg">
+          View Mediterranean Menu →
+        </p>
+      </div>
+    </a>
 
-          {/* Biryani */}
-          <div className="bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-500">
-            <img
-              src="biryani.jpg"
-              alt="Biryani"
-              className="h-64 w-full object-cover"
-            />
+    {/* Wings */}
+    <a
+      href="#american-menu"
+      className="bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-500 hover:scale-105 transition duration-300 block"
+    >
+      <img
+        src="buffalo wings.jpg"
+        alt="Buffalo Wings"
+        className="h-64 w-full object-cover"
+      />
 
-            <div className="p-5 text-center">
-              <h3 className="text-3xl font-bold text-yellow-400">
-                Signature Biryani
-              </h3>
+      <div className="p-5 text-center">
+        <h3 className="text-3xl font-bold text-yellow-400">
+          Buffalo Wings
+        </h3>
 
-              <p className="text-gray-300 mt-3">
-                Aromatic basmati rice layered with rich spices and tender meat.
-              </p>
-            </div>
-          </div>
+        <p className="text-gray-300 mt-3">
+          Juicy wings tossed in our signature spicy sauce.
+        </p>
 
-          {/* Nihari */}
-          <div className="bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-500">
-            <img
-              src="nihari.jpg"
-              alt="Beef Nihari"
-              className="h-64 w-full object-cover"
-            />
+        <p className="mt-5 text-red-500 font-bold text-lg">
+          View American Menu →
+        </p>
+      </div>
+    </a>
 
-            <div className="p-5 text-center">
-              <h3 className="text-3xl font-bold text-yellow-400">
-                Lamb Nihari
-              </h3>
+    {/* Biryani */}
+    <a
+      href="#desi-menu"
+      className="bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-500 hover:scale-105 transition duration-300 block"
+    >
+      <img
+        src="biryani.jpg"
+        alt="Biryani"
+        className="h-64 w-full object-cover"
+      />
 
-              <p className="text-gray-300 mt-3">
-                Slow-cooked traditional desi curry packed with bold flavor.
-              </p>
-            </div>
-          </div>
+      <div className="p-5 text-center">
+        <h3 className="text-3xl font-bold text-yellow-400">
+          Signature Biryani
+        </h3>
 
-        </div>
-      </section>
+        <p className="text-gray-300 mt-3">
+          Aromatic basmati rice layered with rich spices and tender meat.
+        </p>
+
+        <p className="mt-5 text-red-500 font-bold text-lg">
+          View Desi Menu →
+        </p>
+      </div>
+    </a>
+
+    {/* Nihari */}
+    <a
+      href="#desi-menu"
+      className="bg-zinc-900 rounded-2xl overflow-hidden border border-yellow-500 hover:scale-105 transition duration-300 block"
+    >
+      <img
+        src="nihari.jpg"
+        alt="Lamb Nihari"
+        className="h-64 w-full object-cover"
+      />
+
+      <div className="p-5 text-center">
+        <h3 className="text-3xl font-bold text-yellow-400">
+          Lamb Nihari
+        </h3>
+
+        <p className="text-gray-300 mt-3">
+          Slow-cooked traditional desi curry packed with bold flavor.
+        </p>
+
+        <p className="mt-5 text-red-500 font-bold text-lg">
+          View Desi Menu →
+        </p>
+      </div>
+    </a>
+
+  </div>
+</section>
 
       {/* MENU */}
-      <section
-        id="menu"
-        className="bg-zinc-950 py-20 px-6"
-      >
+      {/* MENU SECTION */}
+<section
+  id="menu"
+  className="bg-zinc-950 py-20 px-6"
+>
 
-        <h2 className="text-6xl font-black text-center text-white uppercase mb-16">
-          Our Menu
-        </h2>
+  <h2 className="text-6xl font-black text-center text-white uppercase mb-14">
+    Our Menu
+  </h2>
 
-        <div className="space-y-12 max-w-6xl mx-auto">
+  {/* MENU BUTTONS */}
+  <div className="flex flex-wrap justify-center gap-6 mb-16">
 
-          <img
-            src="/menu1.png"
-            alt="Menu 1"
-            className="rounded-3xl shadow-2xl"
-          />
+    <a
+      href="#american-menu"
+      className="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-xl text-xl font-bold transition"
+    >
+      American Menu
+    </a>
 
-          <img
-            src="/menu2.png"
-            alt="Menu 2"
-            className="rounded-3xl shadow-2xl"
-          />
+    <a
+      href="#mediterranean-menu"
+      className="bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-4 rounded-xl text-xl font-bold transition"
+    >
+      Mediterranean Menu
+    </a>
 
-          <img
-            src="/menu3.png"
-            alt="Menu 3"
-            className="rounded-3xl shadow-2xl"
-          />
+    <a
+      href="#desi-menu"
+      className="bg-green-600 hover:bg-green-700 px-8 py-4 rounded-xl text-xl font-bold transition"
+    >
+      Desi Menu
+    </a>
 
+  </div>
+
+  {/* AMERICAN MENU */}
+  <div
+    id="american-menu"
+    className="mb-24"
+  >
+
+    <h3 className="text-5xl font-black text-red-500 text-center mb-10 uppercase">
+      American Menu
+    </h3>
+
+    <div className="max-w-6xl mx-auto">
+      <img
+        src="/menu1.png"
+        alt="American Menu"
+        className="rounded-3xl shadow-2xl w-full"
+      />
+    </div>
+
+  </div>
+
+  {/* MEDITERRANEAN MENU */}
+  <div
+    id="mediterranean-menu"
+    className="mb-24"
+  >
+
+    <h3 className="text-5xl font-black text-yellow-400 text-center mb-10 uppercase">
+      Mediterranean Menu
+    </h3>
+
+    <div className="max-w-6xl mx-auto">
+      <img
+       src="gyro.jpg"
+        alt="Mediterranean Menu"
+        className="rounded-3xl shadow-2xl w-full"
+      />
+    </div>
+
+  </div>
+
+  {/* DESI MENU */}
+  <div id="desi-menu">
+
+    <h3 className="text-5xl font-black text-green-500 text-center mb-10 uppercase">
+      Desi Menu
+    </h3>
+
+    <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
+
+      {/* Biryani */}
+      <div className="bg-black rounded-3xl overflow-hidden border border-zinc-800">
+        <img
+          src="biryani.jpg"
+          alt="Biryani"
+          className="h-72 w-full object-cover"
+        />
+
+        <div className="p-6">
+          <h4 className="text-3xl font-bold text-yellow-400 mb-3">
+            Signature Biryani
+          </h4>
+
+          <p className="text-gray-300 text-lg">
+            Rich aromatic basmati rice with authentic desi spices.
+          </p>
+
+          <p className="text-red-500 text-2xl font-bold mt-4">
+            $15.99
+          </p>
         </div>
-      </section>
+      </div>
+
+      {/* Nihari */}
+      <div className="bg-black rounded-3xl overflow-hidden border border-zinc-800">
+        <img
+          src="nihari.jpg"
+          alt="Nihari"
+          className="h-72 w-full object-cover"
+        />
+
+        <div className="p-6">
+          <h4 className="text-3xl font-bold text-yellow-400 mb-3">
+            Lamb Nihari
+          </h4>
+
+          <p className="text-gray-300 text-lg">
+            Slow-cooked traditional desi curry packed with bold flavor.
+          </p>
+
+          <p className="text-red-500 text-2xl font-bold mt-4">
+            $15.99
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
       {/* CONTACT */}
       <section
