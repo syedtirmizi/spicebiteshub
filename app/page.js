@@ -168,8 +168,121 @@ export default function Home() {
         {/* MEDITERRANEAN MENU */}
         <div id="mediterranean-menu" className="mb-24">
           <h3 className="text-5xl font-black text-yellow-400 text-center mb-10 uppercase">Mediterranean Menu</h3>
-          <div className="max-w-6xl mx-auto">
-            <img src="gyro.jpg" alt="Mediterranean Menu" className="rounded-3xl shadow-2xl w-full" />
+ 
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
+ 
+            {/* CHICKEN OVER RICE */}
+            <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+              <img
+                src="chicken over rice.jpg"
+                alt="Chicken Over Rice"
+                className="h-72 w-full object-cover"
+              />
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-2xl font-bold text-yellow-400">Chicken Over Rice</h3>
+                  <span className="text-2xl font-bold text-red-500">$12.99</span>
+                </div>
+                <p className="text-gray-300">Seasoned grilled chicken served over fragrant basmati rice with white sauce and hot sauce.</p>
+              </div>
+            </div>
+ 
+            {/* LAMB OVER RICE */}
+            <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+              <img
+                src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?q=80&w=1200&auto=format&fit=crop"
+                alt="Lamb Over Rice"
+                className="h-72 w-full object-cover"
+              />
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-2xl font-bold text-yellow-400">Lamb Over Rice</h3>
+                  <span className="text-2xl font-bold text-red-500">$14.99</span>
+                </div>
+                <p className="text-gray-300">Tender spiced lamb over fluffy basmati rice with creamy white sauce and house hot sauce.</p>
+              </div>
+            </div>
+ 
+            {/* CHICKEN GYRO */}
+            <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+              <img
+                src="gyro.jpg"
+                alt="Chicken Gyro"
+                className="h-72 w-full object-cover"
+              />
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-2xl font-bold text-yellow-400">Chicken Gyro</h3>
+                  <span className="text-2xl font-bold text-red-500">$11.99</span>
+                </div>
+                <p className="text-gray-300">Grilled chicken, fresh veggies and garlic sauce wrapped in warm pita bread.</p>
+              </div>
+            </div>
+ 
+            {/* LAMB GYRO */}
+            <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+              <img
+                src="gyro.jpg"
+                alt="Lamb Gyro"
+                className="h-72 w-full object-cover"
+              />
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-2xl font-bold text-yellow-400">Lamb Gyro</h3>
+                  <span className="text-2xl font-bold text-red-500">$13.99</span>
+                </div>
+                <p className="text-gray-300">Slow-roasted seasoned lamb with fresh tomatoes, onions and tzatziki in warm pita.</p>
+              </div>
+            </div>
+ 
+            {/* FALAFEL GYRO */}
+            <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+              <img
+                src="https://i.cdn.newsbytesapp.com/images/l82920240716142709.jpeg"
+                alt="Falafel Gyro"
+                className="h-72 w-full object-cover"
+              />
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-2xl font-bold text-yellow-400">Falafel Gyro</h3>
+                  <span className="text-2xl font-bold text-red-500">$10.99</span>
+                </div>
+                <p className="text-gray-300">Crispy golden falafel with fresh veggies, hummus and tahini wrapped in soft pita.</p>
+              </div>
+            </div>
+ 
+            {/* CHICKEN PHILLY */}
+            <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+              <img
+                src="c philly.jpg"
+                alt="Chicken Philly"
+                className="h-72 w-full object-cover"
+              />
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-2xl font-bold text-yellow-400">Chicken Philly</h3>
+                  <span className="text-2xl font-bold text-red-500">$12.99</span>
+                </div>
+                <p className="text-gray-300">Grilled chicken with sautéed peppers, onions and melted cheese on a toasted hoagie roll.</p>
+              </div>
+            </div>
+ 
+            {/* PHILLY CHEESESTEAK */}
+            <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+              <img
+                src="philly.jpg"
+                alt="Philly Cheesesteak"
+                className="h-72 w-full object-cover"
+              />
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-2xl font-bold text-yellow-400">Philly Cheesesteak</h3>
+                  <span className="text-2xl font-bold text-red-500">$13.99</span>
+                </div>
+                <p className="text-gray-300">Thinly sliced ribeye steak with sautéed onions, peppers and gooey melted cheese on a hoagie roll.</p>
+              </div>
+            </div>
+ 
           </div>
         </div>
 
