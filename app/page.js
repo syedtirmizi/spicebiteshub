@@ -158,11 +158,142 @@ export default function Home() {
         </div>
 
         {/* AMERICAN MENU */}
-        <div id="american-menu" className="mb-24">
-          <h3 className="text-5xl font-black text-red-500 text-center mb-10 uppercase">American Menu</h3>
-          <div className="max-w-6xl mx-auto">
-            <img src="/menu1.png" alt="American Menu" className="rounded-3xl shadow-2xl w-full" />
+          <div id="american-menu" className="mb-24">
+          <h3 className="text-5xl font-black text-red-500 text-center mb-16 uppercase">American Menu</h3>
+ 
+          {/* ── PIZZA ── */}
+          <div className="mb-20">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-10">
+              <div className="h-1 flex-1 bg-red-600 rounded" />
+              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🍕 Pizza</h4>
+              <div className="h-1 flex-1 bg-red-600 rounded" />
+            </div>
+ 
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
+ 
+              {/* CHEESE PIZZA */}
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="cheese pizza.jpg" alt="Cheese Pizza" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Cheese Pizza</h3>
+                    <span className="text-2xl font-bold text-red-500">$11.99</span>
+                  </div>
+                  <p className="text-gray-300">Signature pizza sauce and a generous layer of melted mozzarella cheese. Simple, cheesy and always satisfying.</p>
+                </div>
+              </div>
+ 
+              {/* PEPPERONI PIZZA */}
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?q=80&w=1200&auto=format&fit=crop" alt="Pepperoni Pizza" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Pepperoni Pizza</h3>
+                    <span className="text-2xl font-bold text-red-500">$13.99</span>
+                  </div>
+                  <p className="text-gray-300">Signature pizza sauce with pepperoni layer of melted mozzarella cheese.</p>
+                </div>
+              </div>
+ 
+              {/* SIGNATURE PIZZA */}
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="signature pizza.jpg" alt="Signature Pizza" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Signature Pizza</h3>
+                    <span className="text-2xl font-bold text-red-500">$16.99</span>
+                  </div>
+                  <p className="text-gray-300">Signature pizza sauce with pepperoni, Italian sausage, onion, fresh mushrooms, green peppers & black olive layer of melted mozzarella cheese.</p>
+                </div>
+              </div>
+ 
+              {/* PEPPERONI & SAUSAGE PIZZA */}
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?q=80&w=1200&auto=format&fit=crop" alt="Pepperoni and Sausage Pizza" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Pepperoni &amp; Sausage</h3>
+                    <span className="text-2xl font-bold text-red-500">$15.99</span>
+                  </div>
+                  <p className="text-gray-300">Signature pizza sauce with double sausage & double pepperoni layer of melted mozzarella cheese.</p>
+                </div>
+              </div>
+ 
+              {/* BUFFALO CHICKEN PIZZA */}
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="buffalo chicken pizza.jpg" alt="Buffalo Chicken Pizza" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Buffalo Chicken Pizza</h3>
+                    <span className="text-2xl font-bold text-red-500">$15.99</span>
+                  </div>
+                  <p className="text-gray-300">Hot sauce, Bermuda onions & chunks of fresh chicken layer of melted mozzarella cheese.</p>
+                </div>
+              </div>
+ 
+              {/* ITALIAN SAUSAGE PIZZA */}
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://www.thursdaynightpizza.com/wp-content/uploads/2020/11/cut-overhead_STAMP.png" alt="Italian Sausage Pizza" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Italian Sausage Pizza</h3>
+                    <span className="text-2xl font-bold text-red-500">$14.99</span>
+                  </div>
+                  <p className="text-gray-300">Signature pizza sauce with seasoned italian sausage, fresh mushroom & green pepper layer of melted mozzarella cheese.</p>
+                </div>
+              </div>
+ 
+              {/* MEAT LOVERS PIZZA */}
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="meat lovers.jpg" alt="Meat Lovers Pizza" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Meat Lovers Pizza</h3>
+                    <span className="text-2xl font-bold text-red-500">$17.99</span>
+                  </div>
+                  <p className="text-gray-300">Signature pizza sauce with sausage, pepperoni, Canadian bacon layer of melted mozzarella cheese.</p>
+                </div>
+              </div>
+ 
+              {/* VEGETARIAN PIZZA */}
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="vegi pizza.jpg" alt="Vegetarian Pizza" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Vegetarian Pizza</h3>
+                    <span className="text-2xl font-bold text-red-500">$13.99</span>
+                  </div>
+                  <p className="text-gray-300">Signature pizza sauce with onion, fresh mushrooms, green peppers & spinach layer of melted mozzarella cheese.</p>
+                </div>
+              </div>
+ 
+              {/* CHICKEN TIKKA PIZZA */}
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://flavorry.com/wp-content/uploads/2025/09/teamgreen1001_httpss.mj_.run9zT8Sikxhn8_An_ultra-close-up_AND__ecff3b71-758f-4b56-a1ea-7797418d9935_1.png" alt="Chicken Tikka Pizza" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Chicken Tikka Pizza</h3>
+                    <span className="text-2xl font-bold text-red-500">$15.99</span>
+                  </div>
+                  <p className="text-gray-300">Homemade garlic sauce with marinated chicken chunks layer of melted mozzarella cheese.</p>
+                </div>
+              </div>
+ 
+              {/* LAMB PIZZA */}
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="lamb pizza.jpg" alt="Lamb Pizza" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Lamb Pizza</h3>
+                    <span className="text-2xl font-bold text-red-500">$16.99</span>
+                  </div>
+                  <p className="text-gray-300">Homemade garlic sauce with lamb layer of melted mozzarella cheese.</p>
+                </div>
+              </div>
+ 
+            </div>
           </div>
+ 
         </div>
 
         {/* MEDITERRANEAN MENU */}
