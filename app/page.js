@@ -73,7 +73,7 @@ export default function Home() {
             <img src="signature pizza.jpg" alt="Pizza" className="h-64 w-full object-cover" />
             <div className="p-5 text-center">
               <h3 className="text-3xl font-bold text-yellow-400">Signature Pizza</h3>
-              <p className="text-gray-300 mt-3">Loaded with spicy chicken, veggies and mozzarella cheese.</p>
+              <p className="text-gray-300 mt-3">Signature pizza sauce with pepperoni, Italian sausage, onion, fresh mushrooms, green peppers &amp; black olive layer of melted mozzarella cheese.</p>
               <p className="mt-5 text-red-500 font-bold text-lg">View American Menu →</p>
             </div>
           </a>
@@ -380,7 +380,7 @@ export default function Home() {
                         🌶️ Choice of Flavors
                       </h5>
                       <div className="flex flex-wrap gap-2">
-                        {["Spicy", "Mild", "Garlic", "Spicy Garlic", "Teriyaki", "Lemon Pepper", "Suicide"].map((flavor) => (
+                        {["Spicy", "Mild", "Garlic", "Spicy Garlic", "BBQ", "Honey BBQ", "Teriyaki", "Lemon Pepper", "Suicide"].map((flavor) => (
                           <span key={flavor} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">
                             {flavor}
                           </span>
@@ -407,6 +407,106 @@ export default function Home() {
           </div>
           {/* END BONE-IN WINGS */}
 
+          {/* ── BONELESS WINGS ── */}
+          <div className="mb-20">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-4">
+              <div className="h-1 flex-1 bg-red-600 rounded" />
+              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🍗 Boneless Wings</h4>
+              <div className="h-1 flex-1 bg-red-600 rounded" />
+            </div>
+            <p className="text-center text-gray-400 text-lg italic mb-10 max-w-3xl mx-auto">
+              Made fresh daily — never frozen
+            </p>
+            <div className="max-w-3xl mx-auto">
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+                <img src="bw.jpg" alt="Boneless Wings" className="h-72 w-full object-cover" />
+                <div className="p-8">
+                  <div className="grid grid-cols-1 gap-4">
+ 
+                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">7 pcs</span>
+                        <span className="text-gray-400 ml-3">1 Flavor &amp; 1 Dip</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$7.99</span>
+                    </div>
+ 
+                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">15 pcs</span>
+                        <span className="text-gray-400 ml-3">2 Flavors &amp; 2 Dips</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$15.99</span>
+                    </div>
+ 
+                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">25 pcs</span>
+                        <span className="text-gray-400 ml-3">2 Flavors &amp; 2 Dips</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$25.99</span>
+                    </div>
+ 
+                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">35 pcs</span>
+                        <span className="text-gray-400 ml-3">3 Flavors &amp; 3 Dips</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$35.99</span>
+                    </div>
+ 
+                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">50 pcs</span>
+                        <span className="text-gray-400 ml-3">5 Flavors &amp; 5 Dips</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$50.99</span>
+                    </div>
+ 
+                    <div className="flex justify-between items-center py-4">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">75 pcs</span>
+                        <span className="text-gray-400 ml-3">6 Flavors &amp; 7 Dips</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$75.99</span>
+                    </div>
+ 
+                  </div>
+ 
+                  {/* FLAVORS & DIPS */}
+                  <div className="mt-8 grid md:grid-cols-2 gap-6">
+                    <div className="bg-zinc-800 rounded-2xl p-6">
+                      <h5 className="text-xl font-black text-red-500 uppercase tracking-widest mb-4">
+                        🌶️ Choice of Flavors
+                      </h5>
+                      <div className="flex flex-wrap gap-2">
+                        {["Spicy", "Mild", "Garlic", "Spicy Garlic", "BBQ", "Honey BBQ", "Teriyaki", "Lemon Pepper", "Suicide"].map((flavor) => (
+                          <span key={flavor} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">
+                            {flavor}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-zinc-800 rounded-2xl p-6">
+                      <h5 className="text-xl font-black text-red-500 uppercase tracking-widest mb-4">
+                        🥣 Dipping Sauce
+                      </h5>
+                      <div className="flex flex-wrap gap-2">
+                        {["Ranch", "Blue Cheese"].map((sauce) => (
+                          <span key={sauce} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">
+                            {sauce}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+ 
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* END BONELESS WINGS */}
+          
           {/* ── PASTA ── */}
           <div className="mb-20">
             <div className="flex items-center gap-4 max-w-7xl mx-auto mb-10">
@@ -1199,6 +1299,148 @@ export default function Home() {
 
   </div>
 </section>
+      
+      {/* OUR STORY */}
+      <section id="story" className="bg-zinc-950 py-24 px-6">
+        <div className="max-w-7xl mx-auto">
+ 
+          {/* HEADER */}
+          <div className="text-center mb-20">
+            <p className="text-red-600 uppercase tracking-[5px] font-bold mb-3">Who We Are</p>
+            <h2 className="text-6xl font-black text-white uppercase">Our Story</h2>
+            <div className="h-1 w-32 bg-red-600 mx-auto mt-6 rounded" />
+          </div>
+ 
+          {/* INTRO BLOCK */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center mb-24">
+            <div>
+              <h3 className="text-4xl font-black text-yellow-400 mb-6 leading-tight">
+                Where Every Bite Tells A Story
+              </h3>
+              <p className="text-gray-300 text-xl leading-relaxed mb-6">
+                Spice &amp; Bites Hub was born from a simple but powerful idea — that great food has no borders. Nestled in the heart of Fishers, Indiana, we are more than just a restaurant. We are a celebration of culture, community, and the universal love of food.
+              </p>
+              <p className="text-gray-300 text-xl leading-relaxed mb-6">
+                Our founders brought together decades of culinary passion spanning three rich food traditions — American comfort food, Mediterranean freshness, and bold Desi flavors — all under one roof. We believe the Indiana community deserves a dining experience that is both familiar and adventurous, satisfying and exciting.
+              </p>
+              <p className="text-gray-300 text-xl leading-relaxed">
+                From the first slice of our hand-tossed Signature Pizza to the last spoonful of slow-cooked Lamb Nihari, every dish we serve carries the heart of our kitchen and the warmth of our team.
+              </p>
+            </div>
+            <div className="rounded-3xl overflow-hidden shadow-2xl">
+              <img
+                src="/logo.png"
+                alt="Our Kitchen"
+                className="w-full h-96 object-cover"
+              />
+            </div>
+          </div>
+ 
+          {/* KITCHEN IN ACTION */}
+          <div className="text-center mb-14">
+            <h3 className="text-5xl font-black text-white uppercase">Our Kitchen</h3>
+            <p className="text-gray-400 text-xl mt-4 max-w-3xl mx-auto">
+              Every dish starts with fresh ingredients, prepared with care and cooked with love. No shortcuts. No frozen shortcuts. Just real food made the right way.
+            </p>
+          </div>
+ 
+          <div className="grid md:grid-cols-3 gap-8 mb-24">
+            <div className="rounded-3xl overflow-hidden shadow-2xl">
+              <img
+                src="https://images.stockcake.com/public/1/c/4/1c49fbfa-af29-4652-b98e-f2a791d4cd35_large/pizza-dough-toss-stockcake.jpg"
+                alt="Pizza Preparation"
+                className="w-full h-72 object-cover"
+              />
+              <div className="bg-zinc-900 p-6">
+                <h4 className="text-2xl font-bold text-yellow-400 mb-2">Hand-Crafted Pizzas</h4>
+                <p className="text-gray-300">Every pizza is hand-tossed, sauced and topped fresh to order. Our dough is made in-house daily for that perfect crispy-yet-chewy crust.</p>
+              </div>
+            </div>
+ 
+            <div className="rounded-3xl overflow-hidden shadow-2xl">
+              <img
+                src="https://images.stockcake.com/public/5/6/f/56f7479e-5d83-4d7f-9744-adb0a161f78b_large/spices-meet-heat-stockcake.jpg"
+                alt="Desi Cooking"
+                className="w-full h-72 object-cover"
+              />
+              <div className="bg-zinc-900 p-6">
+                <h4 className="text-2xl font-bold text-yellow-400 mb-2">Slow-Cooked Desi Flavors</h4>
+                <p className="text-gray-300">Our Nihari simmers for hours. Our Biryani is layered and dum-cooked to perfection. Authentic recipes passed down through generations, made fresh every day.</p>
+              </div>
+            </div>
+ 
+            <div className="rounded-3xl overflow-hidden shadow-2xl">
+              <img
+                src="https://www.aspicyperspective.com/wp-content/uploads/2023/11/Buffalo-Wing-Sauce-11.jpg"
+                alt="Wings Preparation"
+                className="w-full h-72 object-cover"
+              />
+              <div className="bg-zinc-900 p-6">
+                <h4 className="text-2xl font-bold text-yellow-400 mb-2">Fresh Wings Daily</h4>
+                <p className="text-gray-300">Our bone-in and boneless wings are made fresh daily — never frozen. Tossed in your choice of 7 signature flavors and served with house-made dipping sauces.</p>
+              </div>
+            </div>
+          </div>
+ 
+          {/* WHAT WE SERVE */}
+          <div className="bg-zinc-900 rounded-3xl p-12 mb-24">
+            <h3 className="text-5xl font-black text-white uppercase text-center mb-12">What We Serve</h3>
+            <div className="grid md:grid-cols-3 gap-10 text-center">
+ 
+              <div>
+                <div className="text-6xl mb-4">🍕</div>
+                <h4 className="text-2xl font-black text-yellow-400 mb-3">American Menu</h4>
+                <p className="text-gray-300 text-lg">Hand-tossed pizzas, calzone wraps, crispy wings, pasta, mac &amp; cheese and starters. Classic American comfort food made fresh with bold flavors.</p>
+              </div>
+ 
+              <div>
+                <div className="text-6xl mb-4">🌯</div>
+                <h4 className="text-2xl font-black text-yellow-400 mb-3">Mediterranean Menu</h4>
+                <p className="text-gray-300 text-lg">Chicken and lamb gyros, over-rice platters, falafel, Philly cheesesteaks and chicken phillies. Fresh Mediterranean flavors prepared with care.</p>
+              </div>
+ 
+              <div>
+                <div className="text-6xl mb-4">🍛</div>
+                <h4 className="text-2xl font-black text-yellow-400 mb-3">Desi Menu</h4>
+                <p className="text-gray-300 text-lg">Slow-cooked Nihari, aromatic Biryani, Chicken Karahi, Butter Chicken, Malai Boti and more. Authentic South Asian cuisine crafted with traditional spices.</p>
+              </div>
+ 
+            </div>
+          </div>
+ 
+          {/* COMMUNITY */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="rounded-3xl overflow-hidden shadow-2xl order-2 lg:order-1">
+              <img
+                src="https://png.pngtree.com/thumb_back/fh260/background/20250310/pngtree-sharing-a-meal-hands-reaching-for-food-on-rustic-wooden-table-image_17087487.jpg"
+                alt="Community Dining"
+                className="w-full h-96 object-cover"
+              />
+            </div>
+            <div className="order-1 lg:order-2">
+              <h3 className="text-4xl font-black text-yellow-400 mb-6 leading-tight">
+                Serving the Indiana Community
+              </h3>
+              <p className="text-gray-300 text-xl leading-relaxed mb-6">
+                Located at 7233 Fishers Landing Dr in Fishers, Indiana, Spice &amp; Bites Hub is proud to be part of this incredible community. We serve families, professionals, students and food lovers of all backgrounds — because great food brings people together.
+              </p>
+              <p className="text-gray-300 text-xl leading-relaxed mb-6">
+                Whether you are stopping in for a late-night slice, ordering wings for the big game, or sitting down for a hearty Desi meal with the family — our doors are open seven days a week from 11 AM to midnight.
+              </p>
+              <p className="text-gray-300 text-xl leading-relaxed">
+                We are not just feeding appetites. We are building memories, one plate at a time. Thank you, Indiana, for welcoming us into your community. We can't wait to serve you.
+              </p>
+              <div className="mt-10">
+                <a href="tel:9514546896" className="bg-red-600 hover:bg-red-700 px-10 py-5 rounded-xl text-xl font-bold transition inline-block">
+                  📞 Call to Order — 951-454-6896
+                </a>
+              </div>
+            </div>
+          </div>
+ 
+        </div>
+      </section>
+      
       {/* CONTACT */}
       <section id="contact" className="bg-black py-20 px-6 text-center">
         <h2 className="text-5xl font-black text-red-600 uppercase mb-10">Visit Us</h2>
