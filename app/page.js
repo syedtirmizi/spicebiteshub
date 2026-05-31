@@ -22,6 +22,17 @@ export default function Home() {
           </div>
           <div className="hidden md:flex items-center gap-12 text-lg font-bold">
             <a href="#" className="text-red-600 border-b-2 border-red-600 pb-1">HOME</a>
+            <a href="#starters" className="hover:text-red-500 transition">
+  STARTERS
+</a>
+
+<a href="#salads" className="hover:text-red-500 transition">
+  SALADS
+</a>
+
+<a href="#beverages" className="hover:text-red-500 transition">
+  BEVERAGES
+</a>
             <a href="#menu" className="hover:text-red-500 transition">MENU</a>
             <a href="#story" className="hover:text-red-500 transition">STORY</a>
             <a href="#gallery" className="hover:text-red-500 transition">GALLERY</a>
@@ -108,7 +119,7 @@ export default function Home() {
         </div>
 
         {/* ══════════════════════════════════════
-            AMERICAN MENU
+            AMERICAN MENU — START
         ══════════════════════════════════════ */}
         <div id="american-menu" className="mb-24">
           <h3 className="text-5xl font-black text-red-500 text-center mb-16 uppercase">American Menu</h3>
@@ -234,6 +245,7 @@ export default function Home() {
 
             </div>
           </div>
+          {/* END PIZZA */}
 
           {/* ── CALZONE WRAP ── */}
           <div className="mb-20">
@@ -254,7 +266,7 @@ export default function Home() {
                     <h3 className="text-2xl font-bold text-yellow-400">Signature Wrap</h3>
                     <span className="text-2xl font-bold text-red-500">$13.99</span>
                   </div>
-                  <p className="text-gray-300">Signature pizza sauce with pepperoni, Italian sausage, onion, fresh mushrooms, green peppers & black olive layer of melted mozzarella cheese.</p>
+                  <p className="text-gray-300">Signature pizza sauce with pepperoni, Italian sausage, onion, fresh mushrooms, green peppers &amp; black olive layer of melted mozzarella cheese.</p>
                 </div>
               </div>
 
@@ -265,7 +277,7 @@ export default function Home() {
                     <h3 className="text-2xl font-bold text-yellow-400">Cheese Wrap</h3>
                     <span className="text-2xl font-bold text-red-500">$11.99</span>
                   </div>
-                  <p className="text-gray-300">Signature pizza sauce & layer of melted mozzarella cheese.</p>
+                  <p className="text-gray-300">Signature pizza sauce &amp; layer of melted mozzarella cheese.</p>
                 </div>
               </div>
 
@@ -276,15 +288,264 @@ export default function Home() {
                     <h3 className="text-2xl font-bold text-yellow-400">Italian Sausage Wrap</h3>
                     <span className="text-2xl font-bold text-red-500">$13.99</span>
                   </div>
-                  <p className="text-gray-300">Signature pizza sauce with sausage, fresh mushroom & green pepper layer of melted mozzarella cheese.</p>
+                  <p className="text-gray-300">Signature pizza sauce with sausage, fresh mushroom &amp; green pepper layer of melted mozzarella cheese.</p>
                 </div>
               </div>
 
             </div>
           </div>
+          {/* END CALZONE WRAP */}
+
+          {/* ── BONE-IN WINGS ── */}
+          <div className="mb-20">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-4">
+              <div className="h-1 flex-1 bg-red-600 rounded" />
+              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🍗 Bone-in Wings</h4>
+              <div className="h-1 flex-1 bg-red-600 rounded" />
+            </div>
+            <p className="text-center text-gray-400 text-lg italic mb-10 max-w-3xl mx-auto">
+              Made fresh daily — never frozen
+            </p>
+            <div className="max-w-3xl mx-auto">
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+                <img src="buffalo wings.jpg" alt="Bone-in Wings" className="h-72 w-full object-cover" />
+                <div className="p-8">
+                  <div className="grid grid-cols-1 gap-4">
+
+                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">6 pcs</span>
+                        <span className="text-gray-400 ml-3">1 Flavor &amp; 1 Dip</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$7.99</span>
+                    </div>
+
+                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">10 pcs</span>
+                        <span className="text-gray-400 ml-3">1 Flavor &amp; 1 Dip</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$10.99</span>
+                    </div>
+
+                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">15 pcs</span>
+                        <span className="text-gray-400 ml-3">2 Flavors &amp; 2 Dips</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$15.99</span>
+                    </div>
+
+                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">20 pcs</span>
+                        <span className="text-gray-400 ml-3">2 Flavors &amp; 2 Dips</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$20.99</span>
+                    </div>
+
+                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">35 pcs</span>
+                        <span className="text-gray-400 ml-3">3 Flavors &amp; 3 Dips</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$35.99</span>
+                    </div>
+
+                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">50 pcs</span>
+                        <span className="text-gray-400 ml-3">5 Flavors &amp; 5 Dips</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$50.99</span>
+                    </div>
+
+                    <div className="flex justify-between items-center py-4">
+                      <div>
+                        <span className="text-2xl font-bold text-yellow-400">75 pcs</span>
+                        <span className="text-gray-400 ml-3">7 Flavors &amp; 7 Dips</span>
+                      </div>
+                      <span className="text-2xl font-bold text-red-500">$75.99</span>
+                    </div>
+
+                  </div>
+
+                  {/* FLAVORS & DIPS */}
+                  <div className="mt-8 grid md:grid-cols-2 gap-6">
+                    <div className="bg-zinc-800 rounded-2xl p-6">
+                      <h5 className="text-xl font-black text-red-500 uppercase tracking-widest mb-4">
+                        🌶️ Choice of Flavors
+                      </h5>
+                      <div className="flex flex-wrap gap-2">
+                        {["Spicy", "Mild", "Garlic", "Spicy Garlic", "Teriyaki", "Lemon Pepper", "Suicide"].map((flavor) => (
+                          <span key={flavor} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">
+                            {flavor}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-zinc-800 rounded-2xl p-6">
+                      <h5 className="text-xl font-black text-red-500 uppercase tracking-widest mb-4">
+                        🥣 Dipping Sauce
+                      </h5>
+                      <div className="flex flex-wrap gap-2">
+                        {["Ranch", "Blue Cheese"].map((sauce) => (
+                          <span key={sauce} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">
+                            {sauce}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* END BONE-IN WINGS */}
+
+          {/* ── PASTA ── */}
+          <div className="mb-20">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-10">
+              <div className="h-1 flex-1 bg-red-600 rounded" />
+              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🍝 Pasta</h4>
+              <div className="h-1 flex-1 bg-red-600 rounded" />
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
+
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=1200&auto=format&fit=crop" alt="Spaghetti Meat Sauce" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Spaghetti Meat Sauce</h3>
+                    <span className="text-2xl font-bold text-red-500">$12.99</span>
+                  </div>
+                  <p className="text-gray-300">Al dente spaghetti tossed in a rich slow-simmered meat sauce with herbs and parmesan.</p>
+                </div>
+              </div>
+
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=1200&auto=format&fit=crop" alt="Chicken Alfredo" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Chicken Alfredo</h3>
+                    <span className="text-2xl font-bold text-red-500">$13.99</span>
+                  </div>
+                  <p className="text-gray-300">Grilled chicken over fettuccine in a creamy parmesan alfredo sauce, topped with fresh parsley.</p>
+                </div>
+              </div>
+
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?q=80&w=1200&auto=format&fit=crop" alt="Penne Arrabbiata" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Penne Arrabbiata</h3>
+                    <span className="text-2xl font-bold text-red-500">$11.99</span>
+                  </div>
+                  <p className="text-gray-300">Penne pasta in a bold spicy tomato sauce with garlic, olive oil and fresh basil.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          {/* END PASTA */}
+
+          {/* ── SALAD ── */}
+          <div className="mb-20">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-10">
+              <div className="h-1 flex-1 bg-red-600 rounded" />
+              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🥗 Salad</h4>
+              <div className="h-1 flex-1 bg-red-600 rounded" />
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
+
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop" alt="Garden Salad" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Garden Salad</h3>
+                    <span className="text-2xl font-bold text-red-500">$7.99</span>
+                  </div>
+                  <p className="text-gray-300">Fresh romaine, tomatoes, cucumbers, red onions and croutons with your choice of dressing.</p>
+                </div>
+              </div>
+
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://images.unsplash.com/photo-1546793665-c74683f339c1?q=80&w=1200&auto=format&fit=crop" alt="Caesar Salad" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Caesar Salad</h3>
+                    <span className="text-2xl font-bold text-red-500">$9.99</span>
+                  </div>
+                  <p className="text-gray-300">Crisp romaine lettuce, parmesan shavings and crunchy croutons tossed in classic Caesar dressing.</p>
+                </div>
+              </div>
+
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=1200&auto=format&fit=crop" alt="Grilled Chicken Salad" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Grilled Chicken Salad</h3>
+                    <span className="text-2xl font-bold text-red-500">$12.99</span>
+                  </div>
+                  <p className="text-gray-300">Juicy grilled chicken over mixed greens, cherry tomatoes, avocado and balsamic vinaigrette.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          {/* END SALAD */}
+
+          {/* ── MAC & CHEESE ── */}
+          <div className="mb-20">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-10">
+              <div className="h-1 flex-1 bg-red-600 rounded" />
+              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🧀 Mac &amp; Cheese</h4>
+              <div className="h-1 flex-1 bg-red-600 rounded" />
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
+
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=1200&auto=format&fit=crop" alt="Classic Mac and Cheese" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Classic Mac &amp; Cheese</h3>
+                    <span className="text-2xl font-bold text-red-500">$9.99</span>
+                  </div>
+                  <p className="text-gray-300">Creamy elbow macaroni smothered in our signature four-cheese sauce, baked golden on top.</p>
+                </div>
+              </div>
+
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://images.unsplash.com/photo-1548340748-6811e9f45f0a?q=80&w=1200&auto=format&fit=crop" alt="Buffalo Chicken Mac" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">Buffalo Chicken Mac</h3>
+                    <span className="text-2xl font-bold text-red-500">$12.99</span>
+                  </div>
+                  <p className="text-gray-300">Classic mac and cheese loaded with spicy buffalo chicken, drizzled with ranch and hot sauce.</p>
+                </div>
+              </div>
+
+              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+                <img src="https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=1200&auto=format&fit=crop" alt="BBQ Brisket Mac" className="h-64 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-2xl font-bold text-yellow-400">BBQ Brisket Mac</h3>
+                    <span className="text-2xl font-bold text-red-500">$13.99</span>
+                  </div>
+                  <p className="text-gray-300">Creamy mac and cheese topped with smoky BBQ beef brisket and crispy fried onions.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          {/* END MAC & CHEESE */}
 
         </div>
-        {/* END AMERICAN MENU */}
+        {/* ══════════════════════════════════════
+            AMERICAN MENU — END
+        ══════════════════════════════════════ */}
 
         {/* ══════════════════════════════════════
             MEDITERRANEAN MENU
@@ -475,7 +736,294 @@ export default function Home() {
         {/* END DESI MENU */}
 
       </section>
+{/* STARTERS */}
+<section
+  id="starters"
+  className="py-20 bg-black text-white px-6"
+>
+  <h2 className="text-6xl font-black text-center text-red-600 mb-6 uppercase">
+    Starters
+  </h2>
 
+  <p className="text-center text-gray-400 text-xl mb-16 italic">
+    Freshly Prepared Favorites To Start Your Meal
+  </p>
+
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+
+    {/* Mozzarella Sticks */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="https://images.unsplash.com/photo-1548340748-6d2b7d7da280?q=80&w=1200&auto=format&fit=crop"
+        alt="Mozzarella Sticks"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Mozzarella Sticks</h3>
+          <span className="text-red-500 font-bold">$7.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          Crispy breaded mozzarella sticks served with marinara sauce for dipping.
+        </p>
+      </div>
+    </div>
+
+    {/* Toasted Ravioli */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="toasted.jpg"
+        alt="Toasted Ravioli"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Toasted Ravioli</h3>
+          <span className="text-red-500 font-bold">$8.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          Breaded ravioli fried crispy and served with marinara.
+        </p>
+      </div>
+    </div>
+
+    {/* Jalapeno Poppers */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="poppers.jpg"
+        alt="Jalapeno Poppers"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Jalapeno Poppers</h3>
+          <span className="text-red-500 font-bold">$7.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          Fresh jalapeños stuffed with creamy cheese, breaded, and fried until perfectly crunchy. A spicy, cheesy favorite!
+        </p>
+      </div>
+    </div>
+
+    {/* Garlic Knots */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="g knots.jpg"
+        alt="Garlic Knots"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Garlic Knots</h3>
+          <span className="text-red-500 font-bold">$5.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          Soft, oven-baked dough knots brushed with garlic butter and herbs. Warm, fluffy, and packed with flavor — served with a side of marinara.
+        </p>
+      </div>
+    </div>
+
+    {/* Bosco Sticks */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="bosco.jpg"
+        alt="Bosco Sticks"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Bosco Sticks</h3>
+          <span className="text-red-500 font-bold">$7.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          Warm, soft breadsticks stuffed with melted mozzarella cheese and baked to a golden finish. Brushed with garlic butter and served with a side of marinara for the perfect cheesy bite.
+        </p>
+      </div>
+    </div>
+
+    {/* Fries */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="fries1.jpg"
+        alt="Fries"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Fries</h3>
+          <span className="text-red-500 font-bold">$3.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          Crispy golden fries cooked fresh to order. Lightly salted and perfectly crunchy.
+        </p>
+      </div>
+    </div>
+
+    {/* Seasoned Fries */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="season f.jpg"
+        alt="Seasoned Fries"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Seasoned Fries</h3>
+          <span className="text-red-500 font-bold">$4.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          Crispy fries tossed in our special house seasoning blend for bold flavor in every bite.
+        </p>
+      </div>
+    </div>
+
+    {/* Cheesy Fries */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+         src="cheese f.jpg"
+        alt="Cheesy Fries"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Cheesy Fries</h3>
+          <span className="text-red-500 font-bold">$5.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          Our hot, crispy fries topped with rich melted cheese for a creamy, savory upgrade.
+        </p>
+      </div>
+    </div>
+
+    {/* Cheese Garlic Bread */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="c bread.jpg"
+        alt="Cheese Garlic Bread"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Cheese Garlic Bread</h3>
+          <span className="text-red-500 font-bold">$6.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          Freshly made bread topped with our special garlic butter sauce topped with a generous amount of mozzarella cheese baked and served with marinara sauce
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+      
+      {/* SALADS */}
+<section
+  id="salads"
+  className="py-20 bg-zinc-950 text-white px-6"
+>
+  <h2 className="text-5xl font-bold text-center text-green-500 mb-6">
+    Salads
+  </h2>
+
+  <p className="text-center text-yellow-400 text-2xl font-bold mb-4">
+    Individual $9.99 • Family $19.99 • Party $32.99
+  </p>
+
+  <p className="text-center text-gray-300 text-lg max-w-4xl mx-auto mb-14">
+    All Salads Are Served With Your Choice Of Dressing:
+    Ranch, Italian, Caesar, Blue Cheese, Balsamic Vinaigrette,
+    or Honey Mustard.
+  </p>
+
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+
+    {/* Classic Chicken Caesar */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+      <img
+        src="https://superbrecipe.com/wp-content/uploads/2025/07/Chicken-Caesar-Salad-1.png"
+        alt="Classic Chicken Caesar Salad"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <h3 className="text-2xl font-bold text-yellow-400">
+          Classic Chicken Caesar Salad
+        </h3>
+        <p className="text-gray-300 mt-3">
+          Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes topped with marinated chicken.
+        </p>
+      </div>
+    </div>
+
+    {/* Garden Salad */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+      <img
+        src="https://images.stockcake.com/public/3/3/e/33e26d46-9fd5-4c57-8616-b18fdf28e9e5_large/fresh-garden-salad-stockcake.jpg"
+        alt="Garden Salad"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <h3 className="text-2xl font-bold text-yellow-400">
+          Garden Salad
+        </h3>
+        <p className="text-gray-300 mt-3">
+          Romaine lettuce, fresh tomatoes, bermuda onions, fresh mushrooms, green peppers.
+        </p>
+      </div>
+    </div>
+
+    {/* Classic Caesar */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+      <img
+        src="https://images.unsplash.com/photo-1551248429-40975aa4de74?q=80&w=1200&auto=format&fit=crop"
+        alt="Classic Caesar Salad"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <h3 className="text-2xl font-bold text-yellow-400">
+          Classic Caesar Salad
+        </h3>
+        <p className="text-gray-300 mt-3">
+          Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes.
+        </p>
+      </div>
+    </div>
+
+    {/* Chopped Chicken Salad */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+      <img
+        src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1200&auto=format&fit=crop"
+        alt="Chopped Chicken Salad"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <h3 className="text-2xl font-bold text-yellow-400">
+          Chopped Chicken Salad
+        </h3>
+        <p className="text-gray-300 mt-3">
+          Romaine lettuce, mozzarella cheese, bermuda onions, bacon, chicken.
+        </p>
+      </div>
+    </div>
+
+    {/* Signature House Salad */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+      <img
+        src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=1200&auto=format&fit=crop"
+        alt="Signature House Salad"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <h3 className="text-2xl font-bold text-yellow-400">
+          Signature House Salad
+        </h3>
+        <p className="text-gray-300 mt-3">
+          Romaine lettuce with artichoke hearts, green peppers, kalamata olives, fresh tomatoes, onions and feta Cheese.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
       {/* CONTACT */}
       <section id="contact" className="bg-black py-20 px-6 text-center">
         <h2 className="text-5xl font-black text-red-600 uppercase mb-10">Visit Us</h2>
