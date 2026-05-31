@@ -145,7 +145,7 @@ export default function Home() {
               </div>
 
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?q=80&w=1200&auto=format&fit=crop" alt="Pepperoni Pizza" className="h-64 w-full object-cover" />
+                <img src="pep pizza.jpg" alt="Pepperoni Pizza" className="h-64 w-full object-cover" />
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-3">
                     <h3 className="text-2xl font-bold text-yellow-400">Pepperoni Pizza</h3>
@@ -260,7 +260,7 @@ export default function Home() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
 
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="calzone.jpg" alt="Signature Wrap" className="h-64 w-full object-cover" />
+                <img src="calzon1.jpg" alt="Signature Wrap" className="h-64 w-full object-cover" />
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-3">
                     <h3 className="text-2xl font-bold text-yellow-400">Signature Wrap</h3>
@@ -449,52 +449,6 @@ export default function Home() {
             </div>
           </div>
           {/* END PASTA */}
-
-          {/* ── SALAD ── */}
-          <div className="mb-20">
-            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-10">
-              <div className="h-1 flex-1 bg-red-600 rounded" />
-              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🥗 Salad</h4>
-              <div className="h-1 flex-1 bg-red-600 rounded" />
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
-
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop" alt="Garden Salad" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Garden Salad</h3>
-                    <span className="text-2xl font-bold text-red-500">$7.99</span>
-                  </div>
-                  <p className="text-gray-300">Fresh romaine, tomatoes, cucumbers, red onions and croutons with your choice of dressing.</p>
-                </div>
-              </div>
-
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="https://images.unsplash.com/photo-1546793665-c74683f339c1?q=80&w=1200&auto=format&fit=crop" alt="Caesar Salad" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Caesar Salad</h3>
-                    <span className="text-2xl font-bold text-red-500">$9.99</span>
-                  </div>
-                  <p className="text-gray-300">Crisp romaine lettuce, parmesan shavings and crunchy croutons tossed in classic Caesar dressing.</p>
-                </div>
-              </div>
-
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=1200&auto=format&fit=crop" alt="Grilled Chicken Salad" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Grilled Chicken Salad</h3>
-                    <span className="text-2xl font-bold text-red-500">$12.99</span>
-                  </div>
-                  <p className="text-gray-300">Juicy grilled chicken over mixed greens, cherry tomatoes, avocado and balsamic vinaigrette.</p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-          {/* END SALAD */}
 
           {/* ── MAC & CHEESE ── */}
           <div className="mb-20">
@@ -957,7 +911,7 @@ export default function Home() {
     {/* Garden Salad */}
     <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
       <img
-        src="https://images.stockcake.com/public/3/3/e/33e26d46-9fd5-4c57-8616-b18fdf28e9e5_large/fresh-garden-salad-stockcake.jpg"
+        src="g salad.jpg"
         alt="Garden Salad"
         className="h-64 w-full object-cover"
       />
@@ -1008,7 +962,7 @@ export default function Home() {
     {/* Signature House Salad */}
     <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
       <img
-        src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=1200&auto=format&fit=crop"
+         src="sig salad.jpg"
         alt="Signature House Salad"
         className="h-64 w-full object-cover"
       />
@@ -1020,6 +974,98 @@ export default function Home() {
           Romaine lettuce with artichoke hearts, green peppers, kalamata olives, fresh tomatoes, onions and feta Cheese.
         </p>
       </div>
+    </div>
+
+  </div>
+</section>
+      
+     {/* BEVERAGES */}
+<section
+  id="beverages"
+  className="py-20 bg-black text-white px-6"
+>
+  <h2 className="text-5xl font-bold text-center text-red-600 mb-6">
+    Beverages
+  </h2>
+
+  <p className="text-center text-gray-300 text-xl mb-14">
+    Soft Drinks Served In Cans • Juices Served In Bottles
+  </p>
+
+  <div className="max-w-5xl mx-auto bg-zinc-900 rounded-3xl p-10 shadow-2xl">
+
+    <div className="grid md:grid-cols-2 gap-6 text-xl">
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Coke (Can)</span>
+        <span className="text-red-500 font-bold">$1.99</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Diet Coke (Can)</span>
+        <span className="text-red-500 font-bold">$1.99</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Coke Zero (Can)</span>
+        <span className="text-red-500 font-bold">$1.99</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Sprite (Can)</span>
+        <span className="text-red-500 font-bold">$1.99</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Sprite Zero (Can)</span>
+        <span className="text-red-500 font-bold">$1.99</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Pepsi (Can)</span>
+        <span className="text-red-500 font-bold">$1.99</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Pepsi Zero (Can)</span>
+        <span className="text-red-500 font-bold">$1.99</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Dr Pepper (Can)</span>
+        <span className="text-red-500 font-bold">$1.99</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Mountain Dew (Can)</span>
+        <span className="text-red-500 font-bold">$1.99</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Fanta (Can)</span>
+        <span className="text-red-500 font-bold">$1.99</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Root Beer (Can)</span>
+        <span className="text-red-500 font-bold">$1.99</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Apple Juice (Bottle)</span>
+        <span className="text-red-500 font-bold">$2.49</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Orange Juice (Bottle)</span>
+        <span className="text-red-500 font-bold">$2.49</span>
+      </div>
+
+      <div className="flex justify-between border-b border-zinc-700 pb-3">
+        <span>Pineapple Juice (Bottle)</span>
+        <span className="text-red-500 font-bold">$2.49</span>
+      </div>
+
     </div>
 
   </div>
