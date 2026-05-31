@@ -33,6 +33,9 @@ export default function Home() {
 <a href="#beverages" className="hover:text-red-500 transition">
   BEVERAGES
 </a>
+<a href="#desserts" className="hover:text-red-500 transition">
+  DESSERTS
+</a>
             <a href="#menu" className="hover:text-red-500 transition">MENU</a>
             <a href="#story" className="hover:text-red-500 transition">STORY</a>
             <a href="#gallery" className="hover:text-red-500 transition">GALLERY</a>
@@ -1066,6 +1069,132 @@ export default function Home() {
         <span className="text-red-500 font-bold">$2.49</span>
       </div>
 
+    </div>
+
+  </div>
+</section>
+      
+      {/* DESSERTS */}
+<section
+  id="desserts"
+  className="py-20 bg-zinc-950 text-white px-6"
+>
+  <h2 className="text-5xl font-bold text-center text-red-600 mb-6">
+    Desserts
+  </h2>
+
+  <p className="text-center text-gray-300 text-xl mb-14 italic">
+    The Perfect Sweet Ending To Your Meal
+  </p>
+
+  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+
+    {/* Gulab Jamun */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="g j.jpg"
+        alt="Gulab Jamun"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Gulab Jamun</h3>
+          <span className="text-red-500 font-bold">$4.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          Soft, golden milk-solid dumplings slow-fried to perfection and soaked in a warm rose-scented sugar syrup. A classic South Asian dessert that melts in your mouth with every bite.
+        </p>
+      </div>
+    </div>
+
+    {/* Kulfi */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="k.jpg"
+        alt="Kulfi"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Kulfi</h3>
+          <span className="text-red-500 font-bold">$5.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          A rich, dense South Asian frozen dessert made with slow-simmered whole milk, cream and aromatic spices. Infused with saffron, rose water and crushed pistachios, kulfi delivers an intensely creamy flavor that's far richer than regular ice cream. Served on a stick or in a cup — a timeless desi classic.
+        </p>
+      </div>
+    </div>
+
+    {/* Cannoli */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="cannoli.jpg"
+        alt="Cannoli"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Cannoli</h3>
+          <span className="text-red-500 font-bold">$4.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          Traditional Italian Cannoli. Tube Shapped Fried Pastry Dough With A Sweet Cream Ricotta Cheese Filling.
+        </p>
+      </div>
+    </div>
+
+    {/* Baklava */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="bk.jpg"
+        alt="Baklava"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Baklava</h3>
+          <span className="text-red-500 font-bold">$4.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+           Layers of crispy golden phyllo pastry filled with finely chopped pistachios and walnuts, baked to perfection and drenched in fragrant honey syrup. A beloved Mediterranean dessert that's sweet, flaky and utterly indulgent.
+        </p>
+      </div>
+    </div>
+
+    {/* Cheesecake */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="c cake.jpg"
+        alt="Cheesecake"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Cheesecake</h3>
+          <span className="text-red-500 font-bold">$5.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          New York Style Cheesecake With Graham Cracker Crust.
+        </p>
+      </div>
+    </div>
+
+    {/* Chocolate Cake */}
+    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+      <img
+        src="ch cake.jpg"
+        alt="Chocolate Cake"
+        className="h-64 w-full object-cover"
+      />
+      <div className="p-6">
+        <div className="flex justify-between">
+          <h3 className="text-2xl font-bold text-yellow-400">Chocolate Cake</h3>
+          <span className="text-red-500 font-bold">$5.99</span>
+        </div>
+        <p className="text-gray-300 mt-3">
+          Layers Of Chocolate Cake Filled and Topped With Fudge.  
+        </p>
+      </div>
     </div>
 
   </div>
