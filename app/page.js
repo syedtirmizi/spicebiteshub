@@ -40,7 +40,20 @@ export default function Home() {
             <a href="#story" className="hover:text-red-500 transition">STORY</a>
             <a href="#gallery" className="hover:text-red-500 transition">GALLERY</a>
             <a href="#contact" className="hover:text-red-500 transition">CONTACT</a>
-            <a href="tel:9514546896" className="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-xl transition">ORDER NOW</a>
+            <a
+  href="tel:9514546896"
+  className="bg-red-600 hover:bg-red-700 px-10 py-5 rounded-xl text-xl font-bold transition inline-block"
+>
+  ORDER NOW
+</a>
+<a
+  href="spicebiteshub.vercel.app"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="border border-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-black transition"
+>
+  🛒 CART
+</a>
           </div>
         </nav>
 
