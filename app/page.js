@@ -1,4 +1,45 @@
+"use client";
+import { useState } from "react";
+
 export default function Home() {
+  const [pizzaOpen, setPizzaOpen] = useState(false);
+  const [buildOpen, setBuildOpen] = useState(false);
+  const [specialtyOpen, setSpecialtyOpen] = useState(false);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedCrust, setSelectedCrust] = useState("");
+  const [selectedToppings, setSelectedToppings] = useState([]);
+  const [specSize, setSpecSize] = useState("");
+  const [specCrust, setSpecCrust] = useState("");
+  const [specToppings, setSpecToppings] = useState([]);
+  const [calzoneOpen, setCalzoneOpen] = useState(false);
+  const [boneInOpen, setBoneInOpen] = useState(false);
+  const [bonelessOpen, setBonelessOpen] = useState(false);
+  const [pastaOpen, setPastaOpen] = useState(false);
+  const [macOpen, setMacOpen] = useState(false);
+
+  const toggleTopping = (topping) => {
+    setSelectedToppings(prev =>
+      prev.includes(topping) ? prev.filter(t => t !== topping) : [...prev, topping]
+    );
+  };
+
+  const toggleSpecTopping = (topping) => {
+    setSpecToppings(prev =>
+      prev.includes(topping) ? prev.filter(t => t !== topping) : [...prev, topping]
+    );
+  };
+
+  const pizzaSizes = ["10\"", "12\"", "14\"", "16\"", "24\""];
+  const crustTypes = ["Thin Crust", "Traditional"];
+  const toppings = [
+    "Artichoke Hearts", "Asiago Cheese", "Banana Peppers", "BBQ Sauce",
+    "Bermuda Onions", "Black Olives", "Canadian Ham", "Cheese Feta",
+    "Fresh Garlic", "Fresh Mushrooms", "Fresh Tomatoes", "Giardiniera Peppers",
+    "Green Olives", "Green Peppers", "Chicken", "Italian Sausage",
+    "Jalapeno Peppers", "Kalamata Olives", "Lean Ground Beef", "Pepperoni",
+    "Smoked Bacon", "Spinach Leaves", "Sweet Pineapple", "White Onions"
+  ];
+
   return (
     <main className="bg-black text-white overflow-x-hidden">
 
@@ -22,38 +63,15 @@ export default function Home() {
           </div>
           <div className="hidden md:flex items-center gap-12 text-lg font-bold">
             <a href="#" className="text-red-600 border-b-2 border-red-600 pb-1">HOME</a>
-            <a href="#starters" className="hover:text-red-500 transition">
-  STARTERS
-</a>
-
-<a href="#salads" className="hover:text-red-500 transition">
-  SALADS
-</a>
-
-<a href="#beverages" className="hover:text-red-500 transition">
-  BEVERAGES
-</a>
-<a href="#desserts" className="hover:text-red-500 transition">
-  DESSERTS
-</a>
+            <a href="#starters" className="hover:text-red-500 transition">STARTERS</a>
+            <a href="#salads" className="hover:text-red-500 transition">SALADS</a>
+            <a href="#beverages" className="hover:text-red-500 transition">BEVERAGES</a>
+            <a href="#desserts" className="hover:text-red-500 transition">DESSERTS</a>
             <a href="#menu" className="hover:text-red-500 transition">MENU</a>
             <a href="#story" className="hover:text-red-500 transition">STORY</a>
             <a href="#gallery" className="hover:text-red-500 transition">GALLERY</a>
             <a href="#contact" className="hover:text-red-500 transition">CONTACT</a>
-            <a
-  href="tel:9514546896"
-  className="bg-red-600 hover:bg-red-700 px-10 py-5 rounded-xl text-xl font-bold transition inline-block"
->
-  ORDER NOW
-</a>
-<a
-  href="spicebiteshub.vercel.app"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="border border-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-black transition"
->
-  🛒 CART
-</a>
+            <a href="tel:9514546896" className="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-xl transition">ORDER NOW</a>
           </div>
         </nav>
 
@@ -134,148 +152,306 @@ export default function Home() {
           <a href="#desi-menu" className="bg-green-600 hover:bg-green-700 px-8 py-4 rounded-xl text-xl font-bold transition">Desi Menu</a>
         </div>
 
-        {/* ══════════════════════════════════════
-            AMERICAN MENU — START
-        ══════════════════════════════════════ */}
+        {/* AMERICAN MENU */}
         <div id="american-menu" className="mb-24">
           <h3 className="text-5xl font-black text-red-500 text-center mb-16 uppercase">American Menu</h3>
 
           {/* ── PIZZA ── */}
           <div className="mb-20">
-            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-10">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-6">
               <div className="h-1 flex-1 bg-red-600 rounded" />
-              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🍕 Pizza</h4>
+              <button
+                onClick={() => setPizzaOpen(!pizzaOpen)}
+                className="flex items-center gap-4 bg-red-600 hover:bg-red-700 px-10 py-5 rounded-2xl transition"
+              >
+                <span className="text-4xl">🍕</span>
+                <span className="text-3xl font-black text-white uppercase tracking-widest">Pizza</span>
+                <span className="text-3xl text-white">{pizzaOpen ? "▲" : "▼"}</span>
+              </button>
               <div className="h-1 flex-1 bg-red-600 rounded" />
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
 
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="cheese pizza.jpg" alt="Cheese Pizza" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Cheese Pizza</h3>
-                    <span className="text-2xl font-bold text-red-500">$11.99</span>
-                  </div>
-                  <p className="text-gray-300">Signature pizza sauce and a generous layer of melted mozzarella cheese. Simple, cheesy and always satisfying.</p>
+            {pizzaOpen && (
+              <div className="max-w-7xl mx-auto mt-6 space-y-6">
+
+                {/* ── BUILD YOUR OWN PIZZA ── */}
+                <div className="bg-zinc-900 rounded-3xl overflow-hidden">
+                  <button
+                    onClick={() => setBuildOpen(!buildOpen)}
+                    className="w-full flex items-center justify-between px-10 py-6 hover:bg-zinc-800 transition"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="text-3xl">🛠️</span>
+                      <span className="text-2xl font-black text-yellow-400 uppercase tracking-wide">Build Your Own Pizza</span>
+                    </div>
+                    <span className="text-2xl text-white">{buildOpen ? "▲" : "▼"}</span>
+                  </button>
+
+                  {buildOpen && (
+                    <div className="px-10 pb-10">
+
+                      {/* CHEESE PIZZA CARD */}
+                      <div className="bg-zinc-800 rounded-2xl overflow-hidden mb-10 max-w-sm">
+                        <img src="cheese pizza.jpg" alt="Cheese Pizza" className="h-48 w-full object-cover" />
+                        <div className="p-5">
+                          <h3 className="text-2xl font-bold text-yellow-400">Cheese Pizza</h3>
+                          <p className="text-gray-300 mt-2">Signature pizza sauce and a generous layer of melted mozzarella cheese. Build it your way!</p>
+                        </div>
+                      </div>
+
+                      {/* SIZE */}
+                      <div className="mb-8">
+                        <h5 className="text-xl font-black text-white uppercase tracking-widest mb-4">📏 Choose Your Size</h5>
+                        <div className="flex flex-wrap gap-3">
+                          {pizzaSizes.map((size) => (
+                            <button key={size} onClick={() => setSelectedSize(size)}
+                              className={`px-7 py-3 rounded-2xl text-lg font-black border-2 transition ${selectedSize === size ? "bg-red-600 border-red-600 text-white" : "bg-zinc-800 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
+                              {size}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* CRUST */}
+                      <div className="mb-8">
+                        <h5 className="text-xl font-black text-white uppercase tracking-widest mb-4">🫓 Choose Your Crust</h5>
+                        <div className="flex flex-wrap gap-3">
+                          {crustTypes.map((crust) => (
+                            <button key={crust} onClick={() => setSelectedCrust(crust)}
+                              className={`px-7 py-3 rounded-2xl text-lg font-black border-2 transition ${selectedCrust === crust ? "bg-yellow-500 border-yellow-500 text-black" : "bg-zinc-800 border-zinc-600 text-gray-300 hover:border-yellow-500"}`}>
+                              {crust}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* TOPPINGS */}
+                      <div className="mb-8">
+                        <h5 className="text-xl font-black text-white uppercase tracking-widest mb-2">🧄 Choose Your Toppings</h5>
+                        <p className="text-gray-400 mb-5 text-sm">Tap to select / deselect</p>
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                          {toppings.map((topping) => (
+                            <button key={topping} onClick={() => toggleTopping(topping)}
+                              className={`px-4 py-3 rounded-xl text-sm font-bold border-2 transition text-left ${selectedToppings.includes(topping) ? "bg-green-600 border-green-600 text-white" : "bg-zinc-800 border-zinc-600 text-gray-300 hover:border-green-500"}`}>
+                              {selectedToppings.includes(topping) ? "✅ " : "➕ "}{topping}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* SUMMARY */}
+                      {(selectedSize || selectedCrust || selectedToppings.length > 0) && (
+                        <div className="bg-zinc-700 rounded-2xl p-6">
+                          <h5 className="text-xl font-black text-yellow-400 mb-3 uppercase">Your Selection</h5>
+                          {selectedSize && <p className="text-white mb-1">📏 Size: <span className="text-yellow-400 font-bold">{selectedSize}</span></p>}
+                          {selectedCrust && <p className="text-white mb-1">🫓 Crust: <span className="text-yellow-400 font-bold">{selectedCrust}</span></p>}
+                          {selectedToppings.length > 0 && (
+                            <div className="mt-2">
+                              <p className="text-white mb-2">🧄 Toppings ({selectedToppings.length}):</p>
+                              <div className="flex flex-wrap gap-2">
+                                {selectedToppings.map(t => (
+                                  <span key={t} className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-bold">{t}</span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          <button onClick={() => { setSelectedSize(""); setSelectedCrust(""); setSelectedToppings([]); }}
+                            className="mt-4 bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-xl font-bold transition text-sm">
+                            🔄 Reset
+                          </button>
+                        </div>
+                      )}
+
+                    </div>
+                  )}
                 </div>
-              </div>
 
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="pep pizza.jpg" alt="Pepperoni Pizza" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Pepperoni Pizza</h3>
-                    <span className="text-2xl font-bold text-red-500">$13.99</span>
-                  </div>
-                  <p className="text-gray-300">Signature pizza sauce with pepperoni layer of melted mozzarella cheese.</p>
+                {/* ── SPECIALTY PIZZA ── */}
+                <div className="bg-zinc-900 rounded-3xl overflow-hidden">
+                  <button
+                    onClick={() => setSpecialtyOpen(!specialtyOpen)}
+                    className="w-full flex items-center justify-between px-10 py-6 hover:bg-zinc-800 transition"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="text-3xl">⭐</span>
+                      <span className="text-2xl font-black text-yellow-400 uppercase tracking-wide">Specialty Pizza</span>
+                    </div>
+                    <span className="text-2xl text-white">{specialtyOpen ? "▲" : "▼"}</span>
+                  </button>
+
+                  {specialtyOpen && (
+                    <div className="px-10 pb-10">
+
+                      {/* SPECIALTY GRID */}
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+
+                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
+                          <img src="pep pizza.jpg" alt="Pepperoni Pizza" className="h-48 w-full object-cover" />
+                          <div className="p-5">
+                            <h3 className="text-xl font-bold text-yellow-400">Pepperoni Pizza</h3>
+                            <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce with pepperoni layer of melted mozzarella cheese.</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
+                          <img src="signature pizza.jpg" alt="Signature Pizza" className="h-48 w-full object-cover" />
+                          <div className="p-5">
+                            <h3 className="text-xl font-bold text-yellow-400">Signature Pizza</h3>
+                            <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce with pepperoni, Italian sausage, onion, fresh mushrooms, green peppers &amp; black olive layer of melted mozzarella cheese.</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
+                          <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?q=80&w=1200&auto=format&fit=crop" alt="Pepperoni and Sausage Pizza" className="h-48 w-full object-cover" />
+                          <div className="p-5">
+                            <h3 className="text-xl font-bold text-yellow-400">Pepperoni &amp; Sausage</h3>
+                            <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce with double sausage &amp; double pepperoni layer of melted mozzarella cheese.</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
+                          <img src="buffalo chicken pizza.jpg" alt="Buffalo Chicken Pizza" className="h-48 w-full object-cover" />
+                          <div className="p-5">
+                            <h3 className="text-xl font-bold text-yellow-400">Buffalo Chicken Pizza</h3>
+                            <p className="text-gray-300 mt-2 text-sm">Hot sauce, Bermuda onions &amp; chunks of fresh chicken layer of melted mozzarella cheese.</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
+                          <img src="https://www.thursdaynightpizza.com/wp-content/uploads/2020/11/cut-overhead_STAMP.png" alt="Italian Sausage Pizza" className="h-48 w-full object-cover" />
+                          <div className="p-5">
+                            <h3 className="text-xl font-bold text-yellow-400">Italian Sausage Pizza</h3>
+                            <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce with seasoned Italian sausage, fresh mushroom &amp; green pepper layer of melted mozzarella cheese.</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
+                          <img src="meat lovers.jpg" alt="Meat Lovers Pizza" className="h-48 w-full object-cover" />
+                          <div className="p-5">
+                            <h3 className="text-xl font-bold text-yellow-400">Meat Lovers Pizza</h3>
+                            <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce with sausage, pepperoni, Canadian bacon layer of melted mozzarella cheese.</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
+                          <img src="vegi pizza.jpg" alt="Vegetarian Pizza" className="h-48 w-full object-cover" />
+                          <div className="p-5">
+                            <h3 className="text-xl font-bold text-yellow-400">Vegetarian Pizza</h3>
+                            <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce with onion, fresh mushrooms, green peppers &amp; spinach layer of melted mozzarella cheese.</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
+                          <img src="https://flavorry.com/wp-content/uploads/2025/09/teamgreen1001_httpss.mj_.run9zT8Sikxhn8_An_ultra-close-up_AND__ecff3b71-758f-4b56-a1ea-7797418d9935_1.png" alt="Chicken Tikka Pizza" className="h-48 w-full object-cover" />
+                          <div className="p-5">
+                            <h3 className="text-xl font-bold text-yellow-400">Chicken Tikka Pizza</h3>
+                            <p className="text-gray-300 mt-2 text-sm">Homemade garlic sauce with marinated chicken chunks layer of melted mozzarella cheese.</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
+                          <img src="lamb pizza.jpg" alt="Lamb Pizza" className="h-48 w-full object-cover" />
+                          <div className="p-5">
+                            <h3 className="text-xl font-bold text-yellow-400">Lamb Pizza</h3>
+                            <p className="text-gray-300 mt-2 text-sm">Homemade garlic sauce with lamb layer of melted mozzarella cheese.</p>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      {/* SPECIALTY SIZE */}
+                      <div className="mb-8">
+                        <h5 className="text-xl font-black text-white uppercase tracking-widest mb-4">📏 Choose Your Size</h5>
+                        <div className="flex flex-wrap gap-3">
+                          {pizzaSizes.map((size) => (
+                            <button key={size} onClick={() => setSpecSize(size)}
+                              className={`px-7 py-3 rounded-2xl text-lg font-black border-2 transition ${specSize === size ? "bg-red-600 border-red-600 text-white" : "bg-zinc-800 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
+                              {size}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* SPECIALTY CRUST */}
+                      <div className="mb-8">
+                        <h5 className="text-xl font-black text-white uppercase tracking-widest mb-4">🫓 Choose Your Crust</h5>
+                        <div className="flex flex-wrap gap-3">
+                          {crustTypes.map((crust) => (
+                            <button key={crust} onClick={() => setSpecCrust(crust)}
+                              className={`px-7 py-3 rounded-2xl text-lg font-black border-2 transition ${specCrust === crust ? "bg-yellow-500 border-yellow-500 text-black" : "bg-zinc-800 border-zinc-600 text-gray-300 hover:border-yellow-500"}`}>
+                              {crust}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* SPECIALTY TOPPINGS */}
+                      <div className="mb-8">
+                        <h5 className="text-xl font-black text-white uppercase tracking-widest mb-2">🧄 Add Extra Toppings</h5>
+                        <p className="text-gray-400 mb-5 text-sm">Tap to select / deselect</p>
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                          {toppings.map((topping) => (
+                            <button key={topping} onClick={() => toggleSpecTopping(topping)}
+                              className={`px-4 py-3 rounded-xl text-sm font-bold border-2 transition text-left ${specToppings.includes(topping) ? "bg-green-600 border-green-600 text-white" : "bg-zinc-800 border-zinc-600 text-gray-300 hover:border-green-500"}`}>
+                              {specToppings.includes(topping) ? "✅ " : "➕ "}{topping}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* SPECIALTY SUMMARY */}
+                      {(specSize || specCrust || specToppings.length > 0) && (
+                        <div className="bg-zinc-700 rounded-2xl p-6">
+                          <h5 className="text-xl font-black text-yellow-400 mb-3 uppercase">Your Selection</h5>
+                          {specSize && <p className="text-white mb-1">📏 Size: <span className="text-yellow-400 font-bold">{specSize}</span></p>}
+                          {specCrust && <p className="text-white mb-1">🫓 Crust: <span className="text-yellow-400 font-bold">{specCrust}</span></p>}
+                          {specToppings.length > 0 && (
+                            <div className="mt-2">
+                              <p className="text-white mb-2">🧄 Extra Toppings ({specToppings.length}):</p>
+                              <div className="flex flex-wrap gap-2">
+                                {specToppings.map(t => (
+                                  <span key={t} className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-bold">{t}</span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          <button onClick={() => { setSpecSize(""); setSpecCrust(""); setSpecToppings([]); }}
+                            className="mt-4 bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-xl font-bold transition text-sm">
+                            🔄 Reset
+                          </button>
+                        </div>
+                      )}
+
+                    </div>
+                  )}
                 </div>
-              </div>
 
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="signature pizza.jpg" alt="Signature Pizza" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Signature Pizza</h3>
-                    <span className="text-2xl font-bold text-red-500">$16.99</span>
-                  </div>
-                  <p className="text-gray-300">Signature pizza sauce with pepperoni, Italian sausage, onion, fresh mushrooms, green peppers &amp; black olive layer of melted mozzarella cheese.</p>
-                </div>
               </div>
-
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?q=80&w=1200&auto=format&fit=crop" alt="Pepperoni and Sausage Pizza" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Pepperoni &amp; Sausage</h3>
-                    <span className="text-2xl font-bold text-red-500">$15.99</span>
-                  </div>
-                  <p className="text-gray-300">Signature pizza sauce with double sausage &amp; double pepperoni layer of melted mozzarella cheese.</p>
-                </div>
-              </div>
-
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="buffalo chicken pizza.jpg" alt="Buffalo Chicken Pizza" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Buffalo Chicken Pizza</h3>
-                    <span className="text-2xl font-bold text-red-500">$15.99</span>
-                  </div>
-                  <p className="text-gray-300">Hot sauce, Bermuda onions &amp; chunks of fresh chicken layer of melted mozzarella cheese.</p>
-                </div>
-              </div>
-
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="https://www.thursdaynightpizza.com/wp-content/uploads/2020/11/cut-overhead_STAMP.png" alt="Italian Sausage Pizza" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Italian Sausage Pizza</h3>
-                    <span className="text-2xl font-bold text-red-500">$14.99</span>
-                  </div>
-                  <p className="text-gray-300">Signature pizza sauce with seasoned Italian sausage, fresh mushroom &amp; green pepper layer of melted mozzarella cheese.</p>
-                </div>
-              </div>
-
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="meat lovers.jpg" alt="Meat Lovers Pizza" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Meat Lovers Pizza</h3>
-                    <span className="text-2xl font-bold text-red-500">$17.99</span>
-                  </div>
-                  <p className="text-gray-300">Signature pizza sauce with sausage, pepperoni, Canadian bacon layer of melted mozzarella cheese.</p>
-                </div>
-              </div>
-
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="vegi pizza.jpg" alt="Vegetarian Pizza" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Vegetarian Pizza</h3>
-                    <span className="text-2xl font-bold text-red-500">$13.99</span>
-                  </div>
-                  <p className="text-gray-300">Signature pizza sauce with onion, fresh mushrooms, green peppers &amp; spinach layer of melted mozzarella cheese.</p>
-                </div>
-              </div>
-
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="ctp.jpg" alt="Chicken Tikka Pizza" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Chicken Tikka Pizza</h3>
-                    <span className="text-2xl font-bold text-red-500">$15.99</span>
-                  </div>
-                  <p className="text-gray-300">Homemade garlic sauce with marinated chicken chunks layer of melted mozzarella cheese.</p>
-                </div>
-              </div>
-
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src="lamb pizza.jpg" alt="Lamb Pizza" className="h-64 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-2xl font-bold text-yellow-400">Lamb Pizza</h3>
-                    <span className="text-2xl font-bold text-red-500">$16.99</span>
-                  </div>
-                  <p className="text-gray-300">Homemade garlic sauce with lamb layer of melted mozzarella cheese.</p>
-                </div>
-              </div>
-
-            </div>
+            )}
           </div>
           {/* END PIZZA */}
 
           {/* ── CALZONE WRAP ── */}
           <div className="mb-20">
-            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-4">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-6">
               <div className="h-1 flex-1 bg-red-600 rounded" />
-              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🫓 Calzone Wrap</h4>
+              <button
+                onClick={() => setCalzoneOpen(!calzoneOpen)}
+                className="flex items-center gap-4 bg-red-600 hover:bg-red-700 px-10 py-5 rounded-2xl transition"
+              >
+                <span className="text-4xl">🫓</span>
+                <span className="text-3xl font-black text-white uppercase tracking-widest">Calzone Wrap</span>
+                <span className="text-3xl text-white">{calzoneOpen ? "▲" : "▼"}</span>
+              </button>
               <div className="h-1 flex-1 bg-red-600 rounded" />
             </div>
-            <p className="text-center text-gray-400 text-lg italic mb-10 max-w-3xl mx-auto">
-              Delicious calzone wrapped in our butter crust with melted mozzarella cheese and signature pizza sauce
-            </p>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
- 
-              {/* CHICKEN CLUB */}
+            {calzoneOpen && (
+              <div>
+                <p className="text-center text-gray-400 text-lg italic mb-10 max-w-3xl mx-auto">
+                  Delicious calzone wrapped in our butter crust with melted mozzarella cheese and signature pizza sauce
+                </p>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="calzone.jpg" alt="Chicken Club" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -286,8 +462,7 @@ export default function Home() {
                   <p className="text-gray-300">Signature pizza sauce, chicken breast, bacon, fresh tomatoes &amp; Bermuda onions.</p>
                 </div>
               </div>
- 
-              {/* VEGETARIAN */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="calzon1.jpg" alt="Vegetarian Calzone" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -298,8 +473,7 @@ export default function Home() {
                   <p className="text-gray-300">Signature pizza sauce, onions, fresh mushrooms, green peppers &amp; spinach.</p>
                 </div>
               </div>
- 
-              {/* SIGNATURE'S CHOICE */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="calzon1.jpg" alt="Signature's Choice" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -310,8 +484,7 @@ export default function Home() {
                   <p className="text-gray-300">Choose any four ingredients your way, wrapped in our golden buttery calzone crust.</p>
                 </div>
               </div>
- 
-              {/* SIGNATURE WRAP */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="calzon1.jpg" alt="Signature Wrap" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -322,8 +495,7 @@ export default function Home() {
                   <p className="text-gray-300">Signature pizza sauce with pepperoni, Italian sausage, onion, fresh mushrooms, green peppers &amp; black olive layer of melted mozzarella cheese.</p>
                 </div>
               </div>
- 
-              {/* CHEESE WRAP */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="calzone.jpg" alt="Cheese Wrap" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -334,8 +506,7 @@ export default function Home() {
                   <p className="text-gray-300">Signature pizza sauce &amp; layer of melted mozzarella cheese.</p>
                 </div>
               </div>
- 
-              {/* ITALIAN SAUSAGE WRAP */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="calzone.jpg" alt="Italian Sausage Wrap" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -346,229 +517,180 @@ export default function Home() {
                   <p className="text-gray-300">Signature pizza sauce with sausage, fresh mushroom &amp; green pepper layer of melted mozzarella cheese.</p>
                 </div>
               </div>
- 
+
             </div>
+              </div>
+            )}
           </div>
           {/* END CALZONE WRAP */}
 
           {/* ── BONE-IN WINGS ── */}
           <div className="mb-20">
-            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-4">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-6">
               <div className="h-1 flex-1 bg-red-600 rounded" />
-              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🍗 Bone-in Wings</h4>
+              <button
+                onClick={() => setBoneInOpen(!boneInOpen)}
+                className="flex items-center gap-4 bg-red-600 hover:bg-red-700 px-10 py-5 rounded-2xl transition"
+              >
+                <span className="text-4xl">🍗</span>
+                <span className="text-3xl font-black text-white uppercase tracking-widest">Bone-in Wings</span>
+                <span className="text-3xl text-white">{boneInOpen ? "▲" : "▼"}</span>
+              </button>
               <div className="h-1 flex-1 bg-red-600 rounded" />
             </div>
-            <p className="text-center text-gray-400 text-lg italic mb-10 max-w-3xl mx-auto">
-              Made fresh daily — never frozen
-            </p>
-            <div className="max-w-3xl mx-auto">
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
-                <img src="buffalo wings.jpg" alt="Bone-in Wings" className="h-72 w-full object-cover" />
-                <div className="p-8">
-                  <div className="grid grid-cols-1 gap-4">
-
-                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">6 pcs</span>
-                        <span className="text-gray-400 ml-3">1 Flavor &amp; 1 Dip</span>
+            {boneInOpen && (
+              <div>
+                <p className="text-center text-gray-400 text-lg italic mb-10 max-w-3xl mx-auto">Made fresh daily — never frozen</p>
+                <div className="max-w-3xl mx-auto">
+                  <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+                    <img src="buffalo wings.jpg" alt="Bone-in Wings" className="h-72 w-full object-cover" />
+                    <div className="p-8">
+                      <div className="grid grid-cols-1 gap-4">
+                        <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                          <div><span className="text-2xl font-bold text-yellow-400">6 pcs</span><span className="text-gray-400 ml-3">1 Flavor &amp; 1 Dip</span></div>
+                          <span className="text-2xl font-bold text-red-500">$7.99</span>
+                        </div>
+                        <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                          <div><span className="text-2xl font-bold text-yellow-400">10 pcs</span><span className="text-gray-400 ml-3">1 Flavor &amp; 1 Dip</span></div>
+                          <span className="text-2xl font-bold text-red-500">$10.99</span>
+                        </div>
+                        <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                          <div><span className="text-2xl font-bold text-yellow-400">15 pcs</span><span className="text-gray-400 ml-3">2 Flavors &amp; 2 Dips</span></div>
+                          <span className="text-2xl font-bold text-red-500">$15.99</span>
+                        </div>
+                        <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                          <div><span className="text-2xl font-bold text-yellow-400">20 pcs</span><span className="text-gray-400 ml-3">2 Flavors &amp; 2 Dips</span></div>
+                          <span className="text-2xl font-bold text-red-500">$20.99</span>
+                        </div>
+                        <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                          <div><span className="text-2xl font-bold text-yellow-400">35 pcs</span><span className="text-gray-400 ml-3">3 Flavors &amp; 3 Dips</span></div>
+                          <span className="text-2xl font-bold text-red-500">$35.99</span>
+                        </div>
+                        <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                          <div><span className="text-2xl font-bold text-yellow-400">50 pcs</span><span className="text-gray-400 ml-3">5 Flavors &amp; 5 Dips</span></div>
+                          <span className="text-2xl font-bold text-red-500">$50.99</span>
+                        </div>
+                        <div className="flex justify-between items-center py-4">
+                          <div><span className="text-2xl font-bold text-yellow-400">75 pcs</span><span className="text-gray-400 ml-3">7 Flavors &amp; 7 Dips</span></div>
+                          <span className="text-2xl font-bold text-red-500">$75.99</span>
+                        </div>
                       </div>
-                      <span className="text-2xl font-bold text-red-500">$7.99</span>
-                    </div>
-
-                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">10 pcs</span>
-                        <span className="text-gray-400 ml-3">1 Flavor &amp; 1 Dip</span>
-                      </div>
-                      <span className="text-2xl font-bold text-red-500">$10.99</span>
-                    </div>
-
-                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">15 pcs</span>
-                        <span className="text-gray-400 ml-3">2 Flavors &amp; 2 Dips</span>
-                      </div>
-                      <span className="text-2xl font-bold text-red-500">$15.99</span>
-                    </div>
-
-                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">20 pcs</span>
-                        <span className="text-gray-400 ml-3">2 Flavors &amp; 2 Dips</span>
-                      </div>
-                      <span className="text-2xl font-bold text-red-500">$20.99</span>
-                    </div>
-
-                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">35 pcs</span>
-                        <span className="text-gray-400 ml-3">3 Flavors &amp; 3 Dips</span>
-                      </div>
-                      <span className="text-2xl font-bold text-red-500">$35.99</span>
-                    </div>
-
-                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">50 pcs</span>
-                        <span className="text-gray-400 ml-3">5 Flavors &amp; 5 Dips</span>
-                      </div>
-                      <span className="text-2xl font-bold text-red-500">$50.99</span>
-                    </div>
-
-                    <div className="flex justify-between items-center py-4">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">75 pcs</span>
-                        <span className="text-gray-400 ml-3">7 Flavors &amp; 7 Dips</span>
-                      </div>
-                      <span className="text-2xl font-bold text-red-500">$75.99</span>
-                    </div>
-
-                  </div>
-
-                  {/* FLAVORS & DIPS */}
-                  <div className="mt-8 grid md:grid-cols-2 gap-6">
-                    <div className="bg-zinc-800 rounded-2xl p-6">
-                      <h5 className="text-xl font-black text-red-500 uppercase tracking-widest mb-4">
-                        🌶️ Choice of Flavors
-                      </h5>
-                      <div className="flex flex-wrap gap-2">
-                        {["Spicy", "Mild", "Garlic", "Spicy Garlic", "BBQ", "Honey BBQ", "Teriyaki", "Lemon Pepper", "Suicide"].map((flavor) => (
-                          <span key={flavor} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">
-                            {flavor}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="bg-zinc-800 rounded-2xl p-6">
-                      <h5 className="text-xl font-black text-red-500 uppercase tracking-widest mb-4">
-                        🥣 Dipping Sauce
-                      </h5>
-                      <div className="flex flex-wrap gap-2">
-                        {["Ranch", "Blue Cheese"].map((sauce) => (
-                          <span key={sauce} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">
-                            {sauce}
-                          </span>
-                        ))}
+                      <div className="mt-8 grid md:grid-cols-2 gap-6">
+                        <div className="bg-zinc-800 rounded-2xl p-6">
+                          <h5 className="text-xl font-black text-red-500 uppercase tracking-widest mb-4">🌶️ Choice of Flavors</h5>
+                          <div className="flex flex-wrap gap-2">
+                            {["Spicy", "Mild", "Garlic", "Spicy Garlic", "BBQ", "Honey BBQ", "Teriyaki", "Lemon Pepper", "Suicide"].map((flavor) => (
+                              <span key={flavor} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">{flavor}</span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="bg-zinc-800 rounded-2xl p-6">
+                          <h5 className="text-xl font-black text-red-500 uppercase tracking-widest mb-4">🥣 Dipping Sauce</h5>
+                          <div className="flex flex-wrap gap-2">
+                            {["Ranch", "Blue Cheese"].map((sauce) => (
+                              <span key={sauce} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">{sauce}</span>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
-            </div>
+            )}
           </div>
           {/* END BONE-IN WINGS */}
 
           {/* ── BONELESS WINGS ── */}
           <div className="mb-20">
-            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-4">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-6">
               <div className="h-1 flex-1 bg-red-600 rounded" />
-              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🍗 Boneless Wings</h4>
+              <button
+                onClick={() => setBonelessOpen(!bonelessOpen)}
+                className="flex items-center gap-4 bg-red-600 hover:bg-red-700 px-10 py-5 rounded-2xl transition"
+              >
+                <span className="text-4xl">🍗</span>
+                <span className="text-3xl font-black text-white uppercase tracking-widest">Boneless Wings</span>
+                <span className="text-3xl text-white">{bonelessOpen ? "▲" : "▼"}</span>
+              </button>
               <div className="h-1 flex-1 bg-red-600 rounded" />
             </div>
-            <p className="text-center text-gray-400 text-lg italic mb-10 max-w-3xl mx-auto">
-              Made fresh daily — never frozen
-            </p>
-            <div className="max-w-3xl mx-auto">
-              <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
-                <img src="bw.jpg" alt="Boneless Wings" className="h-72 w-full object-cover" />
-                <div className="p-8">
-                  <div className="grid grid-cols-1 gap-4">
- 
-                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">7 pcs</span>
-                        <span className="text-gray-400 ml-3">1 Flavor &amp; 1 Dip</span>
+            {bonelessOpen && (
+              <div>
+                <p className="text-center text-gray-400 text-lg italic mb-10 max-w-3xl mx-auto">Made fresh daily — never frozen</p>
+                <div className="max-w-3xl mx-auto">
+                  <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+                    <img src="bw.jpg" alt="Boneless Wings" className="h-72 w-full object-cover" />
+                    <div className="p-8">
+                      <div className="grid grid-cols-1 gap-4">
+                        <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                          <div><span className="text-2xl font-bold text-yellow-400">7 pcs</span><span className="text-gray-400 ml-3">1 Flavor &amp; 1 Dip</span></div>
+                          <span className="text-2xl font-bold text-red-500">$7.99</span>
+                        </div>
+                        <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                          <div><span className="text-2xl font-bold text-yellow-400">15 pcs</span><span className="text-gray-400 ml-3">2 Flavors &amp; 2 Dips</span></div>
+                          <span className="text-2xl font-bold text-red-500">$15.99</span>
+                        </div>
+                        <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                          <div><span className="text-2xl font-bold text-yellow-400">25 pcs</span><span className="text-gray-400 ml-3">2 Flavors &amp; 2 Dips</span></div>
+                          <span className="text-2xl font-bold text-red-500">$25.99</span>
+                        </div>
+                        <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                          <div><span className="text-2xl font-bold text-yellow-400">35 pcs</span><span className="text-gray-400 ml-3">3 Flavors &amp; 3 Dips</span></div>
+                          <span className="text-2xl font-bold text-red-500">$35.99</span>
+                        </div>
+                        <div className="flex justify-between items-center py-4 border-b border-zinc-700">
+                          <div><span className="text-2xl font-bold text-yellow-400">50 pcs</span><span className="text-gray-400 ml-3">5 Flavors &amp; 5 Dips</span></div>
+                          <span className="text-2xl font-bold text-red-500">$50.99</span>
+                        </div>
+                        <div className="flex justify-between items-center py-4">
+                          <div><span className="text-2xl font-bold text-yellow-400">75 pcs</span><span className="text-gray-400 ml-3">6 Flavors &amp; 7 Dips</span></div>
+                          <span className="text-2xl font-bold text-red-500">$75.99</span>
+                        </div>
                       </div>
-                      <span className="text-2xl font-bold text-red-500">$7.99</span>
-                    </div>
- 
-                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">15 pcs</span>
-                        <span className="text-gray-400 ml-3">2 Flavors &amp; 2 Dips</span>
-                      </div>
-                      <span className="text-2xl font-bold text-red-500">$15.99</span>
-                    </div>
- 
-                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">25 pcs</span>
-                        <span className="text-gray-400 ml-3">2 Flavors &amp; 2 Dips</span>
-                      </div>
-                      <span className="text-2xl font-bold text-red-500">$25.99</span>
-                    </div>
- 
-                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">35 pcs</span>
-                        <span className="text-gray-400 ml-3">3 Flavors &amp; 3 Dips</span>
-                      </div>
-                      <span className="text-2xl font-bold text-red-500">$35.99</span>
-                    </div>
- 
-                    <div className="flex justify-between items-center py-4 border-b border-zinc-700">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">50 pcs</span>
-                        <span className="text-gray-400 ml-3">5 Flavors &amp; 5 Dips</span>
-                      </div>
-                      <span className="text-2xl font-bold text-red-500">$50.99</span>
-                    </div>
- 
-                    <div className="flex justify-between items-center py-4">
-                      <div>
-                        <span className="text-2xl font-bold text-yellow-400">75 pcs</span>
-                        <span className="text-gray-400 ml-3">6 Flavors &amp; 7 Dips</span>
-                      </div>
-                      <span className="text-2xl font-bold text-red-500">$75.99</span>
-                    </div>
- 
-                  </div>
- 
-                  {/* FLAVORS & DIPS */}
-                  <div className="mt-8 grid md:grid-cols-2 gap-6">
-                    <div className="bg-zinc-800 rounded-2xl p-6">
-                      <h5 className="text-xl font-black text-red-500 uppercase tracking-widest mb-4">
-                        🌶️ Choice of Flavors
-                      </h5>
-                      <div className="flex flex-wrap gap-2">
-                        {["Spicy", "Mild", "Garlic", "Spicy Garlic", "BBQ", "Honey BBQ", "Teriyaki", "Lemon Pepper", "Suicide"].map((flavor) => (
-                          <span key={flavor} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">
-                            {flavor}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="bg-zinc-800 rounded-2xl p-6">
-                      <h5 className="text-xl font-black text-red-500 uppercase tracking-widest mb-4">
-                        🥣 Dipping Sauce
-                      </h5>
-                      <div className="flex flex-wrap gap-2">
-                        {["Ranch", "Blue Cheese"].map((sauce) => (
-                          <span key={sauce} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">
-                            {sauce}
-                          </span>
-                        ))}
+                      <div className="mt-8 grid md:grid-cols-2 gap-6">
+                        <div className="bg-zinc-800 rounded-2xl p-6">
+                          <h5 className="text-xl font-black text-red-500 uppercase tracking-widest mb-4">🌶️ Choice of Flavors</h5>
+                          <div className="flex flex-wrap gap-2">
+                            {["Spicy", "Mild", "Garlic", "Spicy Garlic", "BBQ", "Honey BBQ", "Teriyaki", "Lemon Pepper", "Suicide"].map((flavor) => (
+                              <span key={flavor} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">{flavor}</span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="bg-zinc-800 rounded-2xl p-6">
+                          <h5 className="text-xl font-black text-red-500 uppercase tracking-widest mb-4">🥣 Dipping Sauce</h5>
+                          <div className="flex flex-wrap gap-2">
+                            {["Ranch", "Blue Cheese"].map((sauce) => (
+                              <span key={sauce} className="bg-zinc-700 text-yellow-400 font-bold px-4 py-2 rounded-full text-sm">{sauce}</span>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
- 
                 </div>
               </div>
-            </div>
+            )}
           </div>
           {/* END BONELESS WINGS */}
-          
-           {/* ── PASTA ── */}
+
+          {/* ── PASTA ── */}
           <div className="mb-20">
-            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-10">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-6">
               <div className="h-1 flex-1 bg-red-600 rounded" />
-              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🍝 Pasta</h4>
+              <button
+                onClick={() => setPastaOpen(!pastaOpen)}
+                className="flex items-center gap-4 bg-red-600 hover:bg-red-700 px-10 py-5 rounded-2xl transition"
+              >
+                <span className="text-4xl">🍝</span>
+                <span className="text-3xl font-black text-white uppercase tracking-widest">Pasta</span>
+                <span className="text-3xl text-white">{pastaOpen ? "▲" : "▼"}</span>
+              </button>
               <div className="h-1 flex-1 bg-red-600 rounded" />
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
- 
-              {/* CHICKEN CAVATAPPI */}
+            {pastaOpen && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto mt-4">
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=1200&auto=format&fit=crop" alt="Chicken Cavatappi" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -579,8 +701,7 @@ export default function Home() {
                   <p className="text-gray-300">Olive oil, chicken breast, sauteed spinach, mushrooms, red onions topped with parmesan and parsley.</p>
                 </div>
               </div>
- 
-              {/* MOSTACCIOLI W/ MARINARA */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="m.jpg" alt="Mostaccioli with Marinara" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -591,8 +712,7 @@ export default function Home() {
                   <p className="text-gray-300">Traditional mostaccioli with marinara topped with parmesan and parsley.</p>
                 </div>
               </div>
- 
-              {/* BAKED MOSTACCIOLI W/ MOZZARELLA */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="bm.jpg" alt="Baked Mostaccioli with Mozzarella" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -603,8 +723,7 @@ export default function Home() {
                   <p className="text-gray-300">Mostaccioli, marinara, mozzarella baked to perfection, topped with parmesan and parsley.</p>
                 </div>
               </div>
- 
-              {/* ALFREDO CAVATAPPI W/ CHICKEN */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="https://images.unsplash.com/photo-1645112411341-6c4fd023882f?q=80&w=1200&auto=format&fit=crop" alt="Alfredo Cavatappi with Chicken" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -615,8 +734,7 @@ export default function Home() {
                   <p className="text-gray-300">Cavatappi noodles, chicken breast, mushrooms and spinach, topped with parmesan cheese and parsley.</p>
                 </div>
               </div>
- 
-              {/* ALFREDO CAVATAPPI */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="https://images.unsplash.com/photo-1612369997610-a07a4b9e8a0c?q=80&w=1200&auto=format&fit=crop" alt="Alfredo Cavatappi" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -627,8 +745,7 @@ export default function Home() {
                   <p className="text-gray-300">Cavatappi noodles, alfredo sauce baked to perfection, topped with parmesan and parsley.</p>
                 </div>
               </div>
- 
-              {/* TOMATO CREAM PENNE */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?q=80&w=1200&auto=format&fit=crop" alt="Tomato Cream Penne" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -639,22 +756,29 @@ export default function Home() {
                   <p className="text-gray-300">Penne pasta baked in creamy alfredo, marinara topped with parmesan and parsley.</p>
                 </div>
               </div>
- 
+
             </div>
+            )}
           </div>
           {/* END PASTA */}
 
-
           {/* ── MAC & CHEESE ── */}
           <div className="mb-20">
-            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-10">
+            <div className="flex items-center gap-4 max-w-7xl mx-auto mb-6">
               <div className="h-1 flex-1 bg-red-600 rounded" />
-              <h4 className="text-4xl font-black text-white uppercase tracking-widest">🧀 Mac &amp; Cheese</h4>
+              <button
+                onClick={() => setMacOpen(!macOpen)}
+                className="flex items-center gap-4 bg-red-600 hover:bg-red-700 px-10 py-5 rounded-2xl transition"
+              >
+                <span className="text-4xl">🧀</span>
+                <span className="text-3xl font-black text-white uppercase tracking-widest">Mac &amp; Cheese</span>
+                <span className="text-3xl text-white">{macOpen ? "▲" : "▼"}</span>
+              </button>
               <div className="h-1 flex-1 bg-red-600 rounded" />
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
- 
-              {/* BUFFALO CHICKEN MAC */}
+            {macOpen && (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto mt-4">
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="https://images.unsplash.com/photo-1548340748-6811e9f45f0a?q=80&w=1200&auto=format&fit=crop" alt="Buffalo Chicken Mac" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -665,8 +789,7 @@ export default function Home() {
                   <p className="text-gray-300">Chopped chicken breast, Bermuda onions, and our signature spicy sauce, smothered in mozzarella and cheddar.</p>
                 </div>
               </div>
- 
-              {/* DOUBLE BFT */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=1200&auto=format&fit=crop" alt="Double BFT" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -677,8 +800,7 @@ export default function Home() {
                   <p className="text-gray-300">Mound of bacon piled on top of feta, tomato, smothered in mozzarella and cheddar.</p>
                 </div>
               </div>
- 
-              {/* SIGNATURE'S CHOICE */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=1200&auto=format&fit=crop" alt="Signature's Choice" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -689,8 +811,7 @@ export default function Home() {
                   <p className="text-gray-300">Four delicious toppings (your choice) smothered in mozzarella and cheddar.</p>
                 </div>
               </div>
- 
-              {/* BBQ MAC */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=1200&auto=format&fit=crop" alt="BBQ Mac" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -701,8 +822,7 @@ export default function Home() {
                   <p className="text-gray-300">BBQ covered bacon, Bermuda onions, cilantro smothered in mozzarella and cheddar.</p>
                 </div>
               </div>
- 
-              {/* MAC N CHEESE */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="https://images.unsplash.com/photo-1612407219897-7f6ae2748668?q=80&w=1200&auto=format&fit=crop" alt="Mac n Cheese" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -713,8 +833,7 @@ export default function Home() {
                   <p className="text-gray-300">Classic mac smothered in mozzarella and cheddar.</p>
                 </div>
               </div>
- 
-              {/* ALFREDO MAC */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=1200&auto=format&fit=crop" alt="Alfredo Mac" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -725,8 +844,7 @@ export default function Home() {
                   <p className="text-gray-300">Creamy alfredo sauce tossed with fresh mushrooms and spinach.</p>
                 </div>
               </div>
- 
-              {/* BURGER MAC */}
+
               <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
                 <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1200&auto=format&fit=crop" alt="Burger Mac" className="h-64 w-full object-cover" />
                 <div className="p-6">
@@ -737,20 +855,16 @@ export default function Home() {
                   <p className="text-gray-300">Ground beef, onions, fresh tomato, mushrooms smothered in mozzarella and cheddar.</p>
                 </div>
               </div>
- 
+
             </div>
+            )}
           </div>
           {/* END MAC & CHEESE */}
 
-
         </div>
-        {/* ══════════════════════════════════════
-            AMERICAN MENU — END
-        ══════════════════════════════════════ */}
+        {/* AMERICAN MENU END */}
 
-        {/* ══════════════════════════════════════
-            MEDITERRANEAN MENU
-        ══════════════════════════════════════ */}
+        {/* MEDITERRANEAN MENU */}
         <div id="mediterranean-menu" className="mb-24">
           <h3 className="text-5xl font-black text-yellow-400 text-center mb-10 uppercase">Mediterranean Menu</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
@@ -836,9 +950,7 @@ export default function Home() {
         </div>
         {/* END MEDITERRANEAN MENU */}
 
-        {/* ══════════════════════════════════════
-            DESI MENU
-        ══════════════════════════════════════ */}
+        {/* DESI MENU */}
         <div id="desi-menu" className="py-20 bg-black text-white px-6">
           <h2 className="text-5xl font-bold text-center text-red-600 mb-14">Desi Menu</h2>
           <p className="text-center text-gray-300 text-xl mb-16 italic">Where Every Bite Tells A Story</p>
@@ -937,643 +1049,288 @@ export default function Home() {
         {/* END DESI MENU */}
 
       </section>
-{/* STARTERS */}
-<section
-  id="starters"
-  className="py-20 bg-black text-white px-6"
->
-  <h2 className="text-6xl font-black text-center text-red-600 mb-6 uppercase">
-    Starters
-  </h2>
 
-  <p className="text-center text-gray-400 text-xl mb-16 italic">
-    Freshly Prepared Favorites To Start Your Meal
-  </p>
+      {/* STARTERS */}
+      <section id="starters" className="py-20 bg-black text-white px-6">
+        <h2 className="text-6xl font-black text-center text-red-600 mb-6 uppercase">Starters</h2>
+        <p className="text-center text-gray-400 text-xl mb-16 italic">Freshly Prepared Favorites To Start Your Meal</p>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
 
-  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="https://images.unsplash.com/photo-1548340748-6d2b7d7da280?q=80&w=1200&auto=format&fit=crop" alt="Mozzarella Sticks" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Mozzarella Sticks</h3><span className="text-red-500 font-bold">$7.99</span></div>
+              <p className="text-gray-300 mt-3">Crispy breaded mozzarella sticks served with marinara sauce for dipping.</p>
+            </div>
+          </div>
 
-    {/* Mozzarella Sticks */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="https://images.unsplash.com/photo-1548340748-6d2b7d7da280?q=80&w=1200&auto=format&fit=crop"
-        alt="Mozzarella Sticks"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Mozzarella Sticks</h3>
-          <span className="text-red-500 font-bold">$7.99</span>
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="toasted.jpg" alt="Toasted Ravioli" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Toasted Ravioli</h3><span className="text-red-500 font-bold">$8.99</span></div>
+              <p className="text-gray-300 mt-3">Breaded ravioli fried crispy and served with marinara.</p>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="poppers.jpg" alt="Jalapeno Poppers" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Jalapeno Poppers</h3><span className="text-red-500 font-bold">$7.99</span></div>
+              <p className="text-gray-300 mt-3">Fresh jalapenos stuffed with creamy cheese, breaded, and fried until perfectly crunchy.</p>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="g knots.jpg" alt="Garlic Knots" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Garlic Knots</h3><span className="text-red-500 font-bold">$5.99</span></div>
+              <p className="text-gray-300 mt-3">Soft, oven-baked dough knots brushed with garlic butter and herbs. Served with marinara.</p>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="bosco.jpg" alt="Bosco Sticks" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Bosco Sticks</h3><span className="text-red-500 font-bold">$7.99</span></div>
+              <p className="text-gray-300 mt-3">Warm breadsticks stuffed with melted mozzarella, brushed with garlic butter. Served with marinara.</p>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="fries1.jpg" alt="Fries" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Fries</h3><span className="text-red-500 font-bold">$3.99</span></div>
+              <p className="text-gray-300 mt-3">Crispy golden fries cooked fresh to order. Lightly salted and perfectly crunchy.</p>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="season f.jpg" alt="Seasoned Fries" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Seasoned Fries</h3><span className="text-red-500 font-bold">$4.99</span></div>
+              <p className="text-gray-300 mt-3">Crispy fries tossed in our special house seasoning blend for bold flavor in every bite.</p>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="cheese f.jpg" alt="Cheesy Fries" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Cheesy Fries</h3><span className="text-red-500 font-bold">$5.99</span></div>
+              <p className="text-gray-300 mt-3">Our hot, crispy fries topped with rich melted cheese for a creamy, savory upgrade.</p>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="c bread.jpg" alt="Cheese Garlic Bread" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Cheese Garlic Bread</h3><span className="text-red-500 font-bold">$6.99</span></div>
+              <p className="text-gray-300 mt-3">Freshly made bread with garlic butter sauce topped with mozzarella cheese, baked and served with marinara.</p>
+            </div>
+          </div>
+
         </div>
-        <p className="text-gray-300 mt-3">
-          Crispy breaded mozzarella sticks served with marinara sauce for dipping.
-        </p>
-      </div>
-    </div>
+      </section>
 
-    {/* Toasted Ravioli */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="toasted.jpg"
-        alt="Toasted Ravioli"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Toasted Ravioli</h3>
-          <span className="text-red-500 font-bold">$8.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-          Breaded ravioli fried crispy and served with marinara.
-        </p>
-      </div>
-    </div>
-
-    {/* Jalapeno Poppers */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="poppers.jpg"
-        alt="Jalapeno Poppers"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Jalapeno Poppers</h3>
-          <span className="text-red-500 font-bold">$7.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-          Fresh jalapeños stuffed with creamy cheese, breaded, and fried until perfectly crunchy. A spicy, cheesy favorite!
-        </p>
-      </div>
-    </div>
-
-    {/* Garlic Knots */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="g knots.jpg"
-        alt="Garlic Knots"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Garlic Knots</h3>
-          <span className="text-red-500 font-bold">$5.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-          Soft, oven-baked dough knots brushed with garlic butter and herbs. Warm, fluffy, and packed with flavor — served with a side of marinara.
-        </p>
-      </div>
-    </div>
-
-    {/* Bosco Sticks */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="bosco.jpg"
-        alt="Bosco Sticks"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Bosco Sticks</h3>
-          <span className="text-red-500 font-bold">$7.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-          Warm, soft breadsticks stuffed with melted mozzarella cheese and baked to a golden finish. Brushed with garlic butter and served with a side of marinara for the perfect cheesy bite.
-        </p>
-      </div>
-    </div>
-
-    {/* Fries */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="fries1.jpg"
-        alt="Fries"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Fries</h3>
-          <span className="text-red-500 font-bold">$3.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-          Crispy golden fries cooked fresh to order. Lightly salted and perfectly crunchy.
-        </p>
-      </div>
-    </div>
-
-    {/* Seasoned Fries */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="season f.jpg"
-        alt="Seasoned Fries"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Seasoned Fries</h3>
-          <span className="text-red-500 font-bold">$4.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-          Crispy fries tossed in our special house seasoning blend for bold flavor in every bite.
-        </p>
-      </div>
-    </div>
-
-    {/* Cheesy Fries */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-         src="cheese f.jpg"
-        alt="Cheesy Fries"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Cheesy Fries</h3>
-          <span className="text-red-500 font-bold">$5.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-          Our hot, crispy fries topped with rich melted cheese for a creamy, savory upgrade.
-        </p>
-      </div>
-    </div>
-
-    {/* Cheese Garlic Bread */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="c bread.jpg"
-        alt="Cheese Garlic Bread"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Cheese Garlic Bread</h3>
-          <span className="text-red-500 font-bold">$6.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-          Freshly made bread topped with our special garlic butter sauce topped with a generous amount of mozzarella cheese baked and served with marinara sauce
-        </p>
-      </div>
-    </div>
-
-  </div>
-</section>
-      
       {/* SALADS */}
-<section
-  id="salads"
-  className="py-20 bg-zinc-950 text-white px-6"
->
-  <h2 className="text-5xl font-bold text-center text-green-500 mb-6">
-    Salads
-  </h2>
-
-  <p className="text-center text-yellow-400 text-2xl font-bold mb-4">
-    Individual $9.99 • Family $19.99 • Party $32.99
-  </p>
-
-  <p className="text-center text-gray-300 text-lg max-w-4xl mx-auto mb-14">
-    All Salads Are Served With Your Choice Of Dressing:
-    Ranch, Italian, Caesar, Blue Cheese, Balsamic Vinaigrette,
-    or Honey Mustard.
-  </p>
-
-  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-
-    {/* Classic Chicken Caesar */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
-      <img
-        src="https://superbrecipe.com/wp-content/uploads/2025/07/Chicken-Caesar-Salad-1.png"
-        alt="Classic Chicken Caesar Salad"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <h3 className="text-2xl font-bold text-yellow-400">
-          Classic Chicken Caesar Salad
-        </h3>
-        <p className="text-gray-300 mt-3">
-          Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes topped with marinated chicken.
+      <section id="salads" className="py-20 bg-zinc-950 text-white px-6">
+        <h2 className="text-5xl font-bold text-center text-green-500 mb-6">Salads</h2>
+        <p className="text-center text-yellow-400 text-2xl font-bold mb-4">Individual $9.99 • Family $19.99 • Party $32.99</p>
+        <p className="text-center text-gray-300 text-lg max-w-4xl mx-auto mb-14">
+          All Salads Are Served With Your Choice Of Dressing: Ranch, Italian, Caesar, Blue Cheese, Balsamic Vinaigrette, or Honey Mustard.
         </p>
-      </div>
-    </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
 
-    {/* Garden Salad */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
-      <img
-        src="g salad.jpg"
-        alt="Garden Salad"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <h3 className="text-2xl font-bold text-yellow-400">
-          Garden Salad
-        </h3>
-        <p className="text-gray-300 mt-3">
-          Romaine lettuce, fresh tomatoes, bermuda onions, fresh mushrooms, green peppers.
-        </p>
-      </div>
-    </div>
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+            <img src="https://superbrecipe.com/wp-content/uploads/2025/07/Chicken-Caesar-Salad-1.png" alt="Classic Chicken Caesar Salad" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <h3 className="text-2xl font-bold text-yellow-400">Classic Chicken Caesar Salad</h3>
+              <p className="text-gray-300 mt-3">Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes topped with marinated chicken.</p>
+            </div>
+          </div>
 
-    {/* Classic Caesar */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
-      <img
-        src="https://images.unsplash.com/photo-1551248429-40975aa4de74?q=80&w=1200&auto=format&fit=crop"
-        alt="Classic Caesar Salad"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <h3 className="text-2xl font-bold text-yellow-400">
-          Classic Caesar Salad
-        </h3>
-        <p className="text-gray-300 mt-3">
-          Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes.
-        </p>
-      </div>
-    </div>
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+            <img src="g salad.jpg" alt="Garden Salad" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <h3 className="text-2xl font-bold text-yellow-400">Garden Salad</h3>
+              <p className="text-gray-300 mt-3">Romaine lettuce, fresh tomatoes, bermuda onions, fresh mushrooms, green peppers.</p>
+            </div>
+          </div>
 
-    {/* Chopped Chicken Salad */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
-      <img
-        src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1200&auto=format&fit=crop"
-        alt="Chopped Chicken Salad"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <h3 className="text-2xl font-bold text-yellow-400">
-          Chopped Chicken Salad
-        </h3>
-        <p className="text-gray-300 mt-3">
-          Romaine lettuce, mozzarella cheese, bermuda onions, bacon, chicken.
-        </p>
-      </div>
-    </div>
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1551248429-40975aa4de74?q=80&w=1200&auto=format&fit=crop" alt="Classic Caesar Salad" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <h3 className="text-2xl font-bold text-yellow-400">Classic Caesar Salad</h3>
+              <p className="text-gray-300 mt-3">Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes.</p>
+            </div>
+          </div>
 
-    {/* Signature House Salad */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
-      <img
-         src="sig salad.jpg"
-        alt="Signature House Salad"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <h3 className="text-2xl font-bold text-yellow-400">
-          Signature House Salad
-        </h3>
-        <p className="text-gray-300 mt-3">
-          Romaine lettuce with artichoke hearts, green peppers, kalamata olives, fresh tomatoes, onions and feta Cheese.
-        </p>
-      </div>
-    </div>
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1200&auto=format&fit=crop" alt="Chopped Chicken Salad" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <h3 className="text-2xl font-bold text-yellow-400">Chopped Chicken Salad</h3>
+              <p className="text-gray-300 mt-3">Romaine lettuce, mozzarella cheese, bermuda onions, bacon, chicken.</p>
+            </div>
+          </div>
 
-  </div>
-</section>
-      
-     {/* BEVERAGES */}
-<section
-  id="beverages"
-  className="py-20 bg-black text-white px-6"
->
-  <h2 className="text-5xl font-bold text-center text-red-600 mb-6">
-    Beverages
-  </h2>
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+            <img src="sig salad.jpg" alt="Signature House Salad" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <h3 className="text-2xl font-bold text-yellow-400">Signature House Salad</h3>
+              <p className="text-gray-300 mt-3">Romaine lettuce with artichoke hearts, green peppers, kalamata olives, fresh tomatoes, onions and feta cheese.</p>
+            </div>
+          </div>
 
-  <p className="text-center text-gray-300 text-xl mb-14">
-    Soft Drinks Served In Cans • Juices Served In Bottles
-  </p>
+        </div>
+      </section>
 
-  <div className="max-w-5xl mx-auto bg-zinc-900 rounded-3xl p-10 shadow-2xl">
+      {/* BEVERAGES */}
+      <section id="beverages" className="py-20 bg-black text-white px-6">
+        <h2 className="text-5xl font-bold text-center text-red-600 mb-6">Beverages</h2>
+        <p className="text-center text-gray-300 text-xl mb-14">Soft Drinks Served In Cans • Juices Served In Bottles</p>
+        <div className="max-w-5xl mx-auto bg-zinc-900 rounded-3xl p-10 shadow-2xl">
+          <div className="grid md:grid-cols-2 gap-6 text-xl">
+            {[["Coke (Can)","$1.99"],["Diet Coke (Can)","$1.99"],["Coke Zero (Can)","$1.99"],["Sprite (Can)","$1.99"],["Sprite Zero (Can)","$1.99"],["Pepsi (Can)","$1.99"],["Pepsi Zero (Can)","$1.99"],["Dr Pepper (Can)","$1.99"],["Mountain Dew (Can)","$1.99"],["Fanta (Can)","$1.99"],["Root Beer (Can)","$1.99"],["Apple Juice (Bottle)","$2.49"],["Orange Juice (Bottle)","$2.49"],["Pineapple Juice (Bottle)","$2.49"]].map(([name, price]) => (
+              <div key={name} className="flex justify-between border-b border-zinc-700 pb-3">
+                <span>{name}</span>
+                <span className="text-red-500 font-bold">{price}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-    <div className="grid md:grid-cols-2 gap-6 text-xl">
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Coke (Can)</span>
-        <span className="text-red-500 font-bold">$1.99</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Diet Coke (Can)</span>
-        <span className="text-red-500 font-bold">$1.99</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Coke Zero (Can)</span>
-        <span className="text-red-500 font-bold">$1.99</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Sprite (Can)</span>
-        <span className="text-red-500 font-bold">$1.99</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Sprite Zero (Can)</span>
-        <span className="text-red-500 font-bold">$1.99</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Pepsi (Can)</span>
-        <span className="text-red-500 font-bold">$1.99</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Pepsi Zero (Can)</span>
-        <span className="text-red-500 font-bold">$1.99</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Dr Pepper (Can)</span>
-        <span className="text-red-500 font-bold">$1.99</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Mountain Dew (Can)</span>
-        <span className="text-red-500 font-bold">$1.99</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Fanta (Can)</span>
-        <span className="text-red-500 font-bold">$1.99</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Root Beer (Can)</span>
-        <span className="text-red-500 font-bold">$1.99</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Apple Juice (Bottle)</span>
-        <span className="text-red-500 font-bold">$2.49</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Orange Juice (Bottle)</span>
-        <span className="text-red-500 font-bold">$2.49</span>
-      </div>
-
-      <div className="flex justify-between border-b border-zinc-700 pb-3">
-        <span>Pineapple Juice (Bottle)</span>
-        <span className="text-red-500 font-bold">$2.49</span>
-      </div>
-
-    </div>
-
-  </div>
-</section>
-      
       {/* DESSERTS */}
-<section
-  id="desserts"
-  className="py-20 bg-zinc-950 text-white px-6"
->
-  <h2 className="text-5xl font-bold text-center text-red-600 mb-6">
-    Desserts
-  </h2>
+      <section id="desserts" className="py-20 bg-zinc-950 text-white px-6">
+        <h2 className="text-5xl font-bold text-center text-red-600 mb-6">Desserts</h2>
+        <p className="text-center text-gray-300 text-xl mb-14 italic">The Perfect Sweet Ending To Your Meal</p>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
 
-  <p className="text-center text-gray-300 text-xl mb-14 italic">
-    The Perfect Sweet Ending To Your Meal
-  </p>
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="g j.jpg" alt="Gulab Jamun" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Gulab Jamun</h3><span className="text-red-500 font-bold">$4.99</span></div>
+              <p className="text-gray-300 mt-3">Soft, golden milk-solid dumplings slow-fried to perfection and soaked in a warm rose-scented sugar syrup. A classic South Asian dessert that melts in your mouth.</p>
+            </div>
+          </div>
 
-  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="k.jpg" alt="Kulfi" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Kulfi</h3><span className="text-red-500 font-bold">$5.99</span></div>
+              <p className="text-gray-300 mt-3">A rich, dense South Asian frozen dessert infused with saffron, rose water and crushed pistachios. Far richer than regular ice cream — a timeless desi classic.</p>
+            </div>
+          </div>
 
-    {/* Gulab Jamun */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="g j.jpg"
-        alt="Gulab Jamun"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Gulab Jamun</h3>
-          <span className="text-red-500 font-bold">$4.99</span>
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="cannoli.jpg" alt="Cannoli" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Cannoli</h3><span className="text-red-500 font-bold">$4.99</span></div>
+              <p className="text-gray-300 mt-3">Traditional Italian cannoli. Tube-shaped fried pastry dough with a sweet cream ricotta cheese filling.</p>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="bk.jpg" alt="Baklava" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Baklava</h3><span className="text-red-500 font-bold">$4.99</span></div>
+              <p className="text-gray-300 mt-3">Layers of crispy golden phyllo pastry filled with pistachios and walnuts, drenched in fragrant honey syrup. Sweet, flaky and utterly indulgent.</p>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="c cake.jpg" alt="Cheesecake" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Cheesecake</h3><span className="text-red-500 font-bold">$5.99</span></div>
+              <p className="text-gray-300 mt-3">New York Style Cheesecake With Graham Cracker Crust.</p>
+            </div>
+          </div>
+
+          <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
+            <img src="ch cake.jpg" alt="Chocolate Cake" className="h-64 w-full object-cover" />
+            <div className="p-6">
+              <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">Chocolate Cake</h3><span className="text-red-500 font-bold">$5.99</span></div>
+              <p className="text-gray-300 mt-3">Layers of chocolate cake filled and topped with fudge.</p>
+            </div>
+          </div>
+
         </div>
-        <p className="text-gray-300 mt-3">
-          Soft, golden milk-solid dumplings slow-fried to perfection and soaked in a warm rose-scented sugar syrup. A classic South Asian dessert that melts in your mouth with every bite.
-        </p>
-      </div>
-    </div>
+      </section>
 
-    {/* Kulfi */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="k.jpg"
-        alt="Kulfi"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Kulfi</h3>
-          <span className="text-red-500 font-bold">$5.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-          A rich, dense South Asian frozen dessert made with slow-simmered whole milk, cream and aromatic spices. Infused with saffron, rose water and crushed pistachios, kulfi delivers an intensely creamy flavor that's far richer than regular ice cream. Served on a stick or in a cup — a timeless desi classic.
-        </p>
-      </div>
-    </div>
-
-    {/* Cannoli */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="cannoli.jpg"
-        alt="Cannoli"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Cannoli</h3>
-          <span className="text-red-500 font-bold">$4.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-          Traditional Italian Cannoli. Tube Shapped Fried Pastry Dough With A Sweet Cream Ricotta Cheese Filling.
-        </p>
-      </div>
-    </div>
-
-    {/* Baklava */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="bk.jpg"
-        alt="Baklava"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Baklava</h3>
-          <span className="text-red-500 font-bold">$4.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-           Layers of crispy golden phyllo pastry filled with finely chopped pistachios and walnuts, baked to perfection and drenched in fragrant honey syrup. A beloved Mediterranean dessert that's sweet, flaky and utterly indulgent.
-        </p>
-      </div>
-    </div>
-
-    {/* Cheesecake */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="c cake.jpg"
-        alt="Cheesecake"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Cheesecake</h3>
-          <span className="text-red-500 font-bold">$5.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-          New York Style Cheesecake With Graham Cracker Crust.
-        </p>
-      </div>
-    </div>
-
-    {/* Chocolate Cake */}
-    <div className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-      <img
-        src="ch cake.jpg"
-        alt="Chocolate Cake"
-        className="h-64 w-full object-cover"
-      />
-      <div className="p-6">
-        <div className="flex justify-between">
-          <h3 className="text-2xl font-bold text-yellow-400">Chocolate Cake</h3>
-          <span className="text-red-500 font-bold">$5.99</span>
-        </div>
-        <p className="text-gray-300 mt-3">
-          Layers Of Chocolate Cake Filled and Topped With Fudge.  
-        </p>
-      </div>
-    </div>
-
-  </div>
-</section>
-      
       {/* OUR STORY */}
       <section id="story" className="bg-zinc-950 py-24 px-6">
         <div className="max-w-7xl mx-auto">
- 
-          {/* HEADER */}
           <div className="text-center mb-20">
             <p className="text-red-600 uppercase tracking-[5px] font-bold mb-3">Who We Are</p>
             <h2 className="text-6xl font-black text-white uppercase">Our Story</h2>
             <div className="h-1 w-32 bg-red-600 mx-auto mt-6 rounded" />
           </div>
- 
-          {/* INTRO BLOCK */}
           <div className="grid lg:grid-cols-2 gap-16 items-center mb-24">
             <div>
-              <h3 className="text-4xl font-black text-yellow-400 mb-6 leading-tight">
-                Where Every Bite Tells A Story
-              </h3>
-              <p className="text-gray-300 text-xl leading-relaxed mb-6">
-                Spice &amp; Bites Hub was born from a simple but powerful idea — that great food has no borders. Nestled in the heart of Fishers, Indiana, we are more than just a restaurant. We are a celebration of culture, community, and the universal love of food.
-              </p>
-              <p className="text-gray-300 text-xl leading-relaxed mb-6">
-                Our founders brought together decades of culinary passion spanning three rich food traditions — American comfort food, Mediterranean freshness, and bold Desi flavors — all under one roof. We believe the Indiana community deserves a dining experience that is both familiar and adventurous, satisfying and exciting.
-              </p>
-              <p className="text-gray-300 text-xl leading-relaxed">
-                From the first slice of our hand-tossed Signature Pizza to the last spoonful of slow-cooked Lamb Nihari, every dish we serve carries the heart of our kitchen and the warmth of our team.
-              </p>
+              <h3 className="text-4xl font-black text-yellow-400 mb-6 leading-tight">Where Every Bite Tells A Story</h3>
+              <p className="text-gray-300 text-xl leading-relaxed mb-6">Spice &amp; Bites Hub was born from a simple but powerful idea — that great food has no borders. Nestled in the heart of Fishers, Indiana, we are more than just a restaurant. We are a celebration of culture, community, and the universal love of food.</p>
+              <p className="text-gray-300 text-xl leading-relaxed mb-6">Our founders brought together decades of culinary passion spanning three rich food traditions — American comfort food, Mediterranean freshness, and bold Desi flavors — all under one roof. We believe the Indiana community deserves a dining experience that is both familiar and adventurous, satisfying and exciting.</p>
+              <p className="text-gray-300 text-xl leading-relaxed">From the first slice of our hand-tossed Signature Pizza to the last spoonful of slow-cooked Lamb Nihari, every dish we serve carries the heart of our kitchen and the warmth of our team.</p>
             </div>
             <div className="rounded-3xl overflow-hidden shadow-2xl">
-              <img
-                src="/logo.png"
-                alt="Our Kitchen"
-                className="w-full h-96 object-cover"
-              />
+              <img src="/logo.png" alt="Our Kitchen" className="w-full h-96 object-cover" />
             </div>
           </div>
- 
-          {/* KITCHEN IN ACTION */}
           <div className="text-center mb-14">
             <h3 className="text-5xl font-black text-white uppercase">Our Kitchen</h3>
-            <p className="text-gray-400 text-xl mt-4 max-w-3xl mx-auto">
-              Every dish starts with fresh ingredients, prepared with care and cooked with love. No shortcuts. No frozen shortcuts. Just real food made the right way.
-            </p>
+            <p className="text-gray-400 text-xl mt-4 max-w-3xl mx-auto">Every dish starts with fresh ingredients, prepared with care and cooked with love. No shortcuts. Just real food made the right way.</p>
           </div>
- 
           <div className="grid md:grid-cols-3 gap-8 mb-24">
             <div className="rounded-3xl overflow-hidden shadow-2xl">
-              <img
-                src="https://images.stockcake.com/public/1/c/4/1c49fbfa-af29-4652-b98e-f2a791d4cd35_large/pizza-dough-toss-stockcake.jpg"
-                alt="Pizza Preparation"
-                className="w-full h-72 object-cover"
-              />
+              <img src="https://images.stockcake.com/public/1/c/4/1c49fbfa-af29-4652-b98e-f2a791d4cd35_large/pizza-dough-toss-stockcake.jpg" alt="Pizza Preparation" className="w-full h-72 object-cover" />
               <div className="bg-zinc-900 p-6">
                 <h4 className="text-2xl font-bold text-yellow-400 mb-2">Hand-Crafted Pizzas</h4>
                 <p className="text-gray-300">Every pizza is hand-tossed, sauced and topped fresh to order. Our dough is made in-house daily for that perfect crispy-yet-chewy crust.</p>
               </div>
             </div>
- 
             <div className="rounded-3xl overflow-hidden shadow-2xl">
-              <img
-                src="https://images.stockcake.com/public/5/6/f/56f7479e-5d83-4d7f-9744-adb0a161f78b_large/spices-meet-heat-stockcake.jpg"
-                alt="Desi Cooking"
-                className="w-full h-72 object-cover"
-              />
+              <img src="https://images.stockcake.com/public/5/6/f/56f7479e-5d83-4d7f-9744-adb0a161f78b_large/spices-meet-heat-stockcake.jpg" alt="Desi Cooking" className="w-full h-72 object-cover" />
               <div className="bg-zinc-900 p-6">
                 <h4 className="text-2xl font-bold text-yellow-400 mb-2">Slow-Cooked Desi Flavors</h4>
                 <p className="text-gray-300">Our Nihari simmers for hours. Our Biryani is layered and dum-cooked to perfection. Authentic recipes passed down through generations, made fresh every day.</p>
               </div>
             </div>
- 
             <div className="rounded-3xl overflow-hidden shadow-2xl">
-              <img
-                src="https://www.aspicyperspective.com/wp-content/uploads/2023/11/Buffalo-Wing-Sauce-11.jpg"
-                alt="Wings Preparation"
-                className="w-full h-72 object-cover"
-              />
+              <img src="https://www.aspicyperspective.com/wp-content/uploads/2023/11/Buffalo-Wing-Sauce-11.jpg" alt="Wings Preparation" className="w-full h-72 object-cover" />
               <div className="bg-zinc-900 p-6">
                 <h4 className="text-2xl font-bold text-yellow-400 mb-2">Fresh Wings Daily</h4>
-                <p className="text-gray-300">Our bone-in and boneless wings are made fresh daily — never frozen. Tossed in your choice of 7 signature flavors and served with house-made dipping sauces.</p>
+                <p className="text-gray-300">Our bone-in and boneless wings are made fresh daily — never frozen. Tossed in your choice of signature flavors and served with house-made dipping sauces.</p>
               </div>
             </div>
           </div>
- 
-          {/* WHAT WE SERVE */}
           <div className="bg-zinc-900 rounded-3xl p-12 mb-24">
             <h3 className="text-5xl font-black text-white uppercase text-center mb-12">What We Serve</h3>
             <div className="grid md:grid-cols-3 gap-10 text-center">
- 
               <div>
                 <div className="text-6xl mb-4">🍕</div>
                 <h4 className="text-2xl font-black text-yellow-400 mb-3">American Menu</h4>
                 <p className="text-gray-300 text-lg">Hand-tossed pizzas, calzone wraps, crispy wings, pasta, mac &amp; cheese and starters. Classic American comfort food made fresh with bold flavors.</p>
               </div>
- 
               <div>
                 <div className="text-6xl mb-4">🌯</div>
                 <h4 className="text-2xl font-black text-yellow-400 mb-3">Mediterranean Menu</h4>
                 <p className="text-gray-300 text-lg">Chicken and lamb gyros, over-rice platters, falafel, Philly cheesesteaks and chicken phillies. Fresh Mediterranean flavors prepared with care.</p>
               </div>
- 
               <div>
                 <div className="text-6xl mb-4">🍛</div>
                 <h4 className="text-2xl font-black text-yellow-400 mb-3">Desi Menu</h4>
                 <p className="text-gray-300 text-lg">Slow-cooked Nihari, aromatic Biryani, Chicken Karahi, Butter Chicken, Malai Boti and more. Authentic South Asian cuisine crafted with traditional spices.</p>
               </div>
- 
             </div>
           </div>
- 
-          {/* COMMUNITY */}
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="rounded-3xl overflow-hidden shadow-2xl order-2 lg:order-1">
-              <img
-                src="https://png.pngtree.com/thumb_back/fh260/background/20250310/pngtree-sharing-a-meal-hands-reaching-for-food-on-rustic-wooden-table-image_17087487.jpg"
-                alt="Community Dining"
-                className="w-full h-96 object-cover"
-              />
+              <img src="https://png.pngtree.com/thumb_back/fh260/background/20250310/pngtree-sharing-a-meal-hands-reaching-for-food-on-rustic-wooden-table-image_17087487.jpg" alt="Community Dining" className="w-full h-96 object-cover" />
             </div>
             <div className="order-1 lg:order-2">
-              <h3 className="text-4xl font-black text-yellow-400 mb-6 leading-tight">
-                Serving the Indiana Community
-              </h3>
-              <p className="text-gray-300 text-xl leading-relaxed mb-6">
-                Located at 7233 Fishers Landing Dr in Fishers, Indiana, Spice &amp; Bites Hub is proud to be part of this incredible community. We serve families, professionals, students and food lovers of all backgrounds — because great food brings people together.
-              </p>
-              <p className="text-gray-300 text-xl leading-relaxed mb-6">
-                Whether you are stopping in for a late-night slice, ordering wings for the big game, or sitting down for a hearty Desi meal with the family — our doors are open seven days a week from 11 AM to midnight.
-              </p>
-              <p className="text-gray-300 text-xl leading-relaxed">
-                We are not just feeding appetites. We are building memories, one plate at a time. Thank you, Indiana, for welcoming us into your community. We can't wait to serve you.
-              </p>
+              <h3 className="text-4xl font-black text-yellow-400 mb-6 leading-tight">Serving the Indiana Community</h3>
+              <p className="text-gray-300 text-xl leading-relaxed mb-6">Located at 7233 Fishers Landing Dr in Fishers, Indiana, Spice &amp; Bites Hub is proud to be part of this incredible community. We serve families, professionals, students and food lovers of all backgrounds — because great food brings people together.</p>
+              <p className="text-gray-300 text-xl leading-relaxed mb-6">Whether you are stopping in for a late-night slice, ordering wings for the big game, or sitting down for a hearty Desi meal with the family — our doors are open seven days a week from 11 AM to midnight.</p>
+              <p className="text-gray-300 text-xl leading-relaxed">We are not just feeding appetites. We are building memories, one plate at a time. Thank you, Indiana, for welcoming us into your community.</p>
               <div className="mt-10">
                 <a href="tel:9514546896" className="bg-red-600 hover:bg-red-700 px-10 py-5 rounded-xl text-xl font-bold transition inline-block">
                   📞 Call to Order — 951-454-6896
@@ -1581,10 +1338,9 @@ export default function Home() {
               </div>
             </div>
           </div>
- 
         </div>
       </section>
-      
+
       {/* CONTACT */}
       <section id="contact" className="bg-black py-20 px-6 text-center">
         <h2 className="text-5xl font-black text-red-600 uppercase mb-10">Visit Us</h2>
