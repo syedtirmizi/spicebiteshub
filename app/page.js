@@ -5,31 +5,78 @@ export default function Home() {
   const [pizzaOpen, setPizzaOpen] = useState(false);
   const [buildOpen, setBuildOpen] = useState(false);
   const [specialtyOpen, setSpecialtyOpen] = useState(false);
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedCrust, setSelectedCrust] = useState("");
-  const [selectedToppings, setSelectedToppings] = useState([]);
-  const [specSize, setSpecSize] = useState("");
-  const [specCrust, setSpecCrust] = useState("");
-  const [specToppings, setSpecToppings] = useState([]);
+  const [sliceOpen, setSliceOpen] = useState(false);
   const [calzoneOpen, setCalzoneOpen] = useState(false);
   const [boneInOpen, setBoneInOpen] = useState(false);
   const [bonelessOpen, setBonelessOpen] = useState(false);
   const [pastaOpen, setPastaOpen] = useState(false);
   const [macOpen, setMacOpen] = useState(false);
 
-  const toggleTopping = (topping) => {
-    setSelectedToppings(prev =>
-      prev.includes(topping) ? prev.filter(t => t !== topping) : [...prev, topping]
-    );
+  // Build Your Own — supports multiple pizzas
+  const emptyBuild = { size: "", crust: "", toppings: [] };
+  const [buildOrders, setBuildOrders] = useState([{ ...emptyBuild }]);
+
+  const updateBuild = (index, field, value) => {
+    setBuildOrders(prev => prev.map((o, i) => i === index ? { ...o, [field]: value } : o));
+  };
+  const toggleBuildTopping = (index, topping) => {
+    setBuildOrders(prev => prev.map((o, i) => i === index
+      ? { ...o, toppings: o.toppings.includes(topping) ? o.toppings.filter(t => t !== topping) : [...o.toppings, topping] }
+      : o));
+  };
+  const addBuildPizza = () => setBuildOrders(prev => [...prev, { ...emptyBuild }]);
+  const removeBuildPizza = (index) => setBuildOrders(prev => prev.filter((_, i) => i !== index));
+
+  // Specialty — supports multiple pizzas
+  const emptySpec = { name: "", size: "", crust: "", toppings: [] };
+  const [specOrders, setSpecOrders] = useState([{ ...emptySpec }]);
+
+  const updateSpec = (index, field, value) => {
+    setSpecOrders(prev => prev.map((o, i) => i === index ? { ...o, [field]: value } : o));
+  };
+  const toggleSpecTopping = (index, topping) => {
+    setSpecOrders(prev => prev.map((o, i) => i === index
+      ? { ...o, toppings: o.toppings.includes(topping) ? o.toppings.filter(t => t !== topping) : [...o.toppings, topping] }
+      : o));
+  };
+  const addSpecPizza = () => setSpecOrders(prev => [...prev, { ...emptySpec }]);
+  const removeSpecPizza = (index) => setSpecOrders(prev => prev.filter((_, i) => i !== index));
+
+  // Pizza by Slice
+  const sliceTypes = ["Cheese", "Pepperoni", "Sausage"];
+  const emptySlice = { type: "", quantity: 1, toppings: [] };
+  const [sliceOrders, setSliceOrders] = useState([{ ...emptySlice }]);
+
+  const updateSlice = (index, field, value) => {
+    setSliceOrders(prev => prev.map((o, i) => i === index ? { ...o, [field]: value } : o));
+  };
+  const toggleSliceTopping = (index, topping) => {
+    setSliceOrders(prev => prev.map((o, i) => i === index
+      ? { ...o, toppings: o.toppings.includes(topping) ? o.toppings.filter(t => t !== topping) : [...o.toppings, topping] }
+      : o));
+  };
+  const addSliceOrder = () => setSliceOrders(prev => [...prev, { ...emptySlice }]);
+  const removeSliceOrder = (index) => setSliceOrders(prev => prev.filter((_, i) => i !== index));
+
+  const buildSizes = [
+    { size: '10"', price: "$8.99" },
+    { size: '12"', price: "$10.99" },
+    { size: '14"', price: "$12.99" },
+    { size: '16"', price: "$14.99" },
+    { size: '24"', price: "$24.99" },
+  ];
+
+  const specSizes = [
+    { size: '10"', price: "$12.99" },
+    { size: '12"', price: "$14.99" },
+    { size: '14"', price: "$16.99" },
+    { size: '16"', price: "$18.99" },
+  ];
+
+  const toppingPrices = {
+    '10"': "$1.75", '12"': "$2.25", '14"': "$2.75", '16"': "$3.25", '24"': "$4.00",
   };
 
-  const toggleSpecTopping = (topping) => {
-    setSpecToppings(prev =>
-      prev.includes(topping) ? prev.filter(t => t !== topping) : [...prev, topping]
-    );
-  };
-
-  const pizzaSizes = ["10\"", "12\"", "14\"", "16\"", "24\""];
   const crustTypes = ["Thin Crust", "Traditional"];
   const toppings = [
     "Artichoke Hearts", "Asiago Cheese", "Banana Peppers", "BBQ Sauce",
@@ -38,6 +85,18 @@ export default function Home() {
     "Green Olives", "Green Peppers", "Chicken", "Italian Sausage",
     "Jalapeno Peppers", "Kalamata Olives", "Lean Ground Beef", "Pepperoni",
     "Smoked Bacon", "Spinach Leaves", "Sweet Pineapple", "White Onions"
+  ];
+
+  const specialtyPizzas = [
+    { name: "Pepperoni Pizza", img: "pep pizza.jpg", desc: "Signature pizza sauce with pepperoni layer of melted mozzarella cheese." },
+    { name: "Signature Pizza", img: "signature pizza.jpg", desc: "Signature pizza sauce with pepperoni, Italian sausage, onion, fresh mushrooms, green peppers & black olive layer of melted mozzarella cheese." },
+    { name: "Pepperoni & Sausage", img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?q=80&w=1200&auto=format&fit=crop", desc: "Signature pizza sauce with double sausage & double pepperoni layer of melted mozzarella cheese." },
+    { name: "Buffalo Chicken Pizza", img: "buffalo chicken pizza.jpg", desc: "Hot sauce, Bermuda onions & chunks of fresh chicken layer of melted mozzarella cheese." },
+    { name: "Italian Sausage Pizza", img: "https://www.thursdaynightpizza.com/wp-content/uploads/2020/11/cut-overhead_STAMP.png", desc: "Signature pizza sauce with seasoned Italian sausage, fresh mushroom & green pepper layer of melted mozzarella cheese." },
+    { name: "Meat Lovers Pizza", img: "meat lovers.jpg", desc: "Signature pizza sauce with sausage, pepperoni, Canadian bacon layer of melted mozzarella cheese." },
+    { name: "Vegetarian Pizza", img: "vegi pizza.jpg", desc: "Signature pizza sauce with onion, fresh mushrooms, green peppers & spinach layer of melted mozzarella cheese." },
+    { name: "Chicken Tikka Pizza", img: "https://flavorry.com/wp-content/uploads/2025/09/teamgreen1001_httpss.mj_.run9zT8Sikxhn8_An_ultra-close-up_AND__ecff3b71-758f-4b56-a1ea-7797418d9935_1.png", desc: "Homemade garlic sauce with marinated chicken chunks layer of melted mozzarella cheese." },
+    { name: "Lamb Pizza", img: "lamb pizza.jpg", desc: "Homemade garlic sauce with lamb layer of melted mozzarella cheese." },
   ];
 
   return (
@@ -189,79 +248,108 @@ export default function Home() {
 
                   {buildOpen && (
                     <div className="px-10 pb-10">
-
-                      {/* CHEESE PIZZA CARD */}
-                      <div className="bg-zinc-800 rounded-2xl overflow-hidden mb-10 max-w-sm">
+                      <div className="bg-zinc-800 rounded-2xl overflow-hidden mb-8 max-w-sm">
                         <img src="cheese pizza.jpg" alt="Cheese Pizza" className="h-48 w-full object-cover" />
                         <div className="p-5">
                           <h3 className="text-2xl font-bold text-yellow-400">Cheese Pizza</h3>
-                          <p className="text-gray-300 mt-2">Signature pizza sauce and a generous layer of melted mozzarella cheese. Build it your way!</p>
+                          <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce and melted mozzarella. Build it your way!</p>
                         </div>
                       </div>
 
-                      {/* SIZE */}
-                      <div className="mb-8">
-                        <h5 className="text-xl font-black text-white uppercase tracking-widest mb-4">📏 Choose Your Size</h5>
-                        <div className="flex flex-wrap gap-3">
-                          {pizzaSizes.map((size) => (
-                            <button key={size} onClick={() => setSelectedSize(size)}
-                              className={`px-7 py-3 rounded-2xl text-lg font-black border-2 transition ${selectedSize === size ? "bg-red-600 border-red-600 text-white" : "bg-zinc-800 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
-                              {size}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
+                      {buildOrders.map((order, index) => (
+                        <div key={index} className="bg-zinc-800 rounded-2xl p-6 mb-6 border border-zinc-700">
+                          <div className="flex justify-between items-center mb-5">
+                            <h5 className="text-xl font-black text-yellow-400">Pizza #{index + 1}</h5>
+                            {buildOrders.length > 1 && (
+                              <button onClick={() => removeBuildPizza(index)} className="bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-bold transition">
+                                ✕ Remove
+                              </button>
+                            )}
+                          </div>
 
-                      {/* CRUST */}
-                      <div className="mb-8">
-                        <h5 className="text-xl font-black text-white uppercase tracking-widest mb-4">🫓 Choose Your Crust</h5>
-                        <div className="flex flex-wrap gap-3">
-                          {crustTypes.map((crust) => (
-                            <button key={crust} onClick={() => setSelectedCrust(crust)}
-                              className={`px-7 py-3 rounded-2xl text-lg font-black border-2 transition ${selectedCrust === crust ? "bg-yellow-500 border-yellow-500 text-black" : "bg-zinc-800 border-zinc-600 text-gray-300 hover:border-yellow-500"}`}>
-                              {crust}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
+                          <div className="mb-5">
+                            <p className="text-white font-black uppercase tracking-widest text-sm mb-3">📏 Size</p>
+                            <div className="flex flex-wrap gap-3">
+                              {buildSizes.map(({ size, price }) => (
+                                <button key={size} onClick={() => updateBuild(index, "size", size)}
+                                  className={`px-5 py-3 rounded-xl font-black border-2 transition flex flex-col items-center ${order.size === size ? "bg-red-600 border-red-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
+                                  <span className="text-base">{size}</span>
+                                  <span className={`text-xs font-bold ${order.size === size ? "text-white" : "text-yellow-400"}`}>{price}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
 
-                      {/* TOPPINGS */}
-                      <div className="mb-8">
-                        <h5 className="text-xl font-black text-white uppercase tracking-widest mb-2">🧄 Choose Your Toppings</h5>
-                        <p className="text-gray-400 mb-5 text-sm">Tap to select / deselect</p>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                          {toppings.map((topping) => (
-                            <button key={topping} onClick={() => toggleTopping(topping)}
-                              className={`px-4 py-3 rounded-xl text-sm font-bold border-2 transition text-left ${selectedToppings.includes(topping) ? "bg-green-600 border-green-600 text-white" : "bg-zinc-800 border-zinc-600 text-gray-300 hover:border-green-500"}`}>
-                              {selectedToppings.includes(topping) ? "✅ " : "➕ "}{topping}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
+                          <div className="mb-5">
+                            <p className="text-white font-black uppercase tracking-widest text-sm mb-3">🫓 Crust</p>
+                            <div className="flex flex-wrap gap-3">
+                              {crustTypes.map((crust) => (
+                                <button key={crust} onClick={() => updateBuild(index, "crust", crust)}
+                                  className={`px-6 py-3 rounded-xl text-base font-black border-2 transition ${order.crust === crust ? "bg-yellow-500 border-yellow-500 text-black" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-yellow-500"}`}>
+                                  {crust}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
 
-                      {/* SUMMARY */}
-                      {(selectedSize || selectedCrust || selectedToppings.length > 0) && (
-                        <div className="bg-zinc-700 rounded-2xl p-6">
-                          <h5 className="text-xl font-black text-yellow-400 mb-3 uppercase">Your Selection</h5>
-                          {selectedSize && <p className="text-white mb-1">📏 Size: <span className="text-yellow-400 font-bold">{selectedSize}</span></p>}
-                          {selectedCrust && <p className="text-white mb-1">🫓 Crust: <span className="text-yellow-400 font-bold">{selectedCrust}</span></p>}
-                          {selectedToppings.length > 0 && (
-                            <div className="mt-2">
-                              <p className="text-white mb-2">🧄 Toppings ({selectedToppings.length}):</p>
-                              <div className="flex flex-wrap gap-2">
-                                {selectedToppings.map(t => (
-                                  <span key={t} className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-bold">{t}</span>
-                                ))}
-                              </div>
+                          <div>
+                            <p className="text-white font-black uppercase tracking-widest text-sm mb-1">🧄 Toppings</p>
+                            {order.size && <p className="text-yellow-400 text-xs mb-3">Each topping: {toppingPrices[order.size]} for {order.size}</p>}
+                            {!order.size && <p className="text-gray-400 text-xs mb-3">Select a size to see topping prices</p>}
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                              {toppings.map((topping) => (
+                                <button key={topping} onClick={() => toggleBuildTopping(index, topping)}
+                                  className={`px-3 py-2 rounded-lg text-xs font-bold border-2 transition text-left ${order.toppings.includes(topping) ? "bg-green-600 border-green-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-green-500"}`}>
+                                  {order.toppings.includes(topping) ? "✅ " : "➕ "}{topping}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {(order.size || order.crust || order.toppings.length > 0) && (
+                            <div className="mt-5 bg-zinc-900 rounded-xl p-4">
+                              <p className="text-yellow-400 font-black text-sm uppercase mb-3">Your Pizza #{index + 1} Summary</p>
+                              {order.size && (
+                                <div className="flex justify-between text-sm mb-1">
+                                  <span className="text-white">📏 {order.size} Base Price</span>
+                                  <span className="text-red-400 font-bold">{buildSizes.find(s => s.size === order.size)?.price}</span>
+                                </div>
+                              )}
+                              {order.crust && <p className="text-white text-sm mb-1">🫓 {order.crust}</p>}
+                              {order.toppings.length > 0 && order.size && (
+                                <div>
+                                  <div className="flex justify-between text-sm mb-1 mt-1">
+                                    <span className="text-white">🧄 {order.toppings.length} Topping{order.toppings.length > 1 ? "s" : ""} x {toppingPrices[order.size]}</span>
+                                    <span className="text-green-400 font-bold">
+                                      +${(order.toppings.length * parseFloat(toppingPrices[order.size].replace("$",""))).toFixed(2)}
+                                    </span>
+                                  </div>
+                                  <p className="text-gray-400 text-xs mb-2">{order.toppings.join(", ")}</p>
+                                </div>
+                              )}
+                              {order.toppings.length > 0 && !order.size && (
+                                <p className="text-gray-400 text-xs mb-2">🧄 {order.toppings.join(", ")}</p>
+                              )}
+                              {order.size && (
+                                <div className="border-t border-zinc-700 mt-3 pt-3 flex justify-between">
+                                  <span className="text-white font-black text-sm">Estimated Total</span>
+                                  <span className="text-yellow-400 font-black text-sm">
+                                    ${(
+                                      parseFloat(buildSizes.find(s => s.size === order.size)?.price.replace("$","") || 0) +
+                                      (order.toppings.length * parseFloat((toppingPrices[order.size] || "$0").replace("$","")))
+                                    ).toFixed(2)}
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           )}
-                          <button onClick={() => { setSelectedSize(""); setSelectedCrust(""); setSelectedToppings([]); }}
-                            className="mt-4 bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-xl font-bold transition text-sm">
-                            🔄 Reset
-                          </button>
                         </div>
-                      )}
+                      ))}
 
+                      <button onClick={addBuildPizza}
+                        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black text-lg py-4 rounded-2xl transition mt-2">
+                        ➕ Add Another Pizza
+                      </button>
                     </div>
                   )}
                 </div>
@@ -282,146 +370,237 @@ export default function Home() {
                   {specialtyOpen && (
                     <div className="px-10 pb-10">
 
-                      {/* SPECIALTY GRID */}
-                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-
-                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
-                          <img src="pep pizza.jpg" alt="Pepperoni Pizza" className="h-48 w-full object-cover" />
-                          <div className="p-5">
-                            <h3 className="text-xl font-bold text-yellow-400">Pepperoni Pizza</h3>
-                            <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce with pepperoni layer of melted mozzarella cheese.</p>
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                        {specialtyPizzas.map((pizza) => (
+                          <div key={pizza.name} className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
+                            <img src={pizza.img} alt={pizza.name} className="h-44 w-full object-cover" />
+                            <div className="p-4">
+                              <h3 className="text-lg font-bold text-yellow-400">{pizza.name}</h3>
+                              <p className="text-gray-300 mt-1 text-xs">{pizza.desc}</p>
+                            </div>
                           </div>
-                        </div>
-
-                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
-                          <img src="signature pizza.jpg" alt="Signature Pizza" className="h-48 w-full object-cover" />
-                          <div className="p-5">
-                            <h3 className="text-xl font-bold text-yellow-400">Signature Pizza</h3>
-                            <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce with pepperoni, Italian sausage, onion, fresh mushrooms, green peppers &amp; black olive layer of melted mozzarella cheese.</p>
-                          </div>
-                        </div>
-
-                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
-                          <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?q=80&w=1200&auto=format&fit=crop" alt="Pepperoni and Sausage Pizza" className="h-48 w-full object-cover" />
-                          <div className="p-5">
-                            <h3 className="text-xl font-bold text-yellow-400">Pepperoni &amp; Sausage</h3>
-                            <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce with double sausage &amp; double pepperoni layer of melted mozzarella cheese.</p>
-                          </div>
-                        </div>
-
-                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
-                          <img src="buffalo chicken pizza.jpg" alt="Buffalo Chicken Pizza" className="h-48 w-full object-cover" />
-                          <div className="p-5">
-                            <h3 className="text-xl font-bold text-yellow-400">Buffalo Chicken Pizza</h3>
-                            <p className="text-gray-300 mt-2 text-sm">Hot sauce, Bermuda onions &amp; chunks of fresh chicken layer of melted mozzarella cheese.</p>
-                          </div>
-                        </div>
-
-                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
-                          <img src="https://www.thursdaynightpizza.com/wp-content/uploads/2020/11/cut-overhead_STAMP.png" alt="Italian Sausage Pizza" className="h-48 w-full object-cover" />
-                          <div className="p-5">
-                            <h3 className="text-xl font-bold text-yellow-400">Italian Sausage Pizza</h3>
-                            <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce with seasoned Italian sausage, fresh mushroom &amp; green pepper layer of melted mozzarella cheese.</p>
-                          </div>
-                        </div>
-
-                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
-                          <img src="meat lovers.jpg" alt="Meat Lovers Pizza" className="h-48 w-full object-cover" />
-                          <div className="p-5">
-                            <h3 className="text-xl font-bold text-yellow-400">Meat Lovers Pizza</h3>
-                            <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce with sausage, pepperoni, Canadian bacon layer of melted mozzarella cheese.</p>
-                          </div>
-                        </div>
-
-                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
-                          <img src="vegi pizza.jpg" alt="Vegetarian Pizza" className="h-48 w-full object-cover" />
-                          <div className="p-5">
-                            <h3 className="text-xl font-bold text-yellow-400">Vegetarian Pizza</h3>
-                            <p className="text-gray-300 mt-2 text-sm">Signature pizza sauce with onion, fresh mushrooms, green peppers &amp; spinach layer of melted mozzarella cheese.</p>
-                          </div>
-                        </div>
-
-                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
-                          <img src="https://flavorry.com/wp-content/uploads/2025/09/teamgreen1001_httpss.mj_.run9zT8Sikxhn8_An_ultra-close-up_AND__ecff3b71-758f-4b56-a1ea-7797418d9935_1.png" alt="Chicken Tikka Pizza" className="h-48 w-full object-cover" />
-                          <div className="p-5">
-                            <h3 className="text-xl font-bold text-yellow-400">Chicken Tikka Pizza</h3>
-                            <p className="text-gray-300 mt-2 text-sm">Homemade garlic sauce with marinated chicken chunks layer of melted mozzarella cheese.</p>
-                          </div>
-                        </div>
-
-                        <div className="bg-zinc-800 rounded-2xl overflow-hidden hover:scale-105 transition">
-                          <img src="lamb pizza.jpg" alt="Lamb Pizza" className="h-48 w-full object-cover" />
-                          <div className="p-5">
-                            <h3 className="text-xl font-bold text-yellow-400">Lamb Pizza</h3>
-                            <p className="text-gray-300 mt-2 text-sm">Homemade garlic sauce with lamb layer of melted mozzarella cheese.</p>
-                          </div>
-                        </div>
-
+                        ))}
                       </div>
 
-                      {/* SPECIALTY SIZE */}
-                      <div className="mb-8">
-                        <h5 className="text-xl font-black text-white uppercase tracking-widest mb-4">📏 Choose Your Size</h5>
-                        <div className="flex flex-wrap gap-3">
-                          {pizzaSizes.map((size) => (
-                            <button key={size} onClick={() => setSpecSize(size)}
-                              className={`px-7 py-3 rounded-2xl text-lg font-black border-2 transition ${specSize === size ? "bg-red-600 border-red-600 text-white" : "bg-zinc-800 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
-                              {size}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
+                      {specOrders.map((order, index) => (
+                        <div key={index} className="bg-zinc-800 rounded-2xl p-6 mb-6 border border-zinc-700">
+                          <div className="flex justify-between items-center mb-5">
+                            <h5 className="text-xl font-black text-yellow-400">Order #{index + 1}</h5>
+                            {specOrders.length > 1 && (
+                              <button onClick={() => removeSpecPizza(index)} className="bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-bold transition">
+                                ✕ Remove
+                              </button>
+                            )}
+                          </div>
 
-                      {/* SPECIALTY CRUST */}
-                      <div className="mb-8">
-                        <h5 className="text-xl font-black text-white uppercase tracking-widest mb-4">🫓 Choose Your Crust</h5>
-                        <div className="flex flex-wrap gap-3">
-                          {crustTypes.map((crust) => (
-                            <button key={crust} onClick={() => setSpecCrust(crust)}
-                              className={`px-7 py-3 rounded-2xl text-lg font-black border-2 transition ${specCrust === crust ? "bg-yellow-500 border-yellow-500 text-black" : "bg-zinc-800 border-zinc-600 text-gray-300 hover:border-yellow-500"}`}>
-                              {crust}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
+                          <div className="mb-5">
+                            <p className="text-white font-black uppercase tracking-widest text-sm mb-3">🍕 Select Pizza</p>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                              {specialtyPizzas.map((pizza) => (
+                                <button key={pizza.name} onClick={() => updateSpec(index, "name", pizza.name)}
+                                  className={`px-3 py-2 rounded-xl text-xs font-bold border-2 transition text-left ${order.name === pizza.name ? "bg-red-600 border-red-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
+                                  {order.name === pizza.name ? "✅ " : ""}{pizza.name}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
 
-                      {/* SPECIALTY TOPPINGS */}
-                      <div className="mb-8">
-                        <h5 className="text-xl font-black text-white uppercase tracking-widest mb-2">🧄 Add Extra Toppings</h5>
-                        <p className="text-gray-400 mb-5 text-sm">Tap to select / deselect</p>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                          {toppings.map((topping) => (
-                            <button key={topping} onClick={() => toggleSpecTopping(topping)}
-                              className={`px-4 py-3 rounded-xl text-sm font-bold border-2 transition text-left ${specToppings.includes(topping) ? "bg-green-600 border-green-600 text-white" : "bg-zinc-800 border-zinc-600 text-gray-300 hover:border-green-500"}`}>
-                              {specToppings.includes(topping) ? "✅ " : "➕ "}{topping}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
+                          <div className="mb-5">
+                            <p className="text-white font-black uppercase tracking-widest text-sm mb-3">📏 Size</p>
+                            <div className="flex flex-wrap gap-3">
+                              {specSizes.map(({ size, price }) => (
+                                <button key={size} onClick={() => updateSpec(index, "size", size)}
+                                  className={`px-5 py-3 rounded-xl font-black border-2 transition flex flex-col items-center ${order.size === size ? "bg-red-600 border-red-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
+                                  <span className="text-base">{size}</span>
+                                  <span className={`text-xs font-bold ${order.size === size ? "text-white" : "text-yellow-400"}`}>{price}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
 
-                      {/* SPECIALTY SUMMARY */}
-                      {(specSize || specCrust || specToppings.length > 0) && (
-                        <div className="bg-zinc-700 rounded-2xl p-6">
-                          <h5 className="text-xl font-black text-yellow-400 mb-3 uppercase">Your Selection</h5>
-                          {specSize && <p className="text-white mb-1">📏 Size: <span className="text-yellow-400 font-bold">{specSize}</span></p>}
-                          {specCrust && <p className="text-white mb-1">🫓 Crust: <span className="text-yellow-400 font-bold">{specCrust}</span></p>}
-                          {specToppings.length > 0 && (
-                            <div className="mt-2">
-                              <p className="text-white mb-2">🧄 Extra Toppings ({specToppings.length}):</p>
-                              <div className="flex flex-wrap gap-2">
-                                {specToppings.map(t => (
-                                  <span key={t} className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-bold">{t}</span>
-                                ))}
-                              </div>
+                          <div className="mb-5">
+                            <p className="text-white font-black uppercase tracking-widest text-sm mb-3">🫓 Crust</p>
+                            <div className="flex flex-wrap gap-3">
+                              {crustTypes.map((crust) => (
+                                <button key={crust} onClick={() => updateSpec(index, "crust", crust)}
+                                  className={`px-6 py-3 rounded-xl text-base font-black border-2 transition ${order.crust === crust ? "bg-yellow-500 border-yellow-500 text-black" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-yellow-500"}`}>
+                                  {crust}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div>
+                            <p className="text-white font-black uppercase tracking-widest text-sm mb-1">🧄 Extra Toppings</p>
+                            {order.size && <p className="text-yellow-400 text-xs mb-3">Each topping: {toppingPrices[order.size]} for {order.size}</p>}
+                            {!order.size && <p className="text-gray-400 text-xs mb-3">Select a size to see topping prices</p>}
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                              {toppings.map((topping) => (
+                                <button key={topping} onClick={() => toggleSpecTopping(index, topping)}
+                                  className={`px-3 py-2 rounded-lg text-xs font-bold border-2 transition text-left ${order.toppings.includes(topping) ? "bg-green-600 border-green-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-green-500"}`}>
+                                  {order.toppings.includes(topping) ? "✅ " : "➕ "}{topping}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {(order.name || order.size || order.crust || order.toppings.length > 0) && (
+                            <div className="mt-5 bg-zinc-900 rounded-xl p-4">
+                              <p className="text-yellow-400 font-black text-sm uppercase mb-3">Your Order #{index + 1} Summary</p>
+                              {order.name && <p className="text-white text-sm mb-1">🍕 {order.name}</p>}
+                              {order.size && (
+                                <div className="flex justify-between text-sm mb-1">
+                                  <span className="text-white">📏 {order.size} Base Price</span>
+                                  <span className="text-red-400 font-bold">{specSizes.find(s => s.size === order.size)?.price}</span>
+                                </div>
+                              )}
+                              {order.crust && <p className="text-white text-sm mb-1">🫓 {order.crust}</p>}
+                              {order.toppings.length > 0 && order.size && (
+                                <div>
+                                  <div className="flex justify-between text-sm mb-1 mt-1">
+                                    <span className="text-white">🧄 {order.toppings.length} Extra Topping{order.toppings.length > 1 ? "s" : ""} x {toppingPrices[order.size]}</span>
+                                    <span className="text-green-400 font-bold">
+                                      +${(order.toppings.length * parseFloat(toppingPrices[order.size].replace("$",""))).toFixed(2)}
+                                    </span>
+                                  </div>
+                                  <p className="text-gray-400 text-xs mb-2">{order.toppings.join(", ")}</p>
+                                </div>
+                              )}
+                              {order.toppings.length > 0 && !order.size && (
+                                <p className="text-gray-400 text-xs mb-2">🧄 Extra: {order.toppings.join(", ")}</p>
+                              )}
+                              {order.size && (
+                                <div className="border-t border-zinc-700 mt-3 pt-3 flex justify-between">
+                                  <span className="text-white font-black text-sm">Estimated Total</span>
+                                  <span className="text-yellow-400 font-black text-sm">
+                                    ${(
+                                      parseFloat(specSizes.find(s => s.size === order.size)?.price.replace("$","") || 0) +
+                                      (order.toppings.length * parseFloat((toppingPrices[order.size] || "$0").replace("$","")))
+                                    ).toFixed(2)}
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           )}
-                          <button onClick={() => { setSpecSize(""); setSpecCrust(""); setSpecToppings([]); }}
-                            className="mt-4 bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-xl font-bold transition text-sm">
-                            🔄 Reset
-                          </button>
                         </div>
-                      )}
+                      ))}
 
+                      <button onClick={addSpecPizza}
+                        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black text-lg py-4 rounded-2xl transition mt-2">
+                        ➕ Add Another Pizza
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* ── PIZZA BY SLICE ── */}
+                <div className="bg-zinc-900 rounded-3xl overflow-hidden">
+                  <button
+                    onClick={() => setSliceOpen(!sliceOpen)}
+                    className="w-full flex items-center justify-between px-10 py-6 hover:bg-zinc-800 transition"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="text-3xl">🍕</span>
+                      <span className="text-2xl font-black text-yellow-400 uppercase tracking-wide">Pizza by Slice</span>
+                    </div>
+                    <span className="text-2xl text-white">{sliceOpen ? "▲" : "▼"}</span>
+                  </button>
+
+                  {sliceOpen && (
+                    <div className="px-10 pb-10">
+
+                      <div className="bg-zinc-800 rounded-2xl p-5 mb-8">
+                        <p className="text-white text-lg font-bold">Base Price: <span className="text-yellow-400">$6.00 per slice</span></p>
+                        <p className="text-gray-400 text-sm mt-1">Additional toppings: <span className="text-green-400 font-bold">$0.50 each</span></p>
+                      </div>
+
+                      {sliceOrders.map((order, index) => (
+                        <div key={index} className="bg-zinc-800 rounded-2xl p-6 mb-6 border border-zinc-700">
+                          <div className="flex justify-between items-center mb-5">
+                            <h5 className="text-xl font-black text-yellow-400">Slice Order #{index + 1}</h5>
+                            {sliceOrders.length > 1 && (
+                              <button onClick={() => removeSliceOrder(index)} className="bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-bold transition">
+                                ✕ Remove
+                              </button>
+                            )}
+                          </div>
+
+                          {/* SLICE TYPE */}
+                          <div className="mb-5">
+                            <p className="text-white font-black uppercase tracking-widest text-sm mb-3">🍕 Choose Your Slice</p>
+                            <div className="flex flex-wrap gap-3">
+                              {sliceTypes.map((type) => (
+                                <button key={type} onClick={() => updateSlice(index, "type", type)}
+                                  className={`px-8 py-4 rounded-xl text-lg font-black border-2 transition ${order.type === type ? "bg-red-600 border-red-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
+                                  {order.type === type ? "✅ " : ""}{type}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* QUANTITY */}
+                          <div className="mb-5">
+                            <p className="text-white font-black uppercase tracking-widest text-sm mb-3">🔢 Quantity</p>
+                            <div className="flex items-center gap-4">
+                              <button onClick={() => updateSlice(index, "quantity", Math.max(1, order.quantity - 1))}
+                                className="bg-zinc-700 hover:bg-zinc-600 text-white w-12 h-12 rounded-xl text-2xl font-black transition">−</button>
+                              <span className="text-3xl font-black text-yellow-400 w-10 text-center">{order.quantity}</span>
+                              <button onClick={() => updateSlice(index, "quantity", order.quantity + 1)}
+                                className="bg-zinc-700 hover:bg-zinc-600 text-white w-12 h-12 rounded-xl text-2xl font-black transition">+</button>
+                            </div>
+                          </div>
+
+                          {/* EXTRA TOPPINGS */}
+                          <div className="mb-5">
+                            <p className="text-white font-black uppercase tracking-widest text-sm mb-1">🧄 Extra Toppings</p>
+                            <p className="text-yellow-400 text-xs mb-3">$0.50 per topping per slice</p>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                              {toppings.map((topping) => (
+                                <button key={topping} onClick={() => toggleSliceTopping(index, topping)}
+                                  className={`px-3 py-2 rounded-lg text-xs font-bold border-2 transition text-left ${order.toppings.includes(topping) ? "bg-green-600 border-green-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-green-500"}`}>
+                                  {order.toppings.includes(topping) ? "✅ " : "➕ "}{topping}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* SUMMARY */}
+                          {(order.type || order.toppings.length > 0) && (
+                            <div className="mt-5 bg-zinc-900 rounded-xl p-4">
+                              <p className="text-yellow-400 font-black text-sm uppercase mb-3">Slice Order #{index + 1} Summary</p>
+                              {order.type && (
+                                <div className="flex justify-between text-sm mb-1">
+                                  <span className="text-white">🍕 {order.type} x {order.quantity} slice{order.quantity > 1 ? "s" : ""}</span>
+                                  <span className="text-red-400 font-bold">${(6 * order.quantity).toFixed(2)}</span>
+                                </div>
+                              )}
+                              {order.toppings.length > 0 && (
+                                <div>
+                                  <div className="flex justify-between text-sm mb-1 mt-1">
+                                    <span className="text-white">🧄 {order.toppings.length} topping{order.toppings.length > 1 ? "s" : ""} x $0.50 x {order.quantity} slice{order.quantity > 1 ? "s" : ""}</span>
+                                    <span className="text-green-400 font-bold">+${(order.toppings.length * 0.50 * order.quantity).toFixed(2)}</span>
+                                  </div>
+                                  <p className="text-gray-400 text-xs mb-2">{order.toppings.join(", ")}</p>
+                                </div>
+                              )}
+                              {order.type && (
+                                <div className="border-t border-zinc-700 mt-3 pt-3 flex justify-between">
+                                  <span className="text-white font-black text-sm">Estimated Total</span>
+                                  <span className="text-yellow-400 font-black text-sm">
+                                    ${((6 * order.quantity) + (order.toppings.length * 0.50 * order.quantity)).toFixed(2)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                        </div>
+                      ))}
+
+                      <button onClick={addSliceOrder}
+                        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black text-lg py-4 rounded-2xl transition mt-2">
+                        ➕ Add Another Slice Order
+                      </button>
                     </div>
                   )}
                 </div>
