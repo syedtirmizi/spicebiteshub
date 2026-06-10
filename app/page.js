@@ -53,15 +53,29 @@ export default function Home() {
   const removeSliceOrder = (index) => setSliceOrders(prev => prev.filter((_, i) => i !== index));
 
   // Calzone toppings per item
-  const emptyCalzone = { toppings: [] };
   const [calzoneToppings, setCalzoneToppings] = useState({});
   const toggleCalzoneTopping = (itemName, topping) => {
     setCalzoneToppings(prev => {
       const current = prev[itemName] || [];
-      return {
-        ...prev,
-        [itemName]: current.includes(topping) ? current.filter(t => t !== topping) : [...current, topping]
-      };
+      return { ...prev, [itemName]: current.includes(topping) ? current.filter(t => t !== topping) : [...current, topping] };
+    });
+  };
+
+  // Pasta toppings per item
+  const [pastaToppings, setPastaToppings] = useState({});
+  const togglePastaTopping = (itemName, topping) => {
+    setPastaToppings(prev => {
+      const current = prev[itemName] || [];
+      return { ...prev, [itemName]: current.includes(topping) ? current.filter(t => t !== topping) : [...current, topping] };
+    });
+  };
+
+  // Mac & Cheese toppings per item
+  const [macToppings, setMacToppings] = useState({});
+  const toggleMacTopping = (itemName, topping) => {
+    setMacToppings(prev => {
+      const current = prev[itemName] || [];
+      return { ...prev, [itemName]: current.includes(topping) ? current.filter(t => t !== topping) : [...current, topping] };
     });
   };
 
@@ -743,26 +757,65 @@ export default function Home() {
               <div className="h-1 flex-1 bg-red-600 rounded" />
             </div>
             {pastaOpen && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto mt-4">
-                {[
-                  { img: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=1200&auto=format&fit=crop", name: "Chicken Cavatappi", desc: "Olive oil, chicken breast, sauteed spinach, mushrooms, red onions topped with parmesan and parsley." },
-                  { img: "m.jpg", name: "Mostaccioli w/ Marinara", desc: "Traditional mostaccioli with marinara topped with parmesan and parsley." },
-                  { img: "bm.jpg", name: "Baked Mostaccioli w/ Mozzarella", desc: "Mostaccioli, marinara, mozzarella baked to perfection, topped with parmesan and parsley." },
-                  { img: "https://images.unsplash.com/photo-1645112411341-6c4fd023882f?q=80&w=1200&auto=format&fit=crop", name: "Alfredo Cavatappi w/ Chicken", desc: "Cavatappi noodles, chicken breast, mushrooms and spinach, topped with parmesan cheese and parsley." },
-                  { img: "https://images.unsplash.com/photo-1612369997610-a07a4b9e8a0c?q=80&w=1200&auto=format&fit=crop", name: "Alfredo Cavatappi", desc: "Cavatappi noodles, alfredo sauce baked to perfection, topped with parmesan and parsley." },
-                  { img: "https://images.unsplash.com/photo-1595295333158-4742f28fbd85?q=80&w=1200&auto=format&fit=crop", name: "Tomato Cream Penne", desc: "Penne pasta baked in creamy alfredo, marinara topped with parmesan and parsley." },
-                ].map((item) => (
-                  <div key={item.name} className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                    <img src={item.img} alt={item.name} className="h-64 w-full object-cover" />
-                    <div className="p-6">
-                      <div className="flex justify-between items-center mb-3">
-                        <h3 className="text-2xl font-bold text-yellow-400">{item.name}</h3>
-                        <span className="text-2xl font-bold text-red-500">$9.99</span>
+              <div>
+                <p className="text-center text-yellow-400 font-bold mb-10">Additional toppings: <span className="text-green-400">$1.00 each</span></p>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto mt-4">
+                  {[
+                    { img: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=1200&auto=format&fit=crop", name: "Chicken Cavatappi", desc: "Olive oil, chicken breast, sauteed spinach, mushrooms, red onions topped with parmesan and parsley." },
+                    { img: "m.jpg", name: "Mostaccioli w/ Marinara", desc: "Traditional mostaccioli with marinara topped with parmesan and parsley." },
+                    { img: "bm.jpg", name: "Baked Mostaccioli w/ Mozzarella", desc: "Mostaccioli, marinara, mozzarella baked to perfection, topped with parmesan and parsley." },
+                    { img: "https://images.unsplash.com/photo-1645112411341-6c4fd023882f?q=80&w=1200&auto=format&fit=crop", name: "Alfredo Cavatappi w/ Chicken", desc: "Cavatappi noodles, chicken breast, mushrooms and spinach, topped with parmesan cheese and parsley." },
+                    { img: "https://images.unsplash.com/photo-1612369997610-a07a4b9e8a0c?q=80&w=1200&auto=format&fit=crop", name: "Alfredo Cavatappi", desc: "Cavatappi noodles, alfredo sauce baked to perfection, topped with parmesan and parsley." },
+                    { img: "https://images.unsplash.com/photo-1595295333158-4742f28fbd85?q=80&w=1200&auto=format&fit=crop", name: "Tomato Cream Penne", desc: "Penne pasta baked in creamy alfredo, marinara topped with parmesan and parsley." },
+                  ].map((item) => {
+                    const itemToppings = pastaToppings[item.name] || [];
+                    const extraCharge = itemToppings.length * 1.00;
+                    const total = 9.99 + extraCharge;
+                    return (
+                      <div key={item.name} className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+                        <img src={item.img} alt={item.name} className="h-48 w-full object-cover" />
+                        <div className="p-6">
+                          <div className="flex justify-between items-center mb-2">
+                            <h3 className="text-xl font-bold text-yellow-400">{item.name}</h3>
+                            <span className="text-xl font-bold text-red-500">$9.99</span>
+                          </div>
+                          <p className="text-gray-300 text-sm mb-4">{item.desc}</p>
+                          <div className="mb-4">
+                            <p className="text-white font-black uppercase tracking-widest text-xs mb-1">🧄 Add Toppings</p>
+                            <p className="text-yellow-400 text-xs mb-3">$1.00 each</p>
+                            <div className="grid grid-cols-2 gap-1">
+                              {toppings.map((topping) => (
+                                <button key={topping} onClick={() => togglePastaTopping(item.name, topping)}
+                                  className={`px-2 py-1 rounded-lg text-xs font-bold border transition text-left ${itemToppings.includes(topping) ? "bg-green-600 border-green-600 text-white" : "bg-zinc-800 border-zinc-700 text-gray-300 hover:border-green-500"}`}>
+                                  {itemToppings.includes(topping) ? "✅ " : "➕ "}{topping}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                          {itemToppings.length > 0 && (
+                            <div className="bg-zinc-800 rounded-xl p-3">
+                              <div className="flex justify-between text-xs mb-1">
+                                <span className="text-white">Base Price</span>
+                                <span className="text-red-400 font-bold">$9.99</span>
+                              </div>
+                              <div className="flex justify-between text-xs mb-1">
+                                <span className="text-white">🧄 {itemToppings.length} topping{itemToppings.length > 1 ? "s" : ""} x $1.00</span>
+                                <span className="text-green-400 font-bold">+${extraCharge.toFixed(2)}</span>
+                              </div>
+                              <p className="text-gray-400 text-xs mb-2">{itemToppings.join(", ")}</p>
+                              <div className="border-t border-zinc-700 pt-2 flex justify-between">
+                                <span className="text-white font-black text-xs">Total</span>
+                                <span className="text-yellow-400 font-black text-sm">${total.toFixed(2)}</span>
+                              </div>
+                              <button onClick={() => setPastaToppings(prev => ({ ...prev, [item.name]: [] }))}
+                                className="mt-2 text-xs text-red-400 hover:text-red-300 font-bold">🔄 Reset</button>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <p className="text-gray-300">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>
@@ -780,27 +833,66 @@ export default function Home() {
               <div className="h-1 flex-1 bg-red-600 rounded" />
             </div>
             {macOpen && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto mt-4">
-                {[
-                  { img: "https://images.unsplash.com/photo-1548340748-6811e9f45f0a?q=80&w=1200&auto=format&fit=crop", name: "Buffalo Chicken Mac", desc: "Chopped chicken breast, Bermuda onions, and our signature spicy sauce, smothered in mozzarella and cheddar." },
-                  { img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=1200&auto=format&fit=crop", name: "Double BFT", desc: "Mound of bacon piled on top of feta, tomato, smothered in mozzarella and cheddar." },
-                  { img: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=1200&auto=format&fit=crop", name: "Signature\u2019s Choice", desc: "Four delicious toppings (your choice) smothered in mozzarella and cheddar." },
-                  { img: "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=1200&auto=format&fit=crop", name: "BBQ Mac", desc: "BBQ covered bacon, Bermuda onions, cilantro smothered in mozzarella and cheddar." },
-                  { img: "https://images.unsplash.com/photo-1612407219897-7f6ae2748668?q=80&w=1200&auto=format&fit=crop", name: "Mac n Cheese", desc: "Classic mac smothered in mozzarella and cheddar." },
-                  { img: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=1200&auto=format&fit=crop", name: "Alfredo Mac", desc: "Creamy alfredo sauce tossed with fresh mushrooms and spinach." },
-                  { img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1200&auto=format&fit=crop", name: "Burger Mac", desc: "Ground beef, onions, fresh tomato, mushrooms smothered in mozzarella and cheddar." },
-                ].map((item) => (
-                  <div key={item.name} className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                    <img src={item.img} alt={item.name} className="h-64 w-full object-cover" />
-                    <div className="p-6">
-                      <div className="flex justify-between items-center mb-3">
-                        <h3 className="text-2xl font-bold text-yellow-400">{item.name}</h3>
-                        <span className="text-2xl font-bold text-red-500">$9.99</span>
+              <div>
+                <p className="text-center text-yellow-400 font-bold mb-10">Additional toppings: <span className="text-green-400">$1.00 each</span></p>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto mt-4">
+                  {[
+                    { img: "https://images.unsplash.com/photo-1548340748-6811e9f45f0a?q=80&w=1200&auto=format&fit=crop", name: "Buffalo Chicken Mac", desc: "Chopped chicken breast, Bermuda onions, and our signature spicy sauce, smothered in mozzarella and cheddar." },
+                    { img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=1200&auto=format&fit=crop", name: "Double BFT", desc: "Mound of bacon piled on top of feta, tomato, smothered in mozzarella and cheddar." },
+                    { img: "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=1200&auto=format&fit=crop", name: "Signature\u2019s Choice", desc: "Four delicious toppings (your choice) smothered in mozzarella and cheddar." },
+                    { img: "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=1200&auto=format&fit=crop", name: "BBQ Mac", desc: "BBQ covered bacon, Bermuda onions, cilantro smothered in mozzarella and cheddar." },
+                    { img: "https://images.unsplash.com/photo-1612407219897-7f6ae2748668?q=80&w=1200&auto=format&fit=crop", name: "Mac n Cheese", desc: "Classic mac smothered in mozzarella and cheddar." },
+                    { img: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=1200&auto=format&fit=crop", name: "Alfredo Mac", desc: "Creamy alfredo sauce tossed with fresh mushrooms and spinach." },
+                    { img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1200&auto=format&fit=crop", name: "Burger Mac", desc: "Ground beef, onions, fresh tomato, mushrooms smothered in mozzarella and cheddar." },
+                  ].map((item) => {
+                    const itemToppings = macToppings[item.name] || [];
+                    const extraCharge = itemToppings.length * 1.00;
+                    const total = 9.99 + extraCharge;
+                    return (
+                      <div key={item.name} className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
+                        <img src={item.img} alt={item.name} className="h-48 w-full object-cover" />
+                        <div className="p-6">
+                          <div className="flex justify-between items-center mb-2">
+                            <h3 className="text-xl font-bold text-yellow-400">{item.name}</h3>
+                            <span className="text-xl font-bold text-red-500">$9.99</span>
+                          </div>
+                          <p className="text-gray-300 text-sm mb-4">{item.desc}</p>
+                          <div className="mb-4">
+                            <p className="text-white font-black uppercase tracking-widest text-xs mb-1">🧄 Add Toppings</p>
+                            <p className="text-yellow-400 text-xs mb-3">$1.00 each</p>
+                            <div className="grid grid-cols-2 gap-1">
+                              {toppings.map((topping) => (
+                                <button key={topping} onClick={() => toggleMacTopping(item.name, topping)}
+                                  className={`px-2 py-1 rounded-lg text-xs font-bold border transition text-left ${itemToppings.includes(topping) ? "bg-green-600 border-green-600 text-white" : "bg-zinc-800 border-zinc-700 text-gray-300 hover:border-green-500"}`}>
+                                  {itemToppings.includes(topping) ? "✅ " : "➕ "}{topping}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                          {itemToppings.length > 0 && (
+                            <div className="bg-zinc-800 rounded-xl p-3">
+                              <div className="flex justify-between text-xs mb-1">
+                                <span className="text-white">Base Price</span>
+                                <span className="text-red-400 font-bold">$9.99</span>
+                              </div>
+                              <div className="flex justify-between text-xs mb-1">
+                                <span className="text-white">🧄 {itemToppings.length} topping{itemToppings.length > 1 ? "s" : ""} x $1.00</span>
+                                <span className="text-green-400 font-bold">+${extraCharge.toFixed(2)}</span>
+                              </div>
+                              <p className="text-gray-400 text-xs mb-2">{itemToppings.join(", ")}</p>
+                              <div className="border-t border-zinc-700 pt-2 flex justify-between">
+                                <span className="text-white font-black text-xs">Total</span>
+                                <span className="text-yellow-400 font-black text-sm">${total.toFixed(2)}</span>
+                              </div>
+                              <button onClick={() => setMacToppings(prev => ({ ...prev, [item.name]: [] }))}
+                                className="mt-2 text-xs text-red-400 hover:text-red-300 font-bold">🔄 Reset</button>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <p className="text-gray-300">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>
