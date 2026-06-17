@@ -10,7 +10,134 @@ export default function Home() {
   const [boneInOpen, setBoneInOpen] = useState(false);
   const [bonelessOpen, setBonelessOpen] = useState(false);
   const [desiOpen, setDesiOpen] = useState(false);
-  const [selectedNaan, setSelectedNaan] = useState("");
+
+  // Salad cart
+  const [saladCart, setSaladCart] = useState({});
+  const saladItems = [
+    { img:"https://superbrecipe.com/wp-content/uploads/2025/07/Chicken-Caesar-Salad-1.png", name:"Classic Chicken Caesar Salad", desc:"Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes topped with marinated chicken." },
+    { img:"g salad.jpg", name:"Garden Salad", desc:"Romaine lettuce, fresh tomatoes, bermuda onions, fresh mushrooms, green peppers." },
+    { img:"salad1.jpg", name:"Classic Caesar Salad", desc:"Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes." },
+    { img:"https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1200&auto=format&fit=crop", name:"Chopped Chicken Salad", desc:"Romaine lettuce, mozzarella cheese, bermuda onions, bacon, chicken." },
+    { img:"sig salad.jpg", name:"Signature House Salad", desc:"Romaine lettuce with artichoke hearts, green peppers, kalamata olives, fresh tomatoes, onions and feta cheese." },
+  ];
+  const updateSaladQty = (name, delta) => {
+    setSaladCart(prev => {
+      const qty = Math.max(0, (prev[name] || 0) + delta);
+      if (qty === 0) { const next = { ...prev }; delete next[name]; return next; }
+      return { ...prev, [name]: qty };
+    });
+  };
+  const saladTotal = Object.entries(saladCart).map(([name, qty]) => ({ name, qty, price: 9.99 }));
+  const [desiCart, setDesiCart] = useState({});
+  const [naanCart, setNaanCart] = useState({});
+  const [starterCart, setStarterCart] = useState({});
+  const starterItems = [
+    { img:"https://images.unsplash.com/photo-1548340748-6d2b7d7da280?q=80&w=1200&auto=format&fit=crop", name:"Mozzarella Sticks", price:7.99, desc:"Crispy breaded mozzarella sticks served with marinara sauce for dipping." },
+    { img:"toasted.jpg", name:"Toasted Ravioli", price:8.99, desc:"Breaded ravioli fried crispy and served with marinara." },
+    { img:"poppers.jpg", name:"Jalapeno Poppers", price:7.99, desc:"Fresh jalapenos stuffed with creamy cheese, breaded, and fried until perfectly crunchy." },
+    { img:"g knots.jpg", name:"Garlic Knots", price:5.99, desc:"Soft, oven-baked dough knots brushed with garlic butter and herbs. Served with marinara." },
+    { img:"bosco.jpg", name:"Bosco Sticks", price:7.99, desc:"Warm breadsticks stuffed with melted mozzarella, brushed with garlic butter. Served with marinara." },
+    { img:"fries1.jpg", name:"Fries", price:3.99, desc:"Crispy golden fries cooked fresh to order. Lightly salted and perfectly crunchy." },
+    { img:"season f.jpg", name:"Seasoned Fries", price:4.99, desc:"Crispy fries tossed in our special house seasoning blend for bold flavor in every bite." },
+    { img:"cheese f.jpg", name:"Cheesy Fries", price:5.99, desc:"Our hot, crispy fries topped with rich melted cheese for a creamy, savory upgrade." },
+    { img:"cgb.jpg", name:"Cheese Garlic Bread", price:6.99, desc:"Freshly made bread with garlic butter sauce topped with mozzarella cheese, baked and served with marinara." },
+  ];
+  const updateStarterQty = (name, delta) => {
+    setStarterCart(prev => {
+      const qty = Math.max(0, (prev[name] || 0) + delta);
+      if (qty === 0) { const next = { ...prev }; delete next[name]; return next; }
+      return { ...prev, [name]: qty };
+    });
+  };
+
+  const dessertItems = [
+    { img: "g j.jpg", name: "Gulab Jamun", price: 4.99, desc: "Soft, golden milk-solid dumplings soaked in a warm rose-scented sugar syrup." },
+    { img: "k.jpg", name: "Kulfi", price: 5.99, desc: "Rich, dense South Asian frozen dessert infused with saffron, rose water and crushed pistachios." },
+    { img: "cannoli.jpg", name: "Cannoli", price: 4.99, desc: "Traditional Italian tube-shaped fried pastry with sweet cream ricotta filling." },
+    { img: "bk.jpg", name: "Baklava", price: 4.99, desc: "Crispy golden phyllo pastry with pistachios and walnuts, drenched in honey syrup." },
+    { img: "c cake.jpg", name: "Cheesecake", price: 5.99, desc: "New York Style Cheesecake With Graham Cracker Crust." },
+    { img: "ch cake.jpg", name: "Chocolate Cake", price: 5.99, desc: "Layers of chocolate cake filled and topped with fudge." },
+  ];
+  const [dessertCart, setDessertCart] = useState({});
+  const updateDessertQty = (name, delta) => {
+    setDessertCart(prev => {
+      const qty = Math.max(0, (prev[name] || 0) + delta);
+      if (qty === 0) { const next = { ...prev }; delete next[name]; return next; }
+      return { ...prev, [name]: qty };
+    });
+  };
+  const dessertTotal = Object.entries(dessertCart).map(([name, qty]) => {
+    const item = dessertItems.find(i => i.name === name);
+    return { name, qty, price: item?.price || 0 };
+  });
+  const starterTotal = Object.entries(starterCart).map(([name, qty]) => {
+    const item = starterItems.find(i => i.name === name);
+    return { name, qty, price: item?.price || 0 };
+  });
+  const [medOpen, setMedOpen] = useState(false);
+  const [medCart, setMedCart] = useState({});
+
+  const medItems = [
+    { img: "chicken over rice.jpg", name: "Chicken Over Rice", price: 12.99, desc: "Seasoned grilled chicken served over fragrant basmati rice with white sauce and hot sauce." },
+    { img: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?q=80&w=1200&auto=format&fit=crop", name: "Lamb Over Rice", price: 14.99, desc: "Tender spiced lamb over fluffy basmati rice with creamy white sauce and house hot sauce." },
+    { img: "gyro.jpg", name: "Chicken Gyro", price: 11.99, desc: "Grilled chicken, fresh veggies and garlic sauce wrapped in warm pita bread." },
+    { img: "gyro.jpg", name: "Lamb Gyro", price: 13.99, desc: "Slow-roasted seasoned lamb with fresh tomatoes, onions and tzatziki in warm pita." },
+    { img: "https://i.cdn.newsbytesapp.com/images/l82920240716142709.jpeg", name: "Falafel Gyro", price: 10.99, desc: "Crispy golden falafel with fresh veggies, hummus and tahini wrapped in soft pita." },
+    { img: "c philly.jpg", name: "Chicken Philly", price: 12.99, desc: "Grilled chicken with sauteed peppers, onions and melted cheese on a toasted hoagie roll." },
+    { img: "philly.jpg", name: "Philly Cheesesteak", price: 13.99, desc: "Thinly sliced ribeye steak with sauteed onions, peppers and gooey melted cheese on a hoagie roll." },
+  ];
+
+  const updateMedQty = (name, delta) => {
+    setMedCart(prev => {
+      const current = prev[name] || 0;
+      const next = Math.max(0, current + delta);
+      if (next === 0) { const { [name]: _, ...rest } = prev; return rest; }
+      return { ...prev, [name]: next };
+    });
+  };
+
+  const medTotal = Object.entries(medCart).map(([name, qty]) => {
+    const item = medItems.find(i => i.name === name);
+    return { name, qty, price: item?.price || 0 };
+  });
+
+  const desiItems = [
+    { img:"korma.jpg", name:"Chicken Korma", price:13.99, desc:"Creamy traditional curry cooked with aromatic spices and rich flavor." },
+    { img:"karahi.jpg", name:"Chicken Karahi", price:14.99, desc:"Fresh tomato-based karahi cooked with ginger, garlic and desi spices." },
+    { img:"chana daal.jpg", name:"Daal Chana", price:10.99, desc:"Slow-cooked chana daal seasoned with traditional Pakistani spices." },
+    { img:"malai boti.jpg", name:"Chicken Malai Boti", price:15.99, desc:"Creamy grilled chicken cubes marinated with cheese and mild spices." },
+    { img:"butter chicken.jpg", name:"Butter Chicken", price:14.99, desc:"Tender chicken simmered in rich buttery tomato cream sauce." },
+    { img:"tikka.jpg", name:"Chicken Tikka", price:13.99, desc:"Charcoal grilled tikka marinated in yogurt and traditional spices." },
+    { img:"nihari.jpg", name:"Lamb Nihari", price:16.99, desc:"Slow-cooked traditional desi curry packed with bold authentic flavor." },
+    { img:"biryani.jpg", name:"Signature Biryani", price:15.99, desc:"Aromatic basmati rice layered with rich spices and tender meat." },
+  ];
+  const naanItems = [
+    { img:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=1200&auto=format&fit=crop", name:"Plain Naan", price:1.99, desc:"Soft, fluffy tandoor-baked flatbread with a golden crust." },
+    { img:"https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=1200&auto=format&fit=crop", name:"Garlic Naan", price:2.49, desc:"Tandoor-baked naan brushed with fresh garlic butter and herbs." },
+    { img:"https://images.unsplash.com/photo-1606491956689-2ea866880c84?q=80&w=1200&auto=format&fit=crop", name:"Butter Naan", price:2.49, desc:"Soft naan generously brushed with rich melted butter straight from the tandoor." },
+  ];
+
+  const updateDesiQty = (name, delta) => {
+    setDesiCart(prev => {
+      const cur = prev[name] || 0;
+      const next = Math.max(0, cur + delta);
+      if (next === 0) { const { [name]: _, ...rest } = prev; return rest; }
+      return { ...prev, [name]: next };
+    });
+  };
+  const updateNaanQty = (name, delta) => {
+    setNaanCart(prev => {
+      const cur = prev[name] || 0;
+      const next = Math.max(0, cur + delta);
+      if (next === 0) { const { [name]: _, ...rest } = prev; return rest; }
+      return { ...prev, [name]: next };
+    });
+  };
+
+  const desiTotal = [
+    ...Object.entries(desiCart).map(([name, qty]) => ({ name, qty, price: desiItems.find(i => i.name === name)?.price || 0 })),
+    ...Object.entries(naanCart).map(([name, qty]) => ({ name, qty, price: naanItems.find(i => i.name === name)?.price || 0 })),
+  ];
   const [pastaOpen, setPastaOpen] = useState(false);
   const [macOpen, setMacOpen] = useState(false);
 
@@ -842,27 +969,91 @@ export default function Home() {
 
         {/* MEDITERRANEAN MENU */}
         <div id="mediterranean-menu" className="mb-24">
-          <h3 className="text-5xl font-black text-yellow-400 text-center mb-10 uppercase">Mediterranean Menu</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
-            {[
-              { img:"chicken over rice.jpg", name:"Chicken Over Rice", price:"$12.99", desc:"Seasoned grilled chicken served over fragrant basmati rice with white sauce and hot sauce." },
-              { img:"https://images.unsplash.com/photo-1603360946369-dc9bb6258143?q=80&w=1200&auto=format&fit=crop", name:"Lamb Over Rice", price:"$14.99", desc:"Tender spiced lamb over fluffy basmati rice with creamy white sauce and house hot sauce." },
-              { img:"gyro.jpg", name:"Chicken Gyro", price:"$11.99", desc:"Grilled chicken, fresh veggies and garlic sauce wrapped in warm pita bread." },
-              { img:"gyro.jpg", name:"Lamb Gyro", price:"$13.99", desc:"Slow-roasted seasoned lamb with fresh tomatoes, onions and tzatziki in warm pita." },
-              { img:"https://i.cdn.newsbytesapp.com/images/l82920240716142709.jpeg", name:"Falafel Gyro", price:"$10.99", desc:"Crispy golden falafel with fresh veggies, hummus and tahini wrapped in soft pita." },
-              { img:"c philly.jpg", name:"Chicken Philly", price:"$12.99", desc:"Grilled chicken with sauteed peppers, onions and melted cheese on a toasted hoagie roll." },
-              { img:"philly.jpg", name:"Philly Cheesesteak", price:"$13.99", desc:"Thinly sliced ribeye steak with sauteed onions, peppers and gooey melted cheese on a hoagie roll." },
-            ].map((item) => (
-              <div key={item.name} className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                <img src={item.img} alt={item.name} className="h-72 w-full object-cover" />
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-3"><h3 className="text-2xl font-bold text-yellow-400">{item.name}</h3><span className="text-2xl font-bold text-red-500">{item.price}</span></div>
-                  <p className="text-gray-300">{item.desc}</p>
-                </div>
-              </div>
-            ))}
+
+          {/* TOGGLE BUTTON */}
+          <div className="flex items-center gap-4 max-w-7xl mx-auto mb-6">
+            <div className="h-1 flex-1 bg-yellow-500 rounded" />
+            <button
+              onClick={() => setMedOpen(!medOpen)}
+              className="flex items-center gap-4 bg-yellow-500 hover:bg-yellow-400 text-black px-10 py-5 rounded-2xl transition"
+            >
+              <span className="text-4xl">🌯</span>
+              <span className="text-3xl font-black uppercase tracking-widest">Mediterranean Menu</span>
+              <span className="text-3xl">{medOpen ? "▲" : "▼"}</span>
+            </button>
+            <div className="h-1 flex-1 bg-yellow-500 rounded" />
           </div>
+
+          {medOpen && (
+            <div className="max-w-7xl mx-auto">
+
+              {/* ITEMS GRID */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+                {medItems.map((item) => {
+                  const qty = medCart[item.name] || 0;
+                  return (
+                    <div key={item.name} className={`bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl border-2 transition ${qty > 0 ? "border-yellow-400" : "border-zinc-800"}`}>
+                      <img src={item.img} alt={item.name} className="h-56 w-full object-cover" />
+                      <div className="p-5">
+                        <div className="flex justify-between items-center mb-2">
+                          <h3 className="text-xl font-bold text-yellow-400">{item.name}</h3>
+                          <span className="text-lg font-bold text-red-500">${item.price.toFixed(2)}</span>
+                        </div>
+                        <p className="text-gray-300 text-sm mb-4">{item.desc}</p>
+                        <div className="flex items-center justify-between">
+                          {qty === 0 ? (
+                            <button onClick={() => updateMedQty(item.name, 1)}
+                              className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-2 rounded-xl transition text-sm">
+                              ➕ Add to Order
+                            </button>
+                          ) : (
+                            <div className="flex items-center gap-3 w-full justify-between">
+                              <button onClick={() => updateMedQty(item.name, -1)}
+                                className="bg-zinc-700 hover:bg-zinc-600 text-white w-10 h-10 rounded-xl text-xl font-black transition">−</button>
+                              <div className="text-center">
+                                <span className="text-2xl font-black text-yellow-400">{qty}</span>
+                                <p className="text-green-400 text-xs font-bold">${(item.price * qty).toFixed(2)}</p>
+                              </div>
+                              <button onClick={() => updateMedQty(item.name, 1)}
+                                className="bg-yellow-500 hover:bg-yellow-400 text-black w-10 h-10 rounded-xl text-xl font-black transition">+</button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* ORDER SUMMARY */}
+              {medTotal.length > 0 && (
+                <div className="bg-zinc-900 rounded-3xl p-8 shadow-2xl border border-yellow-400">
+                  <h4 className="text-2xl font-black text-yellow-400 uppercase mb-5">🧾 Your Mediterranean Order</h4>
+                  {medTotal.map(({ name, qty, price }) => (
+                    <div key={name} className="flex justify-between items-center py-3 border-b border-zinc-700">
+                      <div>
+                        <p className="text-white font-bold">{name}</p>
+                        <p className="text-gray-400 text-sm">x {qty} @ ${price.toFixed(2)} each</p>
+                      </div>
+                      <span className="text-yellow-400 font-black">${(price * qty).toFixed(2)}</span>
+                    </div>
+                  ))}
+                  <div className="flex justify-between items-center mt-5 pt-3">
+                    <span className="text-white font-black text-xl">Total</span>
+                    <span className="text-yellow-400 font-black text-2xl">
+                      ${medTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
+                    </span>
+                  </div>
+                  <button onClick={() => setMedCart({})} className="mt-4 bg-red-700 hover:bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
+                    🔄 Reset Order
+                  </button>
+                </div>
+              )}
+
+            </div>
+          )}
         </div>
+        {/* END MEDITERRANEAN MENU */}
 
         {/* DESI MENU */}
         <div id="desi-menu" className="py-20 bg-black text-white px-6">
@@ -886,82 +1077,109 @@ export default function Home() {
             <div className="max-w-7xl mx-auto">
 
               {/* DESI DISHES GRID */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 mb-16">
-                {[
-                  { img:"korma.jpg", name:"Chicken Korma", price:"$13.99", desc:"Creamy traditional curry cooked with aromatic spices and rich flavor." },
-                  { img:"karahi.jpg", name:"Chicken Karahi", price:"$14.99", desc:"Fresh tomato-based karahi cooked with ginger, garlic and desi spices." },
-                  { img:"chana daal.jpg", name:"Daal Chana", price:"$10.99", desc:"Slow-cooked chana daal seasoned with traditional Pakistani spices." },
-                  { img:"malai boti.jpg", name:"Chicken Malai Boti", price:"$15.99", desc:"Creamy grilled chicken cubes marinated with cheese and mild spices." },
-                  { img:"butter chicken.jpg", name:"Butter Chicken", price:"$14.99", desc:"Tender chicken simmered in rich buttery tomato cream sauce." },
-                  { img:"tikka.jpg", name:"Chicken Tikka", price:"$13.99", desc:"Charcoal grilled tikka marinated in yogurt and traditional spices." },
-                  { img:"nihari.jpg", name:"Lamb Nihari", price:"$16.99", desc:"Slow-cooked traditional desi curry packed with bold authentic flavor." },
-                  { img:"biryani.jpg", name:"Signature Biryani", price:"$15.99", desc:"Aromatic basmati rice layered with rich spices and tender meat." },
-                ].map((item) => (
-                  <div key={item.name} className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-                    <img src={item.img} alt={item.name} className="h-72 w-full object-cover" />
-                    <div className="p-6">
-                      <div className="flex justify-between items-center mb-3">
-                        <h3 className="text-3xl font-bold text-yellow-400">{item.name}</h3>
-                        <span className="text-2xl font-bold text-red-500">{item.price}</span>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                {desiItems.map((item) => {
+                  const qty = desiCart[item.name] || 0;
+                  return (
+                    <div key={item.name} className={`bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl border-2 transition ${qty > 0 ? "border-yellow-400" : "border-zinc-800"}`}>
+                      <img src={item.img} alt={item.name} className="h-56 w-full object-cover" />
+                      <div className="p-5">
+                        <div className="flex justify-between items-center mb-2">
+                          <h3 className="text-xl font-bold text-yellow-400">{item.name}</h3>
+                          <span className="text-lg font-bold text-red-500">${item.price.toFixed(2)}</span>
+                        </div>
+                        <p className="text-gray-300 text-sm mb-4">{item.desc}</p>
+                        <div className="flex items-center justify-between">
+                          {qty === 0 ? (
+                            <button onClick={() => updateDesiQty(item.name, 1)}
+                              className="w-full bg-green-600 hover:bg-green-500 text-white font-black py-2 rounded-xl transition text-sm">
+                              ➕ Add to Order
+                            </button>
+                          ) : (
+                            <div className="flex items-center gap-3 w-full justify-between">
+                              <button onClick={() => updateDesiQty(item.name, -1)}
+                                className="bg-zinc-700 hover:bg-zinc-600 text-white w-10 h-10 rounded-xl text-xl font-black transition">−</button>
+                              <div className="text-center">
+                                <span className="text-2xl font-black text-yellow-400">{qty}</span>
+                                <p className="text-green-400 text-xs font-bold">${(item.price * qty).toFixed(2)}</p>
+                              </div>
+                              <button onClick={() => updateDesiQty(item.name, 1)}
+                                className="bg-green-600 hover:bg-green-500 text-white w-10 h-10 rounded-xl text-xl font-black transition">+</button>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <p className="text-gray-300">{item.desc}</p>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* NAAN SECTION */}
-              <div className="bg-zinc-900 rounded-3xl p-10 shadow-2xl">
+              <div className="bg-zinc-900 rounded-3xl p-8 shadow-2xl mb-10">
                 <div className="flex items-center gap-4 mb-3">
                   <div className="h-1 flex-1 bg-green-600 rounded" />
-                  <h4 className="text-3xl font-black text-yellow-400 uppercase tracking-widest">🫓 Naan Bread</h4>
+                  <h4 className="text-2xl font-black text-yellow-400 uppercase tracking-widest">🫓 Naan Bread</h4>
                   <div className="h-1 flex-1 bg-green-600 rounded" />
                 </div>
-                <p className="text-center text-gray-400 italic mb-8">Freshly baked tandoor bread — the perfect accompaniment to any desi dish</p>
-
-                <div className="grid md:grid-cols-3 gap-6 mb-8">
-                  {[
-                    { img:"pn.png", name:"Plain Naan", price:"$1.99", desc:"Soft, fluffy tandoor-baked flatbread with a golden crust." },
-                    { img:"gn.png", name:"Garlic Naan", price:"$2.49", desc:"Tandoor-baked naan brushed with fresh garlic butter and herbs." },
-                    { img:"bn.png", name:"Butter Naan", price:"$2.49", desc:"Soft naan generously brushed with rich melted butter straight from the tandoor." },
-                  ].map((naan) => (
-                    <div key={naan.name}
-                      onClick={() => setSelectedNaan(prev => prev === naan.name ? "" : naan.name)}
-                      className={`rounded-2xl overflow-hidden cursor-pointer border-2 transition ${selectedNaan === naan.name ? "border-yellow-400 scale-105" : "border-zinc-700 hover:border-green-500"}`}>
-                      <img src={naan.img} alt={naan.name} className="h-48 w-full object-cover" />
-                      <div className={`p-5 ${selectedNaan === naan.name ? "bg-zinc-700" : "bg-zinc-800"}`}>
-                        <div className="flex justify-between items-center mb-2">
-                          <h3 className="text-xl font-bold text-yellow-400">{naan.name}</h3>
-                          <span className="text-lg font-bold text-red-400">{naan.price}</span>
-                        </div>
-                        <p className="text-gray-300 text-sm mb-3">{naan.desc}</p>
-                        <div className={`text-center py-2 rounded-xl font-black text-sm transition ${selectedNaan === naan.name ? "bg-yellow-400 text-black" : "bg-zinc-700 text-gray-300"}`}>
-                          {selectedNaan === naan.name ? "✅ Selected" : "Tap to Select"}
+                <p className="text-center text-gray-400 italic mb-6 text-sm">Freshly baked tandoor bread — the perfect accompaniment to any desi dish</p>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {naanItems.map((naan) => {
+                    const qty = naanCart[naan.name] || 0;
+                    return (
+                      <div key={naan.name} className={`rounded-2xl overflow-hidden border-2 transition ${qty > 0 ? "border-yellow-400" : "border-zinc-700"}`}>
+                        <img src={naan.img} alt={naan.name} className="h-40 w-full object-cover" />
+                        <div className={`p-4 ${qty > 0 ? "bg-zinc-700" : "bg-zinc-800"}`}>
+                          <div className="flex justify-between items-center mb-1">
+                            <h3 className="text-lg font-bold text-yellow-400">{naan.name}</h3>
+                            <span className="text-base font-bold text-red-400">${naan.price.toFixed(2)}</span>
+                          </div>
+                          <p className="text-gray-300 text-xs mb-3">{naan.desc}</p>
+                          {qty === 0 ? (
+                            <button onClick={() => updateNaanQty(naan.name, 1)}
+                              className="w-full bg-green-600 hover:bg-green-500 text-white font-black py-2 rounded-xl transition text-xs">
+                              ➕ Add
+                            </button>
+                          ) : (
+                            <div className="flex items-center justify-between">
+                              <button onClick={() => updateNaanQty(naan.name, -1)} className="bg-zinc-600 hover:bg-zinc-500 text-white w-9 h-9 rounded-xl text-lg font-black transition">−</button>
+                              <div className="text-center">
+                                <span className="text-xl font-black text-yellow-400">{qty}</span>
+                                <p className="text-green-400 text-xs font-bold">${(naan.price * qty).toFixed(2)}</p>
+                              </div>
+                              <button onClick={() => updateNaanQty(naan.name, 1)} className="bg-green-600 hover:bg-green-500 text-white w-9 h-9 rounded-xl text-lg font-black transition">+</button>
+                            </div>
+                          )}
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
-
-                {/* NAAN SUMMARY */}
-                {selectedNaan && (
-                  <div className="bg-zinc-800 rounded-2xl p-5 flex justify-between items-center">
-                    <div>
-                      <p className="text-yellow-400 font-black text-lg">🫓 {selectedNaan} selected</p>
-                      <p className="text-gray-400 text-sm">Add to your desi meal order</p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <span className="text-2xl font-black text-red-400">
-                        {selectedNaan === "Plain Naan" ? "$1.99" : "$2.49"}
-                      </span>
-                      <button onClick={() => setSelectedNaan("")} className="bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-sm font-bold transition">
-                        ✕ Remove
-                      </button>
-                    </div>
-                  </div>
-                )}
-
               </div>
+
+              {/* ORDER SUMMARY */}
+              {desiTotal.length > 0 && (
+                <div className="bg-zinc-900 rounded-3xl p-8 shadow-2xl border border-yellow-400">
+                  <h4 className="text-2xl font-black text-yellow-400 uppercase mb-5">🧾 Your Desi Order Summary</h4>
+                  <div className="space-y-3 mb-5">
+                    {desiTotal.map(({ name, qty, price }) => (
+                      <div key={name} className="flex justify-between items-center border-b border-zinc-700 pb-2">
+                        <span className="text-white font-bold">{name} <span className="text-gray-400 text-sm">x {qty}</span></span>
+                        <span className="text-red-400 font-black">${(price * qty).toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-white font-black text-xl">Estimated Total</span>
+                    <span className="text-yellow-400 font-black text-2xl">
+                      ${desiTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
+                    </span>
+                  </div>
+                  <button onClick={() => { setDesiCart({}); setNaanCart({}); }}
+                    className="mt-4 bg-red-700 hover:bg-red-600 text-white px-6 py-2 rounded-xl text-sm font-bold transition">
+                    🔄 Reset Order
+                  </button>
+                </div>
+              )}
 
             </div>
           )}
@@ -974,26 +1192,66 @@ export default function Home() {
         <h2 className="text-6xl font-black text-center text-red-600 mb-6 uppercase">Starters</h2>
         <p className="text-center text-gray-400 text-xl mb-16 italic">Freshly Prepared Favorites To Start Your Meal</p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {[
-            { img:"https://images.unsplash.com/photo-1548340748-6d2b7d7da280?q=80&w=1200&auto=format&fit=crop", name:"Mozzarella Sticks", price:"$7.99", desc:"Crispy breaded mozzarella sticks served with marinara sauce for dipping." },
-            { img:"toasted.jpg", name:"Toasted Ravioli", price:"$8.99", desc:"Breaded ravioli fried crispy and served with marinara." },
-            { img:"poppers.jpg", name:"Jalapeno Poppers", price:"$7.99", desc:"Fresh jalapenos stuffed with creamy cheese, breaded, and fried until perfectly crunchy." },
-            { img:"g knots.jpg", name:"Garlic Knots", price:"$5.99", desc:"Soft, oven-baked dough knots brushed with garlic butter and herbs. Served with marinara." },
-            { img:"bosco.jpg", name:"Bosco Sticks", price:"$7.99", desc:"Warm breadsticks stuffed with melted mozzarella, brushed with garlic butter. Served with marinara." },
-            { img:"fries1.jpg", name:"Fries", price:"$3.99", desc:"Crispy golden fries cooked fresh to order. Lightly salted and perfectly crunchy." },
-            { img:"season f.jpg", name:"Seasoned Fries", price:"$4.99", desc:"Crispy fries tossed in our special house seasoning blend for bold flavor in every bite." },
-            { img:"cheese f.jpg", name:"Cheesy Fries", price:"$5.99", desc:"Our hot, crispy fries topped with rich melted cheese for a creamy, savory upgrade." },
-            { img:"cgb.jpg", name:"Cheese Garlic Bread", price:"$6.99", desc:"Freshly made bread with garlic butter sauce topped with mozzarella cheese, baked and served with marinara." },
-          ].map((item) => (
-            <div key={item.name} className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-              <img src={item.img} alt={item.name} className="h-64 w-full object-cover" />
-              <div className="p-6">
-                <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">{item.name}</h3><span className="text-red-500 font-bold">{item.price}</span></div>
-                <p className="text-gray-300 mt-3">{item.desc}</p>
+          {starterItems.map((item) => {
+            const qty = starterCart[item.name] || 0;
+            return (
+              <div key={item.name} className={`bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl border-2 transition ${qty > 0 ? "border-red-500" : "border-zinc-800"}`}>
+                <img src={item.img} alt={item.name} className="h-56 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-2xl font-bold text-yellow-400">{item.name}</h3>
+                    <span className="text-lg font-bold text-red-500">${item.price.toFixed(2)}</span>
+                  </div>
+                  <p className="text-gray-300 text-sm mb-4">{item.desc}</p>
+                  <div className="flex items-center justify-between">
+                    {qty === 0 ? (
+                      <button onClick={() => updateStarterQty(item.name, 1)}
+                        className="w-full bg-red-600 hover:bg-red-500 text-white font-black py-2 rounded-xl transition text-sm">
+                        ➕ Add to Order
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-3 w-full justify-between">
+                        <button onClick={() => updateStarterQty(item.name, -1)}
+                          className="bg-zinc-700 hover:bg-zinc-600 text-white w-10 h-10 rounded-xl text-xl font-black transition">−</button>
+                        <div className="text-center">
+                          <span className="text-2xl font-black text-yellow-400">{qty}</span>
+                          <p className="text-green-400 text-xs font-bold">${(item.price * qty).toFixed(2)}</p>
+                        </div>
+                        <button onClick={() => updateStarterQty(item.name, 1)}
+                          className="bg-red-600 hover:bg-red-500 text-white w-10 h-10 rounded-xl text-xl font-black transition">+</button>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
+        {/* ORDER SUMMARY */}
+        {starterTotal.length > 0 && (
+          <div className="max-w-7xl mx-auto mt-12 bg-zinc-900 rounded-3xl p-8 shadow-2xl border border-red-500">
+            <h4 className="text-2xl font-black text-red-500 uppercase mb-5">🧾 Your Starters Order</h4>
+            {starterTotal.map(({ name, qty, price }) => (
+              <div key={name} className="flex justify-between items-center py-3 border-b border-zinc-700">
+                <div>
+                  <p className="text-white font-bold">{name}</p>
+                  <p className="text-gray-400 text-sm">x {qty} @ ${price.toFixed(2)} each</p>
+                </div>
+                <span className="text-yellow-400 font-black">${(price * qty).toFixed(2)}</span>
+              </div>
+            ))}
+            <div className="flex justify-between items-center mt-5 pt-3">
+              <span className="text-white font-black text-xl">Total</span>
+              <span className="text-red-400 font-black text-2xl">
+                ${starterTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
+              </span>
+            </div>
+            <button onClick={() => setStarterCart({})} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
+              🔄 Reset Order
+            </button>
+          </div>
+        )}
       </section>
 
       {/* SALADS */}
@@ -1001,20 +1259,68 @@ export default function Home() {
         <h2 className="text-5xl font-bold text-center text-green-500 mb-6">Salads</h2>
         <p className="text-center text-yellow-400 text-2xl font-bold mb-4">Individual $9.99 • Family $19.99 • Party $32.99</p>
         <p className="text-center text-gray-300 text-lg max-w-4xl mx-auto mb-14">All Salads Are Served With Your Choice Of Dressing: Ranch, Italian, Caesar, Blue Cheese, Balsamic Vinaigrette, or Honey Mustard.</p>
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {[
-            { img:"https://superbrecipe.com/wp-content/uploads/2025/07/Chicken-Caesar-Salad-1.png", name:"Classic Chicken Caesar Salad", desc:"Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes topped with marinated chicken." },
-            { img:"g salad.jpg", name:"Garden Salad", desc:"Romaine lettuce, fresh tomatoes, bermuda onions, fresh mushrooms, green peppers." },
-            { img:"salad1.jpg", name:"Classic Caesar Salad", desc:"Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes." },
-            { img:"https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1200&auto=format&fit=crop", name:"Chopped Chicken Salad", desc:"Romaine lettuce, mozzarella cheese, bermuda onions, bacon, chicken." },
-            { img:"sig salad.jpg", name:"Signature House Salad", desc:"Romaine lettuce with artichoke hearts, green peppers, kalamata olives, fresh tomatoes, onions and feta cheese." },
-          ].map((item) => (
-            <div key={item.name} className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
-              <img src={item.img} alt={item.name} className="h-64 w-full object-cover" />
-              <div className="p-6"><h3 className="text-2xl font-bold text-yellow-400">{item.name}</h3><p className="text-gray-300 mt-3">{item.desc}</p></div>
-            </div>
-          ))}
+          {saladItems.map((item) => {
+            const qty = saladCart[item.name] || 0;
+            return (
+              <div key={item.name} className={`bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl border-2 transition ${qty > 0 ? "border-green-500" : "border-zinc-800"}`}>
+                <img src={item.img} alt={item.name} className="h-56 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-xl font-bold text-yellow-400">{item.name}</h3>
+                    <span className="text-lg font-bold text-red-500">$9.99</span>
+                  </div>
+                  <p className="text-gray-300 text-sm mb-4">{item.desc}</p>
+                  <div className="flex items-center justify-between">
+                    {qty === 0 ? (
+                      <button onClick={() => updateSaladQty(item.name, 1)}
+                        className="w-full bg-green-600 hover:bg-green-500 text-white font-black py-2 rounded-xl transition text-sm">
+                        ➕ Add to Order
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-3 w-full justify-between">
+                        <button onClick={() => updateSaladQty(item.name, -1)}
+                          className="bg-zinc-700 hover:bg-zinc-600 text-white w-10 h-10 rounded-xl text-xl font-black transition">−</button>
+                        <div className="text-center">
+                          <span className="text-2xl font-black text-yellow-400">{qty}</span>
+                          <p className="text-green-400 text-xs font-bold">${(9.99 * qty).toFixed(2)}</p>
+                        </div>
+                        <button onClick={() => updateSaladQty(item.name, 1)}
+                          className="bg-green-600 hover:bg-green-500 text-white w-10 h-10 rounded-xl text-xl font-black transition">+</button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
+
+        {/* ORDER SUMMARY */}
+        {saladTotal.length > 0 && (
+          <div className="max-w-7xl mx-auto mt-12 bg-zinc-900 rounded-3xl p-8 shadow-2xl border border-green-500">
+            <h4 className="text-2xl font-black text-green-500 uppercase mb-5">🧾 Your Salad Order</h4>
+            {saladTotal.map(({ name, qty, price }) => (
+              <div key={name} className="flex justify-between items-center py-3 border-b border-zinc-700">
+                <div>
+                  <p className="text-white font-bold">{name}</p>
+                  <p className="text-gray-400 text-sm">x {qty} @ ${price.toFixed(2)} each</p>
+                </div>
+                <span className="text-yellow-400 font-black">${(price * qty).toFixed(2)}</span>
+              </div>
+            ))}
+            <div className="flex justify-between items-center mt-5 pt-3">
+              <span className="text-white font-black text-xl">Total</span>
+              <span className="text-green-400 font-black text-2xl">
+                ${saladTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
+              </span>
+            </div>
+            <button onClick={() => setSaladCart({})} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
+              🔄 Reset Order
+            </button>
+          </div>
+        )}
       </section>
 
       {/* BEVERAGES */}
@@ -1035,23 +1341,66 @@ export default function Home() {
         <h2 className="text-5xl font-bold text-center text-red-600 mb-6">Desserts</h2>
         <p className="text-center text-gray-300 text-xl mb-14 italic">The Perfect Sweet Ending To Your Meal</p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {[
-            { img:"g j.jpg", name:"Gulab Jamun", price:"$4.99", desc:"Soft, golden milk-solid dumplings slow-fried to perfection and soaked in a warm rose-scented sugar syrup." },
-            { img:"k.jpg", name:"Kulfi", price:"$5.99", desc:"A rich, dense South Asian frozen dessert infused with saffron, rose water and crushed pistachios." },
-            { img:"cannoli.jpg", name:"Cannoli", price:"$4.99", desc:"Traditional Italian cannoli. Tube-shaped fried pastry dough with a sweet cream ricotta cheese filling." },
-            { img:"bk.jpg", name:"Baklava", price:"$4.99", desc:"Layers of crispy golden phyllo pastry filled with pistachios and walnuts, drenched in fragrant honey syrup." },
-            { img:"c cake.jpg", name:"Cheesecake", price:"$5.99", desc:"New York Style Cheesecake With Graham Cracker Crust." },
-            { img:"ch cake.jpg", name:"Chocolate Cake", price:"$5.99", desc:"Layers of chocolate cake filled and topped with fudge." },
-          ].map((item) => (
-            <div key={item.name} className="bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition">
-              <img src={item.img} alt={item.name} className="h-64 w-full object-cover" />
-              <div className="p-6">
-                <div className="flex justify-between"><h3 className="text-2xl font-bold text-yellow-400">{item.name}</h3><span className="text-red-500 font-bold">{item.price}</span></div>
-                <p className="text-gray-300 mt-3">{item.desc}</p>
+          {dessertItems.map((item) => {
+            const qty = dessertCart[item.name] || 0;
+            return (
+              <div key={item.name} className={`bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl border-2 transition ${qty > 0 ? "border-yellow-500" : "border-zinc-800"}`}>
+                <img src={item.img} alt={item.name} className="h-56 w-full object-cover" />
+                <div className="p-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="text-2xl font-bold text-yellow-400">{item.name}</h3>
+                    <span className="text-lg font-bold text-red-500">${item.price.toFixed(2)}</span>
+                  </div>
+                  <p className="text-gray-300 text-sm mb-4">{item.desc}</p>
+                  <div className="flex items-center justify-between">
+                    {qty === 0 ? (
+                      <button onClick={() => updateDessertQty(item.name, 1)}
+                        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-2 rounded-xl transition text-sm">
+                        ➕ Add to Order
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-3 w-full justify-between">
+                        <button onClick={() => updateDessertQty(item.name, -1)}
+                          className="bg-zinc-700 hover:bg-zinc-600 text-white w-10 h-10 rounded-xl text-xl font-black transition">−</button>
+                        <div className="text-center">
+                          <span className="text-2xl font-black text-yellow-400">{qty}</span>
+                          <p className="text-green-400 text-xs font-bold">${(item.price * qty).toFixed(2)}</p>
+                        </div>
+                        <button onClick={() => updateDessertQty(item.name, 1)}
+                          className="bg-yellow-500 hover:bg-yellow-400 text-black w-10 h-10 rounded-xl text-xl font-black transition">+</button>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
+        {/* ORDER SUMMARY */}
+        {dessertTotal.length > 0 && (
+          <div className="max-w-7xl mx-auto mt-12 bg-zinc-900 rounded-3xl p-8 shadow-2xl border border-yellow-500">
+            <h4 className="text-2xl font-black text-yellow-400 uppercase mb-5">🍮 Your Desserts Order</h4>
+            {dessertTotal.map(({ name, qty, price }) => (
+              <div key={name} className="flex justify-between items-center py-3 border-b border-zinc-700">
+                <div>
+                  <p className="text-white font-bold">{name}</p>
+                  <p className="text-gray-400 text-sm">x {qty} @ ${price.toFixed(2)} each</p>
+                </div>
+                <span className="text-yellow-400 font-black">${(price * qty).toFixed(2)}</span>
+              </div>
+            ))}
+            <div className="flex justify-between items-center mt-5 pt-3">
+              <span className="text-white font-black text-xl">Total</span>
+              <span className="text-red-400 font-black text-2xl">
+                ${dessertTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
+              </span>
+            </div>
+            <button onClick={() => setDessertCart({})} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
+              🔄 Reset Order
+            </button>
+          </div>
+        )}
       </section>
 
       {/* OUR STORY */}
