@@ -70,6 +70,35 @@ export default function Home() {
     const item = dessertItems.find(i => i.name === name);
     return { name, qty, price: item?.price || 0 };
   });
+
+  const beverageItems = [
+    { name: "Coke (Can)", price: 1.79 },
+    { name: "Diet Coke (Can)", price: 1.79 },
+    { name: "Coke Zero (Can)", price: 1.79 },
+    { name: "Sprite (Can)", price: 1.79 },
+    { name: "Sprite Zero (Can)", price: 1.79 },
+    { name: "Pepsi (Can)", price: 1.79 },
+    { name: "Pepsi Zero (Can)", price: 1.79 },
+    { name: "Dr Pepper (Can)", price: 1.79 },
+    { name: "Mountain Dew (Can)", price: 1.79 },
+    { name: "Fanta (Can)", price: 1.79 },
+    { name: "Root Beer (Can)", price: 1.79 },
+    { name: "Apple Juice (Bottle)", price: 2.49 },
+    { name: "Orange Juice (Bottle)", price: 2.49 },
+    { name: "Pineapple Juice (Bottle)", price: 2.49 },
+  ];
+  const [beverageCart, setBeverageCart] = useState({});
+  const updateBeverageQty = (name, delta) => {
+    setBeverageCart(prev => {
+      const qty = Math.max(0, (prev[name] || 0) + delta);
+      if (qty === 0) { const next = { ...prev }; delete next[name]; return next; }
+      return { ...prev, [name]: qty };
+    });
+  };
+  const beverageTotal = Object.entries(beverageCart).map(([name, qty]) => {
+    const item = beverageItems.find(i => i.name === name);
+    return { name, qty, price: item?.price || 0 };
+  });
   const starterTotal = Object.entries(starterCart).map(([name, qty]) => {
     const item = starterItems.find(i => i.name === name);
     return { name, qty, price: item?.price || 0 };
@@ -1327,13 +1356,64 @@ export default function Home() {
       <section id="beverages" className="py-20 bg-black text-white px-6">
         <h2 className="text-5xl font-bold text-center text-red-600 mb-6">Beverages</h2>
         <p className="text-center text-gray-300 text-xl mb-14">Soft Drinks Served In Cans • Juices Served In Bottles</p>
-        <div className="max-w-5xl mx-auto bg-zinc-900 rounded-3xl p-10 shadow-2xl">
-          <div className="grid md:grid-cols-2 gap-6 text-xl">
-            {[["Coke (Can)","$1.99"],["Diet Coke (Can)","$1.99"],["Coke Zero (Can)","$1.99"],["Sprite (Can)","$1.99"],["Sprite Zero (Can)","$1.99"],["Pepsi (Can)","$1.99"],["Pepsi Zero (Can)","$1.99"],["Dr Pepper (Can)","$1.99"],["Mountain Dew (Can)","$1.99"],["Fanta (Can)","$1.99"],["Root Beer (Can)","$1.99"],["Apple Juice (Bottle)","$2.49"],["Orange Juice (Bottle)","$2.49"],["Pineapple Juice (Bottle)","$2.49"]].map(([name, price]) => (
-              <div key={name} className="flex justify-between border-b border-zinc-700 pb-3"><span>{name}</span><span className="text-red-500 font-bold">{price}</span></div>
-            ))}
+
+        <div className="max-w-5xl mx-auto bg-zinc-900 rounded-3xl p-8 shadow-2xl mb-8">
+          <div className="grid md:grid-cols-2 gap-4">
+            {beverageItems.map((item) => {
+              const qty = beverageCart[item.name] || 0;
+              return (
+                <div key={item.name} className={`flex items-center justify-between p-4 rounded-2xl border-2 transition ${qty > 0 ? "border-yellow-500 bg-zinc-800" : "border-zinc-700 bg-zinc-800"}`}>
+                  <div>
+                    <p className="text-white font-bold">{item.name}</p>
+                    <p className="text-red-400 font-bold text-sm">${item.price.toFixed(2)}</p>
+                  </div>
+                  {qty === 0 ? (
+                    <button onClick={() => updateBeverageQty(item.name, 1)}
+                      className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-sm font-black transition">
+                      ➕ Add
+                    </button>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => updateBeverageQty(item.name, -1)}
+                        className="bg-zinc-700 hover:bg-zinc-600 text-white w-9 h-9 rounded-xl text-lg font-black transition">−</button>
+                      <div className="text-center min-w-[40px]">
+                        <span className="text-xl font-black text-yellow-400">{qty}</span>
+                        <p className="text-green-400 text-xs font-bold">${(item.price * qty).toFixed(2)}</p>
+                      </div>
+                      <button onClick={() => updateBeverageQty(item.name, 1)}
+                        className="bg-red-600 hover:bg-red-500 text-white w-9 h-9 rounded-xl text-lg font-black transition">+</button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
+
+        {/* BEVERAGE ORDER SUMMARY */}
+        {beverageTotal.length > 0 && (
+          <div className="max-w-5xl mx-auto bg-zinc-900 rounded-3xl p-8 shadow-2xl border border-yellow-500">
+            <h4 className="text-2xl font-black text-yellow-400 uppercase mb-5">🥤 Your Beverage Order</h4>
+            {beverageTotal.map(({ name, qty, price }) => (
+              <div key={name} className="flex justify-between items-center py-3 border-b border-zinc-700">
+                <div>
+                  <p className="text-white font-bold">{name}</p>
+                  <p className="text-gray-400 text-sm">x {qty} @ ${price.toFixed(2)} each</p>
+                </div>
+                <span className="text-yellow-400 font-black">${(price * qty).toFixed(2)}</span>
+              </div>
+            ))}
+            <div className="flex justify-between items-center mt-5 pt-3">
+              <span className="text-white font-black text-xl">Total</span>
+              <span className="text-red-400 font-black text-2xl">
+                ${beverageTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
+              </span>
+            </div>
+            <button onClick={() => setBeverageCart({})} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
+              🔄 Reset Order
+            </button>
+          </div>
+        )}
       </section>
 
       {/* DESSERTS */}
@@ -1456,7 +1536,7 @@ export default function Home() {
               <h3 className="text-4xl font-black text-yellow-400 mb-6 leading-tight">Serving the Indiana Community</h3>
               <p className="text-gray-300 text-xl leading-relaxed mb-6">Located at 7233 Fishers Landing Dr in Fishers, Indiana, we are proud to serve families, professionals, students and food lovers of all backgrounds.</p>
               <p className="text-gray-300 text-xl leading-relaxed mb-6">Our doors are open seven days a week from 11 AM to midnight. We are not just feeding appetites — we are building memories, one plate at a time.</p>
-              <div className="mt-10"><a href="tel:9514546896" className="bg-red-600 hover:bg-red-700 px-10 py-5 rounded-xl text-xl font-bold transition inline-block">📞 Call to Order — 951-454-6896</a></div>
+              <div className="mt-10"><a href="tel:3175372058" className="bg-red-600 hover:bg-red-700 px-10 py-5 rounded-xl text-xl font-bold transition inline-block">📞 Call to Order — 317-537-2058</a></div>
             </div>
           </div>
         </div>
@@ -1467,7 +1547,7 @@ export default function Home() {
         <h2 className="text-5xl font-black text-red-600 uppercase mb-10">Visit Us</h2>
         <div className="space-y-5 text-xl text-gray-300">
           <p>📍 7233 Fishers Landing Dr, Fishers, IN 46038</p>
-          <p>📞 951-454-6896</p>
+          <p>📞 317-537-2058</p>
           <p>🕒 Monday - Sunday: 11:00 AM - 12:00 AM</p>
         </div>
       </section>
