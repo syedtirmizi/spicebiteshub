@@ -72,20 +72,29 @@ export default function Home() {
   });
 
   const beverageItems = [
-    { name: "Coke (Can)", price: 1.79 },
-    { name: "Diet Coke (Can)", price: 1.79 },
-    { name: "Coke Zero (Can)", price: 1.79 },
-    { name: "Sprite (Can)", price: 1.79 },
-    { name: "Sprite Zero (Can)", price: 1.79 },
-    { name: "Pepsi (Can)", price: 1.79 },
-    { name: "Pepsi Zero (Can)", price: 1.79 },
-    { name: "Dr Pepper (Can)", price: 1.79 },
-    { name: "Mountain Dew (Can)", price: 1.79 },
-    { name: "Fanta (Can)", price: 1.79 },
-    { name: "Root Beer (Can)", price: 1.79 },
-    { name: "Apple Juice (Bottle)", price: 2.49 },
-    { name: "Orange Juice (Bottle)", price: 2.49 },
-    { name: "Pineapple Juice (Bottle)", price: 2.49 },
+    { name: "Coke (Can)", price: 1.99, category: "🥤 Single Cans" },
+    { name: "Diet Coke (Can)", price: 1.99, category: "🥤 Single Cans" },
+    { name: "Coke Zero (Can)", price: 1.99, category: "🥤 Single Cans" },
+    { name: "Sprite (Can)", price: 1.99, category: "🥤 Single Cans" },
+    { name: "Sprite Zero (Can)", price: 1.99, category: "🥤 Single Cans" },
+    { name: "Pepsi (Can)", price: 1.99, category: "🥤 Single Cans" },
+    { name: "Pepsi Zero (Can)", price: 1.99, category: "🥤 Single Cans" },
+    { name: "Dr Pepper (Can)", price: 1.99, category: "🥤 Single Cans" },
+    { name: "Mountain Dew (Can)", price: 1.99, category: "🥤 Single Cans" },
+    { name: "Fanta (Can)", price: 1.99, category: "🥤 Single Cans" },
+    { name: "Root Beer (Can)", price: 1.99, category: "🥤 Single Cans" },
+    { name: "Apple Juice (Bottle)", price: 2.49, category: "🧃 Juices" },
+    { name: "Orange Juice (Bottle)", price: 2.49, category: "🧃 Juices" },
+    { name: "Pineapple Juice (Bottle)", price: 2.49, category: "🧃 Juices" },
+    { name: "Coke 2 Liter", price: 4.99, category: "🍾 2 Liter Bottles" },
+    { name: "Sprite 2 Liter", price: 4.99, category: "🍾 2 Liter Bottles" },
+    { name: "Diet Coke 2 Liter", price: 4.99, category: "🍾 2 Liter Bottles" },
+    { name: "Sprite Zero 2 Liter", price: 4.99, category: "🍾 2 Liter Bottles" },
+    { name: "Pepsi 2 Liter", price: 4.99, category: "🍾 2 Liter Bottles" },
+    { name: "Diet Pepsi 2 Liter", price: 4.99, category: "🍾 2 Liter Bottles" },
+    { name: "Dr Pepper 2 Liter", price: 4.99, category: "🍾 2 Liter Bottles" },
+    { name: "Mountain Dew 2 Liter", price: 4.99, category: "🍾 2 Liter Bottles" },
+    { name: "Any 6-Pack Cans", price: 6.99, category: "📦 6-Pack" },
   ];
   const [beverageCart, setBeverageCart] = useState({});
   const updateBeverageQty = (name, delta) => {
@@ -141,9 +150,9 @@ export default function Home() {
     { img:"biryani.jpg", name:"Signature Biryani", price:15.99, desc:"Aromatic basmati rice layered with rich spices and tender meat." },
   ];
   const naanItems = [
-    { img:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=1200&auto=format&fit=crop", name:"Plain Naan", price:1.99, desc:"Soft, fluffy tandoor-baked flatbread with a golden crust." },
-    { img:"https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=1200&auto=format&fit=crop", name:"Garlic Naan", price:2.49, desc:"Tandoor-baked naan brushed with fresh garlic butter and herbs." },
-    { img:"https://images.unsplash.com/photo-1606491956689-2ea866880c84?q=80&w=1200&auto=format&fit=crop", name:"Butter Naan", price:2.49, desc:"Soft naan generously brushed with rich melted butter straight from the tandoor." },
+    { img:"pn.png", name:"Plain Naan", price:1.99, desc:"Soft, fluffy tandoor-baked flatbread with a golden crust." },
+    { img:"gn.png", name:"Garlic Naan", price:2.49, desc:"Tandoor-baked naan brushed with fresh garlic butter and herbs." },
+    { img:"bn.png", name:"Butter Naan", price:2.49, desc:"Soft naan generously brushed with rich melted butter straight from the tandoor." },
   ];
 
   const updateDesiQty = (name, delta) => {
@@ -1355,39 +1364,52 @@ export default function Home() {
       {/* BEVERAGES */}
       <section id="beverages" className="py-20 bg-black text-white px-6">
         <h2 className="text-5xl font-bold text-center text-red-600 mb-6">Beverages</h2>
-        <p className="text-center text-gray-300 text-xl mb-14">Soft Drinks Served In Cans • Juices Served In Bottles</p>
+        <p className="text-center text-gray-300 text-xl mb-14">Soft Drinks Served In Cans • Juices Served In Bottles • 2 Liters Available</p>
 
-        <div className="max-w-5xl mx-auto bg-zinc-900 rounded-3xl p-8 shadow-2xl mb-8">
-          <div className="grid md:grid-cols-2 gap-4">
-            {beverageItems.map((item) => {
-              const qty = beverageCart[item.name] || 0;
-              return (
-                <div key={item.name} className={`flex items-center justify-between p-4 rounded-2xl border-2 transition ${qty > 0 ? "border-yellow-500 bg-zinc-800" : "border-zinc-700 bg-zinc-800"}`}>
-                  <div>
-                    <p className="text-white font-bold">{item.name}</p>
-                    <p className="text-red-400 font-bold text-sm">${item.price.toFixed(2)}</p>
-                  </div>
-                  {qty === 0 ? (
-                    <button onClick={() => updateBeverageQty(item.name, 1)}
-                      className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-sm font-black transition">
-                      ➕ Add
-                    </button>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => updateBeverageQty(item.name, -1)}
-                        className="bg-zinc-700 hover:bg-zinc-600 text-white w-9 h-9 rounded-xl text-lg font-black transition">−</button>
-                      <div className="text-center min-w-[40px]">
-                        <span className="text-xl font-black text-yellow-400">{qty}</span>
-                        <p className="text-green-400 text-xs font-bold">${(item.price * qty).toFixed(2)}</p>
+        <div className="max-w-5xl mx-auto space-y-8 mb-8">
+          {["🥤 Single Cans", "🧃 Juices", "🍾 2 Liter Bottles", "📦 6-Pack"].map((category) => {
+            const categoryItems = beverageItems.filter(i => i.category === category);
+            return (
+              <div key={category} className="bg-zinc-900 rounded-3xl p-6 shadow-2xl">
+                <h3 className="text-xl font-black text-yellow-400 uppercase tracking-widest mb-5">{category}
+                  {category === "🍾 2 Liter Bottles" && <span className="text-green-400 text-sm ml-3 normal-case font-bold">$4.99 each</span>}
+                  {category === "📦 6-Pack" && <span className="text-green-400 text-sm ml-3 normal-case font-bold">$6.99</span>}
+                  {category === "🥤 Single Cans" && <span className="text-green-400 text-sm ml-3 normal-case font-bold">$1.99 each</span>}
+                  {category === "🧃 Juices" && <span className="text-green-400 text-sm ml-3 normal-case font-bold">$2.49 each</span>}
+                </h3>
+                <div className="grid md:grid-cols-2 gap-3">
+                  {categoryItems.map((item) => {
+                    const qty = beverageCart[item.name] || 0;
+                    return (
+                      <div key={item.name} className={`flex items-center justify-between p-4 rounded-2xl border-2 transition ${qty > 0 ? "border-yellow-500 bg-zinc-800" : "border-zinc-700 bg-zinc-800"}`}>
+                        <div>
+                          <p className="text-white font-bold">{item.name}</p>
+                          <p className="text-red-400 font-bold text-sm">${item.price.toFixed(2)}</p>
+                        </div>
+                        {qty === 0 ? (
+                          <button onClick={() => updateBeverageQty(item.name, 1)}
+                            className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl text-sm font-black transition">
+                            ➕ Add
+                          </button>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <button onClick={() => updateBeverageQty(item.name, -1)}
+                              className="bg-zinc-700 hover:bg-zinc-600 text-white w-9 h-9 rounded-xl text-lg font-black transition">−</button>
+                            <div className="text-center min-w-[40px]">
+                              <span className="text-xl font-black text-yellow-400">{qty}</span>
+                              <p className="text-green-400 text-xs font-bold">${(item.price * qty).toFixed(2)}</p>
+                            </div>
+                            <button onClick={() => updateBeverageQty(item.name, 1)}
+                              className="bg-red-600 hover:bg-red-500 text-white w-9 h-9 rounded-xl text-lg font-black transition">+</button>
+                          </div>
+                        )}
                       </div>
-                      <button onClick={() => updateBeverageQty(item.name, 1)}
-                        className="bg-red-600 hover:bg-red-500 text-white w-9 h-9 rounded-xl text-lg font-black transition">+</button>
-                    </div>
-                  )}
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* BEVERAGE ORDER SUMMARY */}
@@ -1536,7 +1558,7 @@ export default function Home() {
               <h3 className="text-4xl font-black text-yellow-400 mb-6 leading-tight">Serving the Indiana Community</h3>
               <p className="text-gray-300 text-xl leading-relaxed mb-6">Located at 7233 Fishers Landing Dr in Fishers, Indiana, we are proud to serve families, professionals, students and food lovers of all backgrounds.</p>
               <p className="text-gray-300 text-xl leading-relaxed mb-6">Our doors are open seven days a week from 11 AM to midnight. We are not just feeding appetites — we are building memories, one plate at a time.</p>
-              <div className="mt-10"><a href="tel:3175372058" className="bg-red-600 hover:bg-red-700 px-10 py-5 rounded-xl text-xl font-bold transition inline-block">📞 Call to Order — 317-537-2058</a></div>
+              <div className="mt-10"><a href="tel:9514546896" className="bg-red-600 hover:bg-red-700 px-10 py-5 rounded-xl text-xl font-bold transition inline-block">📞 Call to Order — 951-454-6896</a></div>
             </div>
           </div>
         </div>
@@ -1547,7 +1569,7 @@ export default function Home() {
         <h2 className="text-5xl font-black text-red-600 uppercase mb-10">Visit Us</h2>
         <div className="space-y-5 text-xl text-gray-300">
           <p>📍 7233 Fishers Landing Dr, Fishers, IN 46038</p>
-          <p>📞 317-537-2058</p>
+          <p>📞 951-454-6896</p>
           <p>🕒 Monday - Sunday: 11:00 AM - 12:00 AM</p>
         </div>
       </section>
