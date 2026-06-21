@@ -1,6 +1,38 @@
 "use client";
 import { useState, useEffect } from "react";
 
+// Defined at module level (not inside Home) so these keep a stable component
+// identity across re-renders. If defined inside Home, React would treat them
+// as brand-new component types on every keystroke, which unmounts/remounts
+// the textarea and steals focus after each character typed.
+function ToppingGrid({ selectedToppings, onToggle, toppingList }) {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+      {toppingList.map((topping) => (
+        <button key={topping} onClick={() => onToggle(topping)}
+          className={`px-3 py-2 rounded-lg text-xs font-bold border-2 transition text-left ${selectedToppings.includes(topping) ? "bg-green-600 border-green-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-green-500"}`}>
+          {selectedToppings.includes(topping) ? "✅ " : "➕ "}{topping}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function SpecialRequests({ value, onChange, placeholder }) {
+  return (
+    <div className="mt-4">
+      <p className="text-white font-black uppercase tracking-widest text-xs mb-2">📝 Special Requests</p>
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder || "Any special instructions for the cook? (allergies, extra sauce, cooking preference, etc.)"}
+        rows={2}
+        className="w-full bg-zinc-800 border-2 border-zinc-700 focus:border-yellow-500 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 outline-none transition resize-none"
+      />
+    </div>
+  );
+}
+
 export default function Home() {
   // Slideshow
   const heroSlides = ["biryani.jpg", "signature pizza.jpg", "calzone.jpg", "gyro.jpg"];
@@ -20,6 +52,7 @@ export default function Home() {
 
   // Salad cart
   const [saladCart, setSaladCart] = useState({});
+  const [saladNotes, setSaladNotes] = useState("");
   const [saladSize, setSaladSize] = useState({});
   const [saladDressing, setSaladDressing] = useState({}); // { [saladName]: { [dressing]: qty } }
   const [saladIngredients, setSaladIngredients] = useState({}); // { [name]: { removed: [], added: [] } }
@@ -89,7 +122,9 @@ export default function Home() {
   });
   const [desiCart, setDesiCart] = useState({});
   const [naanCart, setNaanCart] = useState({});
+  const [desiNotes, setDesiNotes] = useState("");
   const [starterCart, setStarterCart] = useState({});
+  const [starterNotes, setStarterNotes] = useState("");
   const starterItems = [
     { img:"https://images.unsplash.com/photo-1548340748-6d2b7d7da280?q=80&w=1200&auto=format&fit=crop", name:"Mozzarella Sticks", price:7.99, desc:"Crispy breaded mozzarella sticks served with marinara sauce for dipping." },
     { img:"toasted.jpg", name:"Toasted Ravioli", price:8.99, desc:"Breaded ravioli fried crispy and served with marinara." },
@@ -118,6 +153,7 @@ export default function Home() {
     { img: "ch cake.jpg", name: "Chocolate Cake", price: 5.99, desc: "Layers of chocolate cake filled and topped with fudge." },
   ];
   const [dessertCart, setDessertCart] = useState({});
+  const [dessertNotes, setDessertNotes] = useState("");
   const updateDessertQty = (name, delta) => {
     setDessertCart(prev => {
       const qty = Math.max(0, (prev[name] || 0) + delta);
@@ -156,6 +192,7 @@ export default function Home() {
     { name: "Any 6-Pack Cans", price: 6.99, category: "📦 6-Pack" },
   ];
   const [beverageCart, setBeverageCart] = useState({});
+  const [beverageNotes, setBeverageNotes] = useState("");
   const updateBeverageQty = (name, delta) => {
     setBeverageCart(prev => {
       const qty = Math.max(0, (prev[name] || 0) + delta);
@@ -173,6 +210,7 @@ export default function Home() {
   });
   const [medOpen, setMedOpen] = useState(false);
   const [medCart, setMedCart] = useState({});
+  const [medNotes, setMedNotes] = useState("");
 
   const medItems = [
     { img: "chicken over rice.jpg", name: "Chicken Over Rice", price: 12.99, desc: "Seasoned grilled chicken served over fragrant basmati rice with white sauce and hot sauce." },
@@ -258,9 +296,10 @@ export default function Home() {
     { pcs: "50 pcs", desc: "5 Flavors & 5 Dips", price: 50.99, maxFlavors: 5, maxDips: 5 },
     { pcs: "75 pcs", desc: "6 Flavors & 7 Dips", price: 75.99, maxFlavors: 6, maxDips: 7 },
   ];
-  const emptyWingOrder = { size: null, flavors: [], dips: [] };
+  const emptyWingOrder = { size: null, flavors: [], dips: {}, notes: "" };
   const [boneInOrder, setBoneInOrder] = useState({ ...emptyWingOrder });
   const [bonelessOrder, setBonelessOrder] = useState({ ...emptyWingOrder });
+  const extraDipCharge = 0.75;
   const toggleWingFlavor = (order, setOrder, maxFlavors, flavor) => {
     setOrder(prev => {
       if (prev.flavors.includes(flavor)) return { ...prev, flavors: prev.flavors.filter(f => f !== flavor) };
@@ -268,16 +307,26 @@ export default function Home() {
       return { ...prev, flavors: [...prev.flavors, flavor] };
     });
   };
-  const toggleWingDip = (order, setOrder, maxDips, dip) => {
+  // Dips now support any quantity per sauce. The size's maxDips is the FREE
+  // allowance; any dips selected beyond that total are charged $0.75 each.
+  const updateWingDipQty = (setOrder, dip, delta) => {
     setOrder(prev => {
-      if (prev.dips.includes(dip)) return { ...prev, dips: prev.dips.filter(d => d !== dip) };
-      if (prev.dips.length >= maxDips) return prev;
-      return { ...prev, dips: [...prev.dips, dip] };
+      const current = prev.dips || {};
+      const qty = Math.max(0, (current[dip] || 0) + delta);
+      const next = { ...current };
+      if (qty === 0) { delete next[dip]; } else { next[dip] = qty; }
+      return { ...prev, dips: next };
     });
+  };
+  const wingDipTotalQty = (order) => Object.values(order.dips || {}).reduce((s, q) => s + q, 0);
+  const wingDipExtraCharge = (order) => {
+    const totalQty = wingDipTotalQty(order);
+    const freeAllowance = order.size?.maxDips || 0;
+    return Math.max(0, totalQty - freeAllowance) * extraDipCharge;
   };
 
   // Build Your Own Pizza
-  const emptyBuild = { size: "", crust: "", toppings: [] };
+  const emptyBuild = { size: "", crust: "", toppings: [], notes: "" };
   const [buildOrders, setBuildOrders] = useState([{ ...emptyBuild }]);
   const updateBuild = (index, field, value) => setBuildOrders(prev => prev.map((o, i) => i === index ? { ...o, [field]: value } : o));
   const toggleBuildTopping = (index, topping) => setBuildOrders(prev => prev.map((o, i) => i === index ? { ...o, toppings: o.toppings.includes(topping) ? o.toppings.filter(t => t !== topping) : [...o.toppings, topping] } : o));
@@ -285,7 +334,7 @@ export default function Home() {
   const removeBuildPizza = (index) => setBuildOrders(prev => prev.filter((_, i) => i !== index));
 
   // Specialty Pizza
-  const emptySpec = { name: "", size: "", crust: "", toppings: [] };
+  const emptySpec = { name: "", size: "", crust: "", toppings: [], notes: "" };
   const [specOrders, setSpecOrders] = useState([{ ...emptySpec }]);
   const updateSpec = (index, field, value) => setSpecOrders(prev => prev.map((o, i) => i === index ? { ...o, [field]: value } : o));
   const toggleSpecTopping = (index, topping) => setSpecOrders(prev => prev.map((o, i) => i === index ? { ...o, toppings: o.toppings.includes(topping) ? o.toppings.filter(t => t !== topping) : [...o.toppings, topping] } : o));
@@ -294,7 +343,7 @@ export default function Home() {
 
   // Pizza by Slice
   const sliceTypes = ["Cheese", "Pepperoni", "Sausage"];
-  const emptySlice = { type: "", quantity: 1, toppings: [], addFries: false };
+  const emptySlice = { type: "", quantity: 1, toppings: [], addFries: false, notes: "" };
   const [sliceOrders, setSliceOrders] = useState([{ ...emptySlice }]);
   const updateSlice = (index, field, value) => setSliceOrders(prev => prev.map((o, i) => i === index ? { ...o, [field]: value } : o));
   const toggleSliceTopping = (index, topping) => setSliceOrders(prev => prev.map((o, i) => i === index ? { ...o, toppings: o.toppings.includes(topping) ? o.toppings.filter(t => t !== topping) : [...o.toppings, topping] } : o));
@@ -303,18 +352,21 @@ export default function Home() {
 
   // Calzone toppings
   const [calzoneToppings, setCalzoneToppings] = useState({});
+  const [calzoneNotes, setCalzoneNotes] = useState({});
   const toggleCalzoneTopping = (itemName, topping) => {
     setCalzoneToppings(prev => { const c = prev[itemName] || []; return { ...prev, [itemName]: c.includes(topping) ? c.filter(t => t !== topping) : [...c, topping] }; });
   };
 
   // Pasta toppings
   const [pastaToppings, setPastaToppings] = useState({});
+  const [pastaNotes, setPastaNotes] = useState({});
   const togglePastaTopping = (itemName, topping) => {
     setPastaToppings(prev => { const c = prev[itemName] || []; return { ...prev, [itemName]: c.includes(topping) ? c.filter(t => t !== topping) : [...c, topping] }; });
   };
 
   // Mac & Cheese toppings
   const [macToppings, setMacToppings] = useState({});
+  const [macNotes, setMacNotes] = useState({});
   const toggleMacTopping = (itemName, topping) => {
     setMacToppings(prev => { const c = prev[itemName] || []; return { ...prev, [itemName]: c.includes(topping) ? c.filter(t => t !== topping) : [...c, topping] }; });
   };
@@ -349,18 +401,6 @@ export default function Home() {
     { name: "Chicken Tikka Pizza", img: "https://flavorry.com/wp-content/uploads/2025/09/teamgreen1001_httpss.mj_.run9zT8Sikxhn8_An_ultra-close-up_AND__ecff3b71-758f-4b56-a1ea-7797418d9935_1.png", desc: "Homemade garlic sauce with marinated chicken chunks layer of melted mozzarella cheese." },
     { name: "Lamb Pizza", img: "lamb pizza.jpg", desc: "Homemade garlic sauce with lamb layer of melted mozzarella cheese." },
   ];
-
-  // Reusable topping grid component helper
-  const ToppingGrid = ({ selectedToppings, onToggle, toppingList }) => (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-      {toppingList.map((topping) => (
-        <button key={topping} onClick={() => onToggle(topping)}
-          className={`px-3 py-2 rounded-lg text-xs font-bold border-2 transition text-left ${selectedToppings.includes(topping) ? "bg-green-600 border-green-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-green-500"}`}>
-          {selectedToppings.includes(topping) ? "✅ " : "➕ "}{topping}
-        </button>
-      ))}
-    </div>
-  );
 
   return (
     <main className="bg-black text-white overflow-x-hidden">
@@ -507,6 +547,7 @@ export default function Home() {
                             {order.size ? <p className="text-yellow-400 text-xs mb-3">Each topping: {toppingPrices[order.size]} for {order.size}</p> : <p className="text-gray-400 text-xs mb-3">Select a size to see topping prices</p>}
                             <ToppingGrid selectedToppings={order.toppings} onToggle={(t) => toggleBuildTopping(index, t)} toppingList={toppings} />
                           </div>
+                          <SpecialRequests value={order.notes} onChange={(v) => updateBuild(index, "notes", v)} />
                           {(order.size || order.crust || order.toppings.length > 0) && (
                             <div className="mt-5 bg-zinc-900 rounded-xl p-4">
                               <p className="text-yellow-400 font-black text-sm uppercase mb-3">Pizza #{index + 1} Summary</p>
@@ -593,6 +634,7 @@ export default function Home() {
                             {order.size ? <p className="text-yellow-400 text-xs mb-3">Each topping: {toppingPrices[order.size]} for {order.size}</p> : <p className="text-gray-400 text-xs mb-3">Select a size to see topping prices</p>}
                             <ToppingGrid selectedToppings={order.toppings} onToggle={(t) => toggleSpecTopping(index, t)} toppingList={toppings} />
                           </div>
+                          <SpecialRequests value={order.notes} onChange={(v) => updateSpec(index, "notes", v)} />
                           {(order.name || order.size || order.crust || order.toppings.length > 0) && (
                             <div className="mt-5 bg-zinc-900 rounded-xl p-4">
                               <p className="text-yellow-400 font-black text-sm uppercase mb-3">Order #{index + 1} Summary</p>
@@ -682,6 +724,7 @@ export default function Home() {
                             <p className="text-yellow-400 text-xs mb-3">$0.50 per topping per slice</p>
                             <ToppingGrid selectedToppings={order.toppings} onToggle={(t) => toggleSliceTopping(index, t)} toppingList={toppings} />
                           </div>
+                          <SpecialRequests value={order.notes} onChange={(v) => updateSlice(index, "notes", v)} />
                           {order.type && (
                             <div className="mt-5 bg-zinc-900 rounded-xl p-4">
                               <p className="text-yellow-400 font-black text-sm uppercase mb-3">Slice Order #{index + 1} Summary</p>
@@ -755,6 +798,10 @@ export default function Home() {
                               </button>
                             ))}
                           </div>
+                          <SpecialRequests
+                            value={calzoneNotes[item.name] || ""}
+                            onChange={(v) => setCalzoneNotes(prev => ({ ...prev, [item.name]: v }))}
+                          />
                           {itemToppings.length > 0 && (
                             <div className="bg-zinc-800 rounded-xl p-3 mt-4">
                               <div className="flex justify-between text-xs mb-1"><span className="text-white">Base Price</span><span className="text-red-400 font-bold">$11.99</span></div>
@@ -797,7 +844,7 @@ export default function Home() {
                       <p className="text-white font-black uppercase tracking-widest text-sm mb-4">🔢 Choose Your Size</p>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                         {boneInSizes.map((s) => (
-                          <button key={s.pcs} onClick={() => setBoneInOrder({ size: s, flavors: [], dips: [] })}
+                          <button key={s.pcs} onClick={() => setBoneInOrder(prev => ({ size: s, flavors: [], dips: [], notes: prev.notes }))}
                             className={`p-3 rounded-2xl border-2 transition text-left ${boneInOrder.size?.pcs === s.pcs ? "bg-red-600 border-red-600 text-white" : "bg-zinc-800 border-zinc-700 text-gray-300 hover:border-red-500"}`}>
                             <p className="font-black text-lg">{s.pcs}</p>
                             <p className="text-xs opacity-80">{s.desc}</p>
@@ -827,19 +874,32 @@ export default function Home() {
                     {/* DIP SELECTION */}
                     <div className="mb-6">
                       <p className="text-white font-black uppercase tracking-widest text-sm mb-1">🥣 Choose Your Dipping Sauce{boneInOrder.size?.maxDips > 1 ? "s" : ""}</p>
-                      {boneInOrder.size ? <p className="text-yellow-400 text-xs mb-3">Select up to {boneInOrder.size.maxDips} dip{boneInOrder.size.maxDips > 1 ? "s" : ""} ({boneInOrder.dips.length}/{boneInOrder.size.maxDips} selected)</p> : <p className="text-gray-400 text-xs mb-3">Select a size first</p>}
-                      <div className="flex flex-wrap gap-2">
+                      {boneInOrder.size ? (
+                        <p className="text-yellow-400 text-xs mb-3">
+                          {boneInOrder.size.maxDips} free, extra ${extraDipCharge.toFixed(2)} each
+                          {wingDipTotalQty(boneInOrder) > 0 && ` — ${wingDipTotalQty(boneInOrder)} selected${wingDipExtraCharge(boneInOrder) > 0 ? `, +$${wingDipExtraCharge(boneInOrder).toFixed(2)} charge` : " (free)"}`}
+                        </p>
+                      ) : <p className="text-gray-400 text-xs mb-3">Select a size first</p>}
+                      <div className="flex flex-wrap gap-3">
                         {wingDips.map((dip) => {
-                          const maxReached = boneInOrder.size && boneInOrder.dips.length >= boneInOrder.size.maxDips && !boneInOrder.dips.includes(dip);
+                          const dQty = boneInOrder.dips?.[dip] || 0;
                           return (
-                            <button key={dip} onClick={() => boneInOrder.size && toggleWingDip(boneInOrder, setBoneInOrder, boneInOrder.size.maxDips, dip)}
-                              className={`px-6 py-3 rounded-xl font-black border-2 transition ${boneInOrder.dips.includes(dip) ? "bg-yellow-500 border-yellow-500 text-black" : maxReached ? "bg-zinc-800 border-zinc-700 text-gray-500 cursor-not-allowed" : "bg-zinc-800 border-zinc-700 text-gray-300 hover:border-yellow-500"}`}>
-                              {boneInOrder.dips.includes(dip) ? "✅ " : ""}{dip}
-                            </button>
+                            <div key={dip} className={`rounded-xl border-2 transition px-4 py-2 flex items-center gap-3 ${dQty > 0 ? "border-yellow-500 bg-zinc-700" : "border-zinc-700 bg-zinc-800"}`}>
+                              <span className={`font-black ${dQty > 0 ? "text-white" : "text-gray-300"}`}>{dip}</span>
+                              <div className="flex items-center gap-2">
+                                <button disabled={!boneInOrder.size} onClick={() => updateWingDipQty(setBoneInOrder, dip, -1)}
+                                  className="bg-zinc-600 hover:bg-zinc-500 disabled:opacity-40 disabled:cursor-not-allowed text-white w-7 h-7 rounded-lg text-base font-black leading-none transition">−</button>
+                                <span className="text-yellow-400 font-black w-4 text-center">{dQty}</span>
+                                <button disabled={!boneInOrder.size} onClick={() => updateWingDipQty(setBoneInOrder, dip, 1)}
+                                  className="bg-yellow-500 hover:bg-yellow-400 disabled:opacity-40 disabled:cursor-not-allowed text-black w-7 h-7 rounded-lg text-base font-black leading-none transition">+</button>
+                              </div>
+                            </div>
                           );
                         })}
                       </div>
                     </div>
+
+                    <SpecialRequests value={boneInOrder.notes} onChange={(v) => setBoneInOrder(prev => ({ ...prev, notes: v }))} />
 
                     {/* SUMMARY */}
                     {boneInOrder.size && (
@@ -847,12 +907,17 @@ export default function Home() {
                         <p className="text-yellow-400 font-black text-sm uppercase mb-3">Your Order Summary</p>
                         <div className="flex justify-between text-sm mb-1"><span className="text-white">🍗 {boneInOrder.size.pcs}</span><span className="text-red-400 font-bold">${boneInOrder.size.price.toFixed(2)}</span></div>
                         {boneInOrder.flavors.length > 0 && <p className="text-white text-sm mb-1">🌶️ {boneInOrder.flavors.join(", ")}</p>}
-                        {boneInOrder.dips.length > 0 && <p className="text-white text-sm mb-1">🥣 {boneInOrder.dips.join(", ")}</p>}
+                        {wingDipTotalQty(boneInOrder) > 0 && (
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="text-white">🥣 {Object.entries(boneInOrder.dips).map(([d, q]) => q > 1 ? `${d} x${q}` : d).join(", ")}</span>
+                            {wingDipExtraCharge(boneInOrder) > 0 && <span className="text-green-400 font-bold">+${wingDipExtraCharge(boneInOrder).toFixed(2)}</span>}
+                          </div>
+                        )}
                         {boneInOrder.flavors.length < boneInOrder.size.maxFlavors && <p className="text-orange-400 text-xs">⚠️ Please select {boneInOrder.size.maxFlavors - boneInOrder.flavors.length} more flavor{boneInOrder.size.maxFlavors - boneInOrder.flavors.length > 1 ? "s" : ""}</p>}
-                        {boneInOrder.dips.length < boneInOrder.size.maxDips && <p className="text-orange-400 text-xs">⚠️ Please select {boneInOrder.size.maxDips - boneInOrder.dips.length} more dip{boneInOrder.size.maxDips - boneInOrder.dips.length > 1 ? "s" : ""}</p>}
+                        {wingDipTotalQty(boneInOrder) < boneInOrder.size.maxDips && <p className="text-orange-400 text-xs">⚠️ You get {boneInOrder.size.maxDips} free dip{boneInOrder.size.maxDips > 1 ? "s" : ""} — select {boneInOrder.size.maxDips - wingDipTotalQty(boneInOrder)} more to use them all</p>}
                         <div className="border-t border-zinc-700 mt-3 pt-3 flex justify-between">
                           <span className="text-white font-black text-sm">Total</span>
-                          <span className="text-yellow-400 font-black text-lg">${boneInOrder.size.price.toFixed(2)}</span>
+                          <span className="text-yellow-400 font-black text-lg">${(boneInOrder.size.price + wingDipExtraCharge(boneInOrder)).toFixed(2)}</span>
                         </div>
                         <button onClick={() => setBoneInOrder({ ...emptyWingOrder })} className="mt-3 text-xs text-red-400 hover:text-red-300 font-bold">🔄 Reset Order</button>
                       </div>
@@ -888,7 +953,7 @@ export default function Home() {
                       <p className="text-white font-black uppercase tracking-widest text-sm mb-4">🔢 Choose Your Size</p>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                         {bonelessSizes.map((s) => (
-                          <button key={s.pcs} onClick={() => setBonelessOrder({ size: s, flavors: [], dips: [] })}
+                          <button key={s.pcs} onClick={() => setBonelessOrder(prev => ({ size: s, flavors: [], dips: [], notes: prev.notes }))}
                             className={`p-3 rounded-2xl border-2 transition text-left ${bonelessOrder.size?.pcs === s.pcs ? "bg-red-600 border-red-600 text-white" : "bg-zinc-800 border-zinc-700 text-gray-300 hover:border-red-500"}`}>
                             <p className="font-black text-lg">{s.pcs}</p>
                             <p className="text-xs opacity-80">{s.desc}</p>
@@ -918,19 +983,32 @@ export default function Home() {
                     {/* DIP SELECTION */}
                     <div className="mb-6">
                       <p className="text-white font-black uppercase tracking-widest text-sm mb-1">🥣 Choose Your Dipping Sauce{bonelessOrder.size?.maxDips > 1 ? "s" : ""}</p>
-                      {bonelessOrder.size ? <p className="text-yellow-400 text-xs mb-3">Select up to {bonelessOrder.size.maxDips} dip{bonelessOrder.size.maxDips > 1 ? "s" : ""} ({bonelessOrder.dips.length}/{bonelessOrder.size.maxDips} selected)</p> : <p className="text-gray-400 text-xs mb-3">Select a size first</p>}
-                      <div className="flex flex-wrap gap-2">
+                      {bonelessOrder.size ? (
+                        <p className="text-yellow-400 text-xs mb-3">
+                          {bonelessOrder.size.maxDips} free, extra ${extraDipCharge.toFixed(2)} each
+                          {wingDipTotalQty(bonelessOrder) > 0 && ` — ${wingDipTotalQty(bonelessOrder)} selected${wingDipExtraCharge(bonelessOrder) > 0 ? `, +$${wingDipExtraCharge(bonelessOrder).toFixed(2)} charge` : " (free)"}`}
+                        </p>
+                      ) : <p className="text-gray-400 text-xs mb-3">Select a size first</p>}
+                      <div className="flex flex-wrap gap-3">
                         {wingDips.map((dip) => {
-                          const maxReached = bonelessOrder.size && bonelessOrder.dips.length >= bonelessOrder.size.maxDips && !bonelessOrder.dips.includes(dip);
+                          const dQty = bonelessOrder.dips?.[dip] || 0;
                           return (
-                            <button key={dip} onClick={() => bonelessOrder.size && toggleWingDip(bonelessOrder, setBonelessOrder, bonelessOrder.size.maxDips, dip)}
-                              className={`px-6 py-3 rounded-xl font-black border-2 transition ${bonelessOrder.dips.includes(dip) ? "bg-yellow-500 border-yellow-500 text-black" : maxReached ? "bg-zinc-800 border-zinc-700 text-gray-500 cursor-not-allowed" : "bg-zinc-800 border-zinc-700 text-gray-300 hover:border-yellow-500"}`}>
-                              {bonelessOrder.dips.includes(dip) ? "✅ " : ""}{dip}
-                            </button>
+                            <div key={dip} className={`rounded-xl border-2 transition px-4 py-2 flex items-center gap-3 ${dQty > 0 ? "border-yellow-500 bg-zinc-700" : "border-zinc-700 bg-zinc-800"}`}>
+                              <span className={`font-black ${dQty > 0 ? "text-white" : "text-gray-300"}`}>{dip}</span>
+                              <div className="flex items-center gap-2">
+                                <button disabled={!bonelessOrder.size} onClick={() => updateWingDipQty(setBonelessOrder, dip, -1)}
+                                  className="bg-zinc-600 hover:bg-zinc-500 disabled:opacity-40 disabled:cursor-not-allowed text-white w-7 h-7 rounded-lg text-base font-black leading-none transition">−</button>
+                                <span className="text-yellow-400 font-black w-4 text-center">{dQty}</span>
+                                <button disabled={!bonelessOrder.size} onClick={() => updateWingDipQty(setBonelessOrder, dip, 1)}
+                                  className="bg-yellow-500 hover:bg-yellow-400 disabled:opacity-40 disabled:cursor-not-allowed text-black w-7 h-7 rounded-lg text-base font-black leading-none transition">+</button>
+                              </div>
+                            </div>
                           );
                         })}
                       </div>
                     </div>
+
+                    <SpecialRequests value={bonelessOrder.notes} onChange={(v) => setBonelessOrder(prev => ({ ...prev, notes: v }))} />
 
                     {/* SUMMARY */}
                     {bonelessOrder.size && (
@@ -938,12 +1016,17 @@ export default function Home() {
                         <p className="text-yellow-400 font-black text-sm uppercase mb-3">Your Order Summary</p>
                         <div className="flex justify-between text-sm mb-1"><span className="text-white">🍗 {bonelessOrder.size.pcs}</span><span className="text-red-400 font-bold">${bonelessOrder.size.price.toFixed(2)}</span></div>
                         {bonelessOrder.flavors.length > 0 && <p className="text-white text-sm mb-1">🌶️ {bonelessOrder.flavors.join(", ")}</p>}
-                        {bonelessOrder.dips.length > 0 && <p className="text-white text-sm mb-1">🥣 {bonelessOrder.dips.join(", ")}</p>}
+                        {wingDipTotalQty(bonelessOrder) > 0 && (
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="text-white">🥣 {Object.entries(bonelessOrder.dips).map(([d, q]) => q > 1 ? `${d} x${q}` : d).join(", ")}</span>
+                            {wingDipExtraCharge(bonelessOrder) > 0 && <span className="text-green-400 font-bold">+${wingDipExtraCharge(bonelessOrder).toFixed(2)}</span>}
+                          </div>
+                        )}
                         {bonelessOrder.flavors.length < bonelessOrder.size.maxFlavors && <p className="text-orange-400 text-xs">⚠️ Please select {bonelessOrder.size.maxFlavors - bonelessOrder.flavors.length} more flavor{bonelessOrder.size.maxFlavors - bonelessOrder.flavors.length > 1 ? "s" : ""}</p>}
-                        {bonelessOrder.dips.length < bonelessOrder.size.maxDips && <p className="text-orange-400 text-xs">⚠️ Please select {bonelessOrder.size.maxDips - bonelessOrder.dips.length} more dip{bonelessOrder.size.maxDips - bonelessOrder.dips.length > 1 ? "s" : ""}</p>}
+                        {wingDipTotalQty(bonelessOrder) < bonelessOrder.size.maxDips && <p className="text-orange-400 text-xs">⚠️ You get {bonelessOrder.size.maxDips} free dip{bonelessOrder.size.maxDips > 1 ? "s" : ""} — select {bonelessOrder.size.maxDips - wingDipTotalQty(bonelessOrder)} more to use them all</p>}
                         <div className="border-t border-zinc-700 mt-3 pt-3 flex justify-between">
                           <span className="text-white font-black text-sm">Total</span>
-                          <span className="text-yellow-400 font-black text-lg">${bonelessOrder.size.price.toFixed(2)}</span>
+                          <span className="text-yellow-400 font-black text-lg">${(bonelessOrder.size.price + wingDipExtraCharge(bonelessOrder)).toFixed(2)}</span>
                         </div>
                         <button onClick={() => setBonelessOrder({ ...emptyWingOrder })} className="mt-3 text-xs text-red-400 hover:text-red-300 font-bold">🔄 Reset Order</button>
                       </div>
@@ -996,6 +1079,10 @@ export default function Home() {
                             </button>
                           ))}
                         </div>
+                        <SpecialRequests
+                          value={pastaNotes[item.name] || ""}
+                          onChange={(v) => setPastaNotes(prev => ({ ...prev, [item.name]: v }))}
+                        />
                         {itemToppings.length > 0 && (
                           <div className="bg-zinc-800 rounded-xl p-3 mt-4">
                             <div className="flex justify-between text-xs mb-1"><span className="text-white">Base Price</span><span className="text-red-400 font-bold">$9.99</span></div>
@@ -1055,6 +1142,10 @@ export default function Home() {
                             </button>
                           ))}
                         </div>
+                        <SpecialRequests
+                          value={macNotes[item.name] || ""}
+                          onChange={(v) => setMacNotes(prev => ({ ...prev, [item.name]: v }))}
+                        />
                         {itemToppings.length > 0 && (
                           <div className="bg-zinc-800 rounded-xl p-3 mt-4">
                             <div className="flex justify-between text-xs mb-1"><span className="text-white">Base Price</span><span className="text-red-400 font-bold">$9.99</span></div>
@@ -1147,13 +1238,14 @@ export default function Home() {
                       <span className="text-yellow-400 font-black">${(price * qty).toFixed(2)}</span>
                     </div>
                   ))}
+                  <SpecialRequests value={medNotes} onChange={setMedNotes} />
                   <div className="flex justify-between items-center mt-5 pt-3">
                     <span className="text-white font-black text-xl">Total</span>
                     <span className="text-yellow-400 font-black text-2xl">
                       ${medTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
                     </span>
                   </div>
-                  <button onClick={() => setMedCart({})} className="mt-4 bg-red-700 hover:bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
+                  <button onClick={() => { setMedCart({}); setMedNotes(""); }} className="mt-4 bg-red-700 hover:bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
                     🔄 Reset Order
                   </button>
                 </div>
@@ -1277,13 +1369,14 @@ export default function Home() {
                       </div>
                     ))}
                   </div>
+                  <SpecialRequests value={desiNotes} onChange={setDesiNotes} />
                   <div className="flex justify-between items-center">
                     <span className="text-white font-black text-xl">Estimated Total</span>
                     <span className="text-yellow-400 font-black text-2xl">
                       ${desiTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
                     </span>
                   </div>
-                  <button onClick={() => { setDesiCart({}); setNaanCart({}); }}
+                  <button onClick={() => { setDesiCart({}); setNaanCart({}); setDesiNotes(""); }}
                     className="mt-4 bg-red-700 hover:bg-red-600 text-white px-6 py-2 rounded-xl text-sm font-bold transition">
                     🔄 Reset Order
                   </button>
@@ -1350,13 +1443,14 @@ export default function Home() {
                 <span className="text-yellow-400 font-black">${(price * qty).toFixed(2)}</span>
               </div>
             ))}
+            <SpecialRequests value={starterNotes} onChange={setStarterNotes} />
             <div className="flex justify-between items-center mt-5 pt-3">
               <span className="text-white font-black text-xl">Total</span>
               <span className="text-red-400 font-black text-2xl">
                 ${starterTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
               </span>
             </div>
-            <button onClick={() => setStarterCart({})} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
+            <button onClick={() => { setStarterCart({}); setStarterNotes(""); }} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
               🔄 Reset Order
             </button>
           </div>
@@ -1533,13 +1627,14 @@ export default function Home() {
                 <span className="text-yellow-400 font-black">${(price * qty).toFixed(2)}</span>
               </div>
             ))}
+            <SpecialRequests value={saladNotes} onChange={setSaladNotes} />
             <div className="flex justify-between items-center mt-5 pt-3">
               <span className="text-white font-black text-xl">Total</span>
               <span className="text-green-400 font-black text-2xl">
                 ${saladTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
               </span>
             </div>
-            <button onClick={() => { setSaladCart({}); setSaladDressing({}); setSaladSize({}); setSaladIngredients({}); }} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
+            <button onClick={() => { setSaladCart({}); setSaladDressing({}); setSaladSize({}); setSaladIngredients({}); setSaladNotes(""); }} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
               🔄 Reset Order
             </button>
           </div>
@@ -1610,13 +1705,14 @@ export default function Home() {
                 <span className="text-yellow-400 font-black">${(price * qty).toFixed(2)}</span>
               </div>
             ))}
+            <SpecialRequests value={beverageNotes} onChange={setBeverageNotes} />
             <div className="flex justify-between items-center mt-5 pt-3">
               <span className="text-white font-black text-xl">Total</span>
               <span className="text-red-400 font-black text-2xl">
                 ${beverageTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
               </span>
             </div>
-            <button onClick={() => setBeverageCart({})} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
+            <button onClick={() => { setBeverageCart({}); setBeverageNotes(""); }} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
               🔄 Reset Order
             </button>
           </div>
@@ -1677,13 +1773,14 @@ export default function Home() {
                 <span className="text-yellow-400 font-black">${(price * qty).toFixed(2)}</span>
               </div>
             ))}
+            <SpecialRequests value={dessertNotes} onChange={setDessertNotes} />
             <div className="flex justify-between items-center mt-5 pt-3">
               <span className="text-white font-black text-xl">Total</span>
               <span className="text-red-400 font-black text-2xl">
                 ${dessertTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
               </span>
             </div>
-            <button onClick={() => setDessertCart({})} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
+            <button onClick={() => { setDessertCart({}); setDessertNotes(""); }} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
               🔄 Reset Order
             </button>
           </div>
