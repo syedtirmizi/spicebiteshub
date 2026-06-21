@@ -1,7 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
+  // Slideshow
+  const heroSlides = ["biryani.jpg", "signature pizza.jpg", "calzone.jpg", "gyro.jpg"];
+  const [slide, setSlide] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setSlide(s => (s + 1) % heroSlides.length), 4000);
+    return () => clearInterval(interval);
+  }, []);
   const [pizzaOpen, setPizzaOpen] = useState(false);
   const [buildOpen, setBuildOpen] = useState(false);
   const [specialtyOpen, setSpecialtyOpen] = useState(false);
@@ -13,13 +20,27 @@ export default function Home() {
 
   // Salad cart
   const [saladCart, setSaladCart] = useState({});
+  const [saladSize, setSaladSize] = useState({});
+  const [saladDressing, setSaladDressing] = useState({}); // { [saladName]: { [dressing]: qty } }
+  const [saladIngredients, setSaladIngredients] = useState({}); // { [name]: { removed: [], added: [] } }
   const saladItems = [
-    { img:"https://superbrecipe.com/wp-content/uploads/2025/07/Chicken-Caesar-Salad-1.png", name:"Classic Chicken Caesar Salad", desc:"Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes topped with marinated chicken." },
-    { img:"g salad.jpg", name:"Garden Salad", desc:"Romaine lettuce, fresh tomatoes, bermuda onions, fresh mushrooms, green peppers." },
-    { img:"salad1.jpg", name:"Classic Caesar Salad", desc:"Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes." },
-    { img:"https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1200&auto=format&fit=crop", name:"Chopped Chicken Salad", desc:"Romaine lettuce, mozzarella cheese, bermuda onions, bacon, chicken." },
-    { img:"sig salad.jpg", name:"Signature House Salad", desc:"Romaine lettuce with artichoke hearts, green peppers, kalamata olives, fresh tomatoes, onions and feta cheese." },
+    { img:"https://superbrecipe.com/wp-content/uploads/2025/07/Chicken-Caesar-Salad-1.png", name:"Classic Chicken Caesar Salad", desc:"Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes topped with marinated chicken.", baseIngredients:["Romaine Lettuce","Fresh Parmesan","Asiago Cheese","Croutons","Fresh Tomatoes","Marinated Chicken"] },
+    { img:"g salad.jpg", name:"Garden Salad", desc:"Romaine lettuce, fresh tomatoes, bermuda onions, fresh mushrooms, green peppers.", baseIngredients:["Romaine Lettuce","Fresh Tomatoes","Bermuda Onions","Fresh Mushrooms","Green Peppers"] },
+    { img:"salad1.jpg", name:"Classic Caesar Salad", desc:"Romaine lettuce, fresh parmesan, asiago cheese, croutons and fresh tomatoes.", baseIngredients:["Romaine Lettuce","Fresh Parmesan","Asiago Cheese","Croutons","Fresh Tomatoes"] },
+    { img:"https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1200&auto=format&fit=crop", name:"Chopped Chicken Salad", desc:"Romaine lettuce, mozzarella cheese, bermuda onions, bacon, chicken.", baseIngredients:["Romaine Lettuce","Mozzarella Cheese","Bermuda Onions","Bacon","Chicken"] },
+    { img:"sig salad.jpg", name:"Signature House Salad", desc:"Romaine lettuce with artichoke hearts, green peppers, kalamata olives, fresh tomatoes, onions and feta cheese.", baseIngredients:["Romaine Lettuce","Artichoke Hearts","Green Peppers","Kalamata Olives","Fresh Tomatoes","Bermuda Onions","Feta Cheese"] },
   ];
+  const saladSizes = [
+    { label: "Individual", price: 9.99 },
+    { label: "Family", price: 19.99 },
+    { label: "Party", price: 32.99 },
+  ];
+  const saladDressings = ["Ranch", "Italian", "Caesar", "Blue Cheese", "Balsamic Vinaigrette", "Honey Mustard"];
+  const freeDressings = { Individual: 2, Family: 4, Party: 6 };
+  const dressingExtraCharge = 1.25;
+  // Master pool of every ingredient used across all salads, available as a paid add-on
+  const allSaladIngredients = ["Romaine Lettuce","Fresh Parmesan","Asiago Cheese","Croutons","Fresh Tomatoes","Marinated Chicken","Bermuda Onions","Fresh Mushrooms","Green Peppers","Mozzarella Cheese","Bacon","Chicken","Artichoke Hearts","Kalamata Olives","Feta Cheese"];
+  const saladExtraCharge = { Individual: 0.75, Family: 1.75, Party: 2.75 };
   const updateSaladQty = (name, delta) => {
     setSaladCart(prev => {
       const qty = Math.max(0, (prev[name] || 0) + delta);
@@ -27,7 +48,45 @@ export default function Home() {
       return { ...prev, [name]: qty };
     });
   };
-  const saladTotal = Object.entries(saladCart).map(([name, qty]) => ({ name, qty, price: 9.99 }));
+ const updateSaladDressing = (name, dressing, delta) => {
+  setSaladDressing(prev => {
+    const current = prev[name] || {};
+    const qty = Math.max(0, (current[dressing] || 0) + delta);
+    if (qty === 0) {
+      const next = { ...current };
+      delete next[dressing];
+      return { ...prev, [name]: next };
+    }
+    return { ...prev, [name]: { ...current, [dressing]: qty } };
+  });
+};
+  const toggleSaladRemoved = (name, ingredient) => {
+    setSaladIngredients(prev => {
+      const cur = prev[name] || { removed: [], added: [] };
+      const removed = cur.removed.includes(ingredient) ? cur.removed.filter(i => i !== ingredient) : [...cur.removed, ingredient];
+      return { ...prev, [name]: { ...cur, removed } };
+    });
+  };
+  const toggleSaladAdded = (name, ingredient) => {
+    setSaladIngredients(prev => {
+      const cur = prev[name] || { removed: [], added: [] };
+      const added = cur.added.includes(ingredient) ? cur.added.filter(i => i !== ingredient) : [...cur.added, ingredient];
+      return { ...prev, [name]: { ...cur, added } };
+    });
+  };
+  const saladTotal = Object.entries(saladCart).map(([name, qty]) => {
+    const size = saladSize[name] || "Individual";
+    const basePrice = saladSizes.find(s => s.label === size)?.price || 9.99;
+    const ing = saladIngredients[name] || { removed: [], added: [] };
+    const extraChargeEach = saladExtraCharge[size] || 0.75;
+    const addedCharge = ing.added.length * extraChargeEach;
+    const dressingMap = saladDressing[name] || {};
+    const totalDressingQty = Object.values(dressingMap).reduce((s, q) => s + q, 0);
+    const freeDressingAllowance = freeDressings[size] || 2;
+    const dressingCharge = Math.max(0, totalDressingQty - freeDressingAllowance) * dressingExtraCharge;
+    const price = basePrice + addedCharge + dressingCharge;
+    return { name, qty, price, size, removed: ing.removed, added: ing.added, dressingMap, dressingCharge };
+  });
   const [desiCart, setDesiCart] = useState({});
   const [naanCart, setNaanCart] = useState({});
   const [starterCart, setStarterCart] = useState({});
@@ -306,34 +365,46 @@ export default function Home() {
   return (
     <main className="bg-black text-white overflow-x-hidden">
 
+      {/* NAV (now above the slideshow, not layered on top of it) */}
+      <nav className="relative z-20 flex items-center justify-between px-8 py-6 bg-black/90">
+        <div className="flex items-center gap-4">
+          <img src="/logo.png" alt="Spice & Bites Hub" className="h-20 w-auto" />
+          <p className="text-sm text-gray-300 mt-1">American • Mediterranean • Desi<br />All Under One Roof</p>
+        </div>
+        <div className="hidden md:flex items-center gap-8 text-lg font-bold">
+          <a href="#" className="text-red-600 border-b-2 border-red-600 pb-1">HOME</a>
+          <a href="#starters" className="hover:text-red-500 transition">STARTERS</a>
+          <a href="#salads" className="hover:text-red-500 transition">SALADS</a>
+          <a href="#beverages" className="hover:text-red-500 transition">BEVERAGES</a>
+          <a href="#desserts" className="hover:text-red-500 transition">DESSERTS</a>
+          <a href="#menu" className="hover:text-red-500 transition">MENU</a>
+          <a href="#story" className="hover:text-red-500 transition">STORY</a>
+          <a href="#contact" className="hover:text-red-500 transition">CONTACT</a>
+          <a href="tel:9514546896" className="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-xl transition">ORDER NOW</a>
+        </div>
+      </nav>
+
       {/* HERO */}
-      <section className="relative h-[700px] overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('https://images.pexels.com/photos/36879454/pexels-photo-36879454.jpeg')" }} />
+      <section className="relative h-[450px] overflow-hidden">
+
+        {/* SLIDESHOW */}
+        {heroSlides.map((src, i) => (
+          <div key={src} className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${i === slide ? "opacity-100" : "opacity-0"}`}
+            style={{ backgroundImage: `url('${src}')` }} />
+        ))}
+
+        {/* SLIDE DOTS */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+          {heroSlides.map((_, i) => (
+            <button key={i} onClick={() => setSlide(i)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${i === slide ? "bg-red-500 scale-125" : "bg-white/50 hover:bg-white"}`} />
+          ))}
+        </div>
         <div className="absolute inset-0 bg-black/60" />
-        <nav className="relative z-20 flex items-center justify-between px-8 py-6">
-          <div className="flex items-center gap-4">
-            <img src="/logo.png" alt="Spice & Bites Hub" className="h-20 w-auto" />
-            <p className="text-sm text-gray-300 mt-1">American • Mediterranean • Desi<br />All Under One Roof</p>
-          </div>
-          <div className="hidden md:flex items-center gap-8 text-lg font-bold">
-            <a href="#" className="text-red-600 border-b-2 border-red-600 pb-1">HOME</a>
-            <a href="#starters" className="hover:text-red-500 transition">STARTERS</a>
-            <a href="#salads" className="hover:text-red-500 transition">SALADS</a>
-            <a href="#beverages" className="hover:text-red-500 transition">BEVERAGES</a>
-            <a href="#desserts" className="hover:text-red-500 transition">DESSERTS</a>
-            <a href="#menu" className="hover:text-red-500 transition">MENU</a>
-            <a href="#story" className="hover:text-red-500 transition">STORY</a>
-            <a href="#contact" className="hover:text-red-500 transition">CONTACT</a>
-            <a href="tel:9514546896" className="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-xl transition">ORDER NOW</a>
-          </div>
-        </nav>
-        <div className="relative z-10 px-8 md:px-16 pt-12 pb-32 max-w-3xl">
-          <h1 className="text-7xl md:text-9xl font-black leading-none text-red-600 uppercase">Spice &amp;<br />Bites Hub</h1>
-          <p className="mt-6 text-4xl md:text-5xl text-white italic" style={{ fontFamily: "'Brush Script MT', cursive" }}>Where Every Bite Tells A Story</p>
-          <p className="mt-8 text-xl text-gray-300 leading-relaxed">Pizza • Gyro • Wings • Biryani • Nihari</p>
-          <div className="mt-10">
-            <a href="tel:9514546896" className="bg-red-600 hover:bg-red-700 px-10 py-5 rounded-xl text-xl font-bold transition inline-block">ORDER NOW</a>
-          </div>
+        <div className="relative z-10 px-8 md:px-16 pt-8 pb-10 max-w-3xl h-full flex flex-col justify-end">
+          <h1 className="text-4xl md:text-6xl font-black leading-tight text-red-600 uppercase">Spice &amp; Bites Hub</h1>
+          <p className="mt-2 text-2xl md:text-3xl text-white italic" style={{ fontFamily: "'Brush Script MT', cursive" }}>Where Every Bite Tells A Story</p>
+          <p className="mt-3 text-base md:text-lg text-gray-300 leading-relaxed">Pizza • Gyro • Wings • Biryani • Nihari</p>
         </div>
       </section>
 
@@ -1296,20 +1367,126 @@ export default function Home() {
       <section id="salads" className="py-20 bg-zinc-950 text-white px-6">
         <h2 className="text-5xl font-bold text-center text-green-500 mb-6">Salads</h2>
         <p className="text-center text-yellow-400 text-2xl font-bold mb-4">Individual $9.99 • Family $19.99 • Party $32.99</p>
-        <p className="text-center text-gray-300 text-lg max-w-4xl mx-auto mb-14">All Salads Are Served With Your Choice Of Dressing: Ranch, Italian, Caesar, Blue Cheese, Balsamic Vinaigrette, or Honey Mustard.</p>
+        <p className="text-center text-gray-300 text-lg max-w-4xl mx-auto mb-14">Choose your size and any dressings you'd like — mix and match as many as you want.</p>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {saladItems.map((item) => {
             const qty = saladCart[item.name] || 0;
+            const dressings = saladDressing[item.name] || [];
+            const size = saladSize[item.name] || "Individual";
+            const basePrice = saladSizes.find(s => s.label === size)?.price || 9.99;
+            const ing = saladIngredients[item.name] || { removed: [], added: [] };
+            const extraChargeEach = saladExtraCharge[size];
+            const addedCharge = ing.added.length * extraChargeEach;
+            const dressingMap = saladDressing[item.name] || {};
+            const totalDressingQty = Object.values(dressingMap).reduce((s, q) => s + q, 0);
+            const freeDressingAllowance = freeDressings[size] || 2;
+            const dressingCharge = Math.max(0, totalDressingQty - freeDressingAllowance) * dressingExtraCharge;
+            const price = basePrice + addedCharge + dressingCharge;
+            const extraIngredientOptions = allSaladIngredients.filter(i => !item.baseIngredients.includes(i));
             return (
               <div key={item.name} className={`bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl border-2 transition ${qty > 0 ? "border-green-500" : "border-zinc-800"}`}>
-                <img src={item.img} alt={item.name} className="h-56 w-full object-cover" />
+                <img src={item.img} alt={item.name} className="h-48 w-full object-cover" />
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="text-xl font-bold text-yellow-400">{item.name}</h3>
-                    <span className="text-lg font-bold text-red-500">$9.99</span>
+                    <span className="text-lg font-bold text-red-500">${price.toFixed(2)}</span>
                   </div>
                   <p className="text-gray-300 text-sm mb-4">{item.desc}</p>
+
+                  {/* SIZE PICKER */}
+                  <div className="mb-4">
+                    <p className="text-white font-black text-xs uppercase tracking-widest mb-2">📏 Size</p>
+                    <div className="flex gap-2">
+                      {saladSizes.map((s) => (
+                        <button key={s.label} onClick={() => setSaladSize(prev => ({ ...prev, [item.name]: s.label }))}
+                          className={`flex-1 px-2 py-2 rounded-lg text-xs font-bold border-2 transition ${size === s.label ? "bg-green-600 border-green-600 text-white" : "bg-zinc-800 border-zinc-700 text-gray-300 hover:border-green-500"}`}>
+                          <span className="block">{s.label}</span>
+                          <span className={`block text-[10px] ${size === s.label ? "text-white" : "text-yellow-400"}`}>${s.price.toFixed(2)}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* DRESSING PICKER (qty per dressing) */}
+                  <div className="mb-4">
+                    <p className="text-white font-black text-xs uppercase tracking-widest mb-1">🥗 Dressing</p>
+                    <p className="text-gray-400 text-xs mb-2">
+                      {freeDressings[size]} free • extra $1.25 each
+                      {(() => {
+                        const totalQty = totalDressingQty;
+                        const over = Math.max(0, totalQty - freeDressings[size]);
+                        return totalQty > 0
+                          ? ` — ${totalQty} selected${over > 0 ? `, +$${(over * 1.25).toFixed(2)} charge` : " (free)"}`
+                          : "";
+                      })()}
+                    </p>
+                    <div className="grid grid-cols-2 gap-1">
+                      {saladDressings.map((d) => {
+                        const dQty = dressingMap[d] || 0;
+                        const totalQty = totalDressingQty;
+                        const freeCap = freeDressings[size];
+                        const atFree = totalQty < freeCap;
+                        return (
+                          <div key={d} className={`rounded-lg border-2 transition ${dQty > 0 ? "border-green-500 bg-zinc-700" : "border-zinc-700 bg-zinc-800"}`}>
+                            <div className="flex items-center justify-between px-2 py-1 gap-1">
+                              <span className={`text-xs font-bold truncate ${dQty > 0 ? "text-white" : "text-gray-300"}`}>{d}</span>
+                              <div className="flex items-center gap-1 shrink-0">
+                                {dQty > 0 && (
+                                  <button onClick={() => updateSaladDressing(item.name, d, -1)}
+                                    className="bg-zinc-600 hover:bg-zinc-500 text-white w-5 h-5 rounded text-xs font-black leading-none transition">−</button>
+                                )}
+                                {dQty > 0 && <span className="text-yellow-400 font-black text-xs w-4 text-center">{dQty}</span>}
+                                <button onClick={() => updateSaladDressing(item.name, d, 1)}
+                                  className={`w-5 h-5 rounded text-xs font-black leading-none transition text-white ${atFree || dQty > 0 ? "bg-green-600 hover:bg-green-500" : "bg-yellow-600 hover:bg-yellow-500"}`}>+</button>
+                              </div>
+                            </div>
+                            {dQty > 0 && totalQty > freeCap && (
+                              <p className="text-yellow-400 text-[10px] px-2 pb-1">some paid @ $1.25</p>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* INGREDIENTS - REMOVE WHAT'S INCLUDED */}
+                  <div className="mb-4">
+                    <p className="text-white font-black text-xs uppercase tracking-widest mb-2">🥬 Included Ingredients <span className="text-gray-400 normal-case font-normal">(tap to remove, free)</span></p>
+                    <div className="grid grid-cols-2 gap-1">
+                      {item.baseIngredients.map((bi) => {
+                        const isRemoved = ing.removed.includes(bi);
+                        return (
+                          <button key={bi} onClick={() => toggleSaladRemoved(item.name, bi)}
+                            className={`px-2 py-1 rounded-lg text-xs font-bold border transition text-left ${isRemoved ? "bg-zinc-800 border-zinc-700 text-gray-500 line-through" : "bg-green-600 border-green-600 text-white"}`}>
+                            {isRemoved ? "🚫 " : "✅ "}{bi}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* INGREDIENTS - ADD EXTRA */}
+                  <div className="mb-4">
+                    <p className="text-white font-black text-xs uppercase tracking-widest mb-1">➕ Add Extra Ingredients</p>
+                    <p className="text-yellow-400 text-xs mb-2">${extraChargeEach.toFixed(2)} each for {size} size</p>
+                    <div className="grid grid-cols-2 gap-1">
+                      {extraIngredientOptions.map((ei) => {
+                        const isAdded = ing.added.includes(ei);
+                        return (
+                          <button key={ei} onClick={() => toggleSaladAdded(item.name, ei)}
+                            className={`px-2 py-1 rounded-lg text-xs font-bold border transition text-left ${isAdded ? "bg-green-600 border-green-600 text-white" : "bg-zinc-800 border-zinc-700 text-gray-300 hover:border-green-500"}`}>
+                            {isAdded ? "✅ " : "➕ "}{ei}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {ing.added.length > 0 && (
+                      <p className="text-green-400 text-xs font-bold mt-2">+${addedCharge.toFixed(2)} for {ing.added.length} extra ingredient{ing.added.length > 1 ? "s" : ""}</p>
+                    )}
+                  </div>
+
+                  {/* ADD / QTY */}
                   <div className="flex items-center justify-between">
                     {qty === 0 ? (
                       <button onClick={() => updateSaladQty(item.name, 1)}
@@ -1322,7 +1499,7 @@ export default function Home() {
                           className="bg-zinc-700 hover:bg-zinc-600 text-white w-10 h-10 rounded-xl text-xl font-black transition">−</button>
                         <div className="text-center">
                           <span className="text-2xl font-black text-yellow-400">{qty}</span>
-                          <p className="text-green-400 text-xs font-bold">${(9.99 * qty).toFixed(2)}</p>
+                          <p className="text-green-400 text-xs font-bold">${(price * qty).toFixed(2)}</p>
                         </div>
                         <button onClick={() => updateSaladQty(item.name, 1)}
                           className="bg-green-600 hover:bg-green-500 text-white w-10 h-10 rounded-xl text-xl font-black transition">+</button>
@@ -1339,10 +1516,18 @@ export default function Home() {
         {saladTotal.length > 0 && (
           <div className="max-w-7xl mx-auto mt-12 bg-zinc-900 rounded-3xl p-8 shadow-2xl border border-green-500">
             <h4 className="text-2xl font-black text-green-500 uppercase mb-5">🧾 Your Salad Order</h4>
-            {saladTotal.map(({ name, qty, price }) => (
+            {saladTotal.map(({ name, qty, price, size, removed, added, dressingCharge }) => (
               <div key={name} className="flex justify-between items-center py-3 border-b border-zinc-700">
                 <div>
-                  <p className="text-white font-bold">{name}</p>
+                  <p className="text-white font-bold">{name} <span className="text-gray-400 text-sm font-normal">({size})</span></p>
+                  {Object.keys(saladDressing[name] || {}).length > 0 && (
+                    <p className="text-green-400 text-xs font-bold">
+                      🥗 {Object.entries(saladDressing[name]).map(([d, q]) => q > 1 ? `${d} x${q}` : d).join(", ")}
+                      {dressingCharge > 0 && <span className="text-yellow-400"> (+${dressingCharge.toFixed(2)})</span>}
+                    </p>
+                  )}
+                  {removed.length > 0 && <p className="text-red-400 text-xs">🚫 No: {removed.join(", ")}</p>}
+                  {added.length > 0 && <p className="text-green-400 text-xs">➕ Extra: {added.join(", ")} (+${saladExtraCharge[size].toFixed(2)} each)</p>}
                   <p className="text-gray-400 text-sm">x {qty} @ ${price.toFixed(2)} each</p>
                 </div>
                 <span className="text-yellow-400 font-black">${(price * qty).toFixed(2)}</span>
@@ -1354,7 +1539,7 @@ export default function Home() {
                 ${saladTotal.reduce((sum, { price, qty }) => sum + price * qty, 0).toFixed(2)}
               </span>
             </div>
-            <button onClick={() => setSaladCart({})} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
+            <button onClick={() => { setSaladCart({}); setSaladDressing({}); setSaladSize({}); setSaladIngredients({}); }} className="mt-4 bg-zinc-700 hover:bg-zinc-600 text-white px-5 py-2 rounded-xl text-sm font-bold transition">
               🔄 Reset Order
             </button>
           </div>
@@ -1558,7 +1743,7 @@ export default function Home() {
               <h3 className="text-4xl font-black text-yellow-400 mb-6 leading-tight">Serving the Indiana Community</h3>
               <p className="text-gray-300 text-xl leading-relaxed mb-6">Located at 7233 Fishers Landing Dr in Fishers, Indiana, we are proud to serve families, professionals, students and food lovers of all backgrounds.</p>
               <p className="text-gray-300 text-xl leading-relaxed mb-6">Our doors are open seven days a week from 11 AM to midnight. We are not just feeding appetites — we are building memories, one plate at a time.</p>
-              <div className="mt-10"><a href="tel:9514546896" className="bg-red-600 hover:bg-red-700 px-10 py-5 rounded-xl text-xl font-bold transition inline-block">📞 Call to Order — 951-454-6896</a></div>
+              <div className="mt-10"><a href="tel:3175372068" className="bg-red-600 hover:bg-red-700 px-10 py-5 rounded-xl text-xl font-bold transition inline-block">📞 Call to Order — 317-537-2068</a></div>
             </div>
           </div>
         </div>
@@ -1569,7 +1754,7 @@ export default function Home() {
         <h2 className="text-5xl font-black text-red-600 uppercase mb-10">Visit Us</h2>
         <div className="space-y-5 text-xl text-gray-300">
           <p>📍 7233 Fishers Landing Dr, Fishers, IN 46038</p>
-          <p>📞 951-454-6896</p>
+          <p>📞 317-537-2068</p>
           <p>🕒 Monday - Sunday: 11:00 AM - 12:00 AM</p>
         </div>
       </section>
