@@ -568,11 +568,11 @@ export default function Home() {
               <p className="text-yellow-400 font-bold text-sm mb-4">Additional toppings: <span className="text-green-400">$0.75 each</span></p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {[
-                  { img:"calzone.jpg",  name:"Chicken Club",      desc:"Pizza sauce, chicken, bacon, tomatoes & Bermuda onions." },
-                  { img:"calzon1.jpg",  name:"Vegetarian",        desc:"Pizza sauce, onions, mushrooms, green peppers & spinach." },
-                  { img:"calzon1.jpg",  name:"Signature\u2019s Choice", desc:"Choose any four ingredients your way." },
+                  { img:"calzone.jpg",  name:"Chicken Club",      desc:"Signature sauce, chicken, bacon, tomatoes & Bermuda onions." },
+                  { img:"calzon1.jpg",  name:"Vegetarian",        desc:"Signature sauce, onions, mushrooms, green peppers & spinach." },
+                  { img:"calzon1.jpg",  name:"Customer Choice",   desc:"Choose any four ingredients your way." },
                   { img:"calzon1.jpg",  name:"Signature Wrap",    desc:"Pepperoni, sausage, onion, mushrooms, peppers & black olive." },
-                  { img:"calzone.jpg",  name:"Cheese Wrap",       desc:"Signature pizza sauce & melted mozzarella." },
+                  { img:"calzone.jpg",  name:"Cheese Wrap",       desc:"Signature sauce & melted mozzarella." },
                   { img:"calzone.jpg",  name:"Italian Sausage Wrap", desc:"Sausage, fresh mushroom & green pepper, mozzarella." },
                 ].map(item => {
                   const itemToppings = calzoneToppings[item.name] || [];
