@@ -40,13 +40,15 @@ const NAV_SECTIONS = [
   { id: "section-salads",     label: "🥙 Salads",           group: "extra"    },
   { id: "section-beverages",  label: "🥤 Beverages",        group: "extra"    },
   { id: "section-desserts",   label: "🍮 Desserts",         group: "extra"    },
+  { id: "section-story",      label: "📖 Our Story",        group: "story"    },
 ];
 
 const GROUP_LABELS = {
-  american: { label: "🇺🇸 American", color: "text-red-400 border-red-700" },
-  med:      { label: "🫒 Mediterranean", color: "text-yellow-400 border-yellow-700" },
-  desi:     { label: "🌿 Desi", color: "text-green-400 border-green-700" },
-  extra:    { label: "➕ Extras", color: "text-purple-400 border-purple-700" },
+  american: { label: "🇺🇸 American",      color: "text-red-400 border-red-700"      },
+  med:      { label: "🫒 Mediterranean",   color: "text-yellow-400 border-yellow-700"},
+  desi:     { label: "🌿 Desi",            color: "text-green-400 border-green-700"  },
+  extra:    { label: "🍽️ More",            color: "text-purple-400 border-purple-700"},
+  story:    { label: "ℹ️ About Us",         color: "text-orange-400 border-orange-700"},
 };
 
 export default function Home() {
@@ -312,7 +314,7 @@ export default function Home() {
 
   // ── Sidebar component ─────────────────────────────────────────────────────────
   const SidebarNav = () => {
-    const groups = ["american", "med", "desi", "extra"];
+    const groups = ["american", "med", "desi", "extra", "story"];
     return (
       <nav className="h-full flex flex-col gap-1 py-4 px-2 overflow-y-auto">
         <div className="px-2 mb-3">
@@ -960,6 +962,75 @@ export default function Home() {
               {dessertTotal.length > 0 && (
                 <OrderSummary title="🍮 Dessert Order" items={dessertTotal} notes={dessertNotes} onNotesChange={setDessertNotes} onReset={() => { setDessertCart({}); setDessertNotes(""); }} borderColor="border-yellow-500" totalColor="text-yellow-400" />
               )}
+            </section>
+
+            {/* ═══════════════ OUR STORY ════════════════ */}
+            <section id="section-story">
+              <SectionHeader emoji="📖" title="Our Story" color="text-yellow-400" />
+
+              {/* Hero quote */}
+              <div className="relative rounded-2xl overflow-hidden mb-6">
+                <img src="/logo.png" alt="Spice & Bites Hub" className="w-full h-48 object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-5">
+                  <p className="text-white text-xl italic font-bold" style={{ fontFamily: "'Brush Script MT', cursive" }}>Where Every Bite Tells A Story</p>
+                  <p className="text-gray-300 text-xs mt-1">Fishers, Indiana</p>
+                </div>
+              </div>
+
+              {/* Story text */}
+              <div className="bg-zinc-900 rounded-2xl p-5 mb-4">
+                <h3 className="text-lg font-black text-yellow-400 mb-3">Who We Are</h3>
+                <p className="text-gray-300 text-sm leading-relaxed mb-3">Spice &amp; Bites Hub was born from a simple but powerful idea — that great food has no borders. Nestled in the heart of Fishers, Indiana, we are more than just a restaurant.</p>
+                <p className="text-gray-300 text-sm leading-relaxed mb-3">Our founders brought together decades of culinary passion spanning three rich food traditions — American comfort food, Mediterranean freshness, and bold Desi flavors — all under one roof.</p>
+                <p className="text-gray-300 text-sm leading-relaxed">From the first slice of our hand-tossed Signature Pizza to the last spoonful of slow-cooked Lamb Nihari, every dish carries the heart of our kitchen.</p>
+              </div>
+
+              {/* What makes us different */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                {[
+                  { img: "https://images.stockcake.com/public/1/c/4/1c49fbfa-af29-4652-b98e-f2a791d4cd35_large/pizza-dough-toss-stockcake.jpg", title: "Hand-Crafted Pizzas", desc: "Every pizza is hand-tossed, sauced and topped fresh to order. Our dough is made in-house daily." },
+                  { img: "https://images.stockcake.com/public/5/6/f/56f7479e-5d83-4d7f-9744-adb0a161f78b_large/spices-meet-heat-stockcake.jpg", title: "Slow-Cooked Desi Flavors", desc: "Our Nihari simmers for hours. Our Biryani is layered and dum-cooked to perfection. Authentic recipes, made fresh every day." },
+                  { img: "https://www.aspicyperspective.com/wp-content/uploads/2023/11/Buffalo-Wing-Sauce-11.jpg", title: "Fresh Wings Daily", desc: "Our bone-in and boneless wings are made fresh daily — never frozen. Tossed in your choice of signature flavors." },
+                ].map(item => (
+                  <div key={item.title} className="bg-zinc-900 rounded-2xl overflow-hidden">
+                    <img src={item.img} alt={item.title} className="h-36 w-full object-cover" />
+                    <div className="p-4">
+                      <h4 className="text-base font-black text-yellow-400 mb-1">{item.title}</h4>
+                      <p className="text-gray-400 text-xs leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Three menus */}
+              <div className="bg-zinc-900 rounded-2xl p-5 mb-4">
+                <h3 className="text-lg font-black text-white uppercase mb-4 text-center">What We Serve</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                  {[
+                    { icon: "🍕", title: "American Menu", desc: "Hand-tossed pizzas, calzone wraps, crispy wings, pasta, mac & cheese and starters.", color: "text-red-400" },
+                    { icon: "🌯", title: "Mediterranean Menu", desc: "Chicken and lamb gyros, over-rice platters, falafel, Philly cheesesteaks and more.", color: "text-yellow-400" },
+                    { icon: "🍛", title: "Desi Menu", desc: "Slow-cooked Nihari, aromatic Biryani, Chicken Karahi, Butter Chicken, Malai Boti and more.", color: "text-green-400" },
+                  ].map(item => (
+                    <div key={item.title} className="py-3">
+                      <div className="text-4xl mb-2">{item.icon}</div>
+                      <h4 className={`text-base font-black mb-1 ${item.color}`}>{item.title}</h4>
+                      <p className="text-gray-400 text-xs leading-relaxed">{item.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Community */}
+              <div className="bg-zinc-900 rounded-2xl overflow-hidden">
+                <img src="https://png.pngtree.com/thumb_back/fh260/background/20250310/pngtree-sharing-a-meal-hands-reaching-for-food-on-rustic-wooden-table-image_17087487.jpg" alt="Community Dining" className="h-40 w-full object-cover" />
+                <div className="p-5">
+                  <h3 className="text-lg font-black text-yellow-400 mb-2">Serving the Indiana Community</h3>
+                  <p className="text-gray-300 text-sm leading-relaxed mb-2">Located at 7233 Fishers Landing Dr in Fishers, Indiana, we are proud to serve families, professionals, students and food lovers of all backgrounds.</p>
+                  <p className="text-gray-300 text-sm leading-relaxed">Our doors are open seven days a week from 11 AM to midnight. We are not just feeding appetites — we are building memories, one plate at a time.</p>
+                  <a href="tel:3175372068" className="mt-4 inline-block bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-xl transition text-sm">📞 Call to Order — 317-537-2068</a>
+                </div>
+              </div>
             </section>
 
             {/* ═══════════════ CONTACT ════════════════ */}
