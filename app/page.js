@@ -301,6 +301,251 @@ export default function Home() {
   const updateDessertQty = (name, delta) => setDessertCart(prev => { const n = Math.max(0, (prev[name] || 0) + delta); if (!n) { const r = { ...prev }; delete r[name]; return r; } return { ...prev, [name]: n }; });
   const dessertTotal = Object.entries(dessertCart).map(([name, qty]) => ({ name, qty, price: dessertItems.find(i => i.name === name)?.price || 0 }));
 
+  // ── Cart / Checkout state ─────────────────────────────────────────────────────
+  const [cartOpen, setCartOpen] = useState(false);
+  const [checkoutStep, setCheckoutStep] = useState(0); // 0=closed, 1=cart, 2=order-type, 3=details, 4=confirm
+  const [orderType, setOrderType] = useState("pickup"); // "pickup" | "delivery"
+  const [customerInfo, setCustomerInfo] = useState({ name:"", phone:"", address:"", city:"", zip:"", notes:"" });
+  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [orderNumber, setOrderNumber] = useState("");
+
+  // ── Build flat cart line items from all section states ────────────────────────
+  const buildCartLines = () => {
+    const lines = [];
+
+    // Build-your-own pizzas
+    buildOrders.forEach((o, i) => {
+      if (!o.size) return;
+      const base = parseFloat(buildSizes.find(s=>s.size===o.size)?.price.replace("$","") || 0);
+      const topCost = o.toppings.length * parseFloat((toppingPrices[o.size]||"$0").replace("$",""));
+      const total = base + topCost;
+      if (total > 0) lines.push({
+        id: `build-${i}`, category:"🍕 Pizza",
+        name: `Build-Your-Own Pizza #${i+1} (${o.size}${o.crust ? `, ${o.crust}` : ""})`,
+        details: o.toppings.length > 0 ? `Toppings: ${o.toppings.join(", ")}` : "Plain cheese",
+        notes: o.notes, qty: 1, price: total,
+        onRemove: () => setBuildOrders(p => p.length > 1 ? p.filter((_,idx)=>idx!==i) : [{ ...emptyBuild }])
+      });
+    });
+
+    // Specialty pizzas
+    specOrders.forEach((o, i) => {
+      if (!o.name || !o.size) return;
+      const base = parseFloat(specSizes.find(s=>s.size===o.size)?.price.replace("$","") || 0);
+      const topCost = o.toppings.length * parseFloat((toppingPrices[o.size]||"$0").replace("$",""));
+      lines.push({
+        id: `spec-${i}`, category:"🍕 Pizza",
+        name: `${o.name} (${o.size}${o.crust ? `, ${o.crust}` : ""})`,
+        details: o.toppings.length > 0 ? `Extra: ${o.toppings.join(", ")}` : "",
+        notes: o.notes, qty: 1, price: base + topCost,
+        onRemove: () => setSpecOrders(p => p.length > 1 ? p.filter((_,idx)=>idx!==i) : [{ ...emptySpec }])
+      });
+    });
+
+    // Pizza by slice
+    sliceOrders.forEach((o, i) => {
+      if (!o.type) return;
+      const base = (o.addFries ? 7 : 6) * o.quantity;
+      const topCost = o.toppings.length * 0.5 * o.quantity;
+      lines.push({
+        id: `slice-${i}`, category:"🍕 Pizza",
+        name: `${o.type} Slice${o.quantity > 1 ? ` x${o.quantity}` : ""} + Soda${o.addFries ? " + Fries" : ""}`,
+        details: o.toppings.length > 0 ? `Extra toppings: ${o.toppings.join(", ")}` : "",
+        notes: o.notes, qty: 1, price: base + topCost,
+        onRemove: () => setSliceOrders(p => p.length > 1 ? p.filter((_,idx)=>idx!==i) : [{ ...emptySlice }])
+      });
+    });
+
+    // Calzones
+    Object.entries(calzoneToppings).forEach(([name, tops]) => {
+      if (!tops || tops.length === 0) return;
+      const price = 11.99 + tops.length * 0.75;
+      lines.push({
+        id: `cal-${name}`, category:"🫓 Calzone",
+        name, details: tops.length > 0 ? `Extra: ${tops.join(", ")}` : "",
+        notes: calzoneNotes[name] || "", qty: 1, price,
+        onRemove: () => setCalzoneToppings(p => ({ ...p, [name]: [] }))
+      });
+    });
+    // Calzones with no extra toppings but notes
+    Object.entries(calzoneNotes).forEach(([name, note]) => {
+      if (!note) return;
+      if (lines.find(l => l.id === `cal-${name}`)) return;
+      lines.push({
+        id: `cal-${name}`, category:"🫓 Calzone",
+        name, details: "", notes: note, qty: 1, price: 11.99,
+        onRemove: () => setCalzoneNotes(p => ({ ...p, [name]: "" }))
+      });
+    });
+
+    // Mediterranean
+    Object.entries(medCart).forEach(([name, qty]) => {
+      const item = medItems.find(i=>i.name===name);
+      if (!item) return;
+      lines.push({
+        id: `med-${name}`, category:"🌯 Mediterranean",
+        name, details: "", notes: "", qty, price: item.price,
+        onRemove: () => setMedCart(p => { const r={...p}; delete r[name]; return r; })
+      });
+    });
+    if (medNotes) lines.filter(l=>l.category==="🌯 Mediterranean").forEach(l => l.notes = medNotes);
+
+    // Desi dishes
+    Object.entries(desiCart).forEach(([name, qty]) => {
+      const item = desiItems.find(i=>i.name===name);
+      if (!item) return;
+      lines.push({
+        id: `desi-${name}`, category:"🍛 Desi",
+        name, details: "", notes: "", qty, price: item.price,
+        onRemove: () => setDesiCart(p => { const r={...p}; delete r[name]; return r; })
+      });
+    });
+
+    // Naan
+    Object.entries(naanCart).forEach(([name, qty]) => {
+      const item = naanItems.find(i=>i.name===name);
+      if (!item) return;
+      lines.push({
+        id: `naan-${name}`, category:"🫓 Naan",
+        name, details: "", notes: "", qty, price: item.price,
+        onRemove: () => setNaanCart(p => { const r={...p}; delete r[name]; return r; })
+      });
+    });
+    if (desiNotes) lines.filter(l=>l.category==="🍛 Desi"||l.category==="🫓 Naan").forEach(l => l.notes = desiNotes);
+
+    // Pasta
+    Object.entries(pastaToppings).forEach(([name, tops]) => {
+      const price = 9.99 + tops.length;
+      lines.push({
+        id: `pasta-${name}`, category:"🍝 Pasta",
+        name, details: tops.length > 0 ? `Extra: ${tops.join(", ")}` : "",
+        notes: pastaNotes[name] || "", qty: 1, price,
+        onRemove: () => setPastaToppings(p => ({ ...p, [name]: [] }))
+      });
+    });
+    Object.entries(pastaNotes).forEach(([name, note]) => {
+      if (!note) return;
+      if (lines.find(l => l.id === `pasta-${name}`)) return;
+      lines.push({ id:`pasta-${name}`, category:"🍝 Pasta", name, details:"", notes:note, qty:1, price:9.99, onRemove: () => setPastaNotes(p=>({...p,[name]:""})) });
+    });
+
+    // Mac & Cheese
+    Object.entries(macToppings).forEach(([name, tops]) => {
+      const price = 9.99 + tops.length;
+      lines.push({
+        id: `mac-${name}`, category:"🧀 Mac & Cheese",
+        name, details: tops.length > 0 ? `Extra: ${tops.join(", ")}` : "",
+        notes: macNotes[name] || "", qty: 1, price,
+        onRemove: () => setMacToppings(p => ({ ...p, [name]: [] }))
+      });
+    });
+    Object.entries(macNotes).forEach(([name, note]) => {
+      if (!note) return;
+      if (lines.find(l => l.id === `mac-${name}`)) return;
+      lines.push({ id:`mac-${name}`, category:"🧀 Mac & Cheese", name, details:"", notes:note, qty:1, price:9.99, onRemove: () => setMacNotes(p=>({...p,[name]:""})) });
+    });
+
+    // Wings
+    if (boneInOrder.size) {
+      const price = boneInOrder.size.price + wingDipExtraCharge(boneInOrder);
+      lines.push({
+        id:"bonein", category:"🍗 Wings",
+        name: `Bone-in Wings (${boneInOrder.size.pcs})`,
+        details: [boneInOrder.flavors.length>0?`Flavors: ${boneInOrder.flavors.join(", ")}`:null, Object.keys(boneInOrder.dips||{}).length>0?`Dips: ${Object.entries(boneInOrder.dips).map(([d,q])=>q>1?`${d}x${q}`:d).join(", ")}`:null].filter(Boolean).join(" | "),
+        notes: boneInOrder.notes, qty:1, price,
+        onRemove: () => setBoneInOrder({ ...emptyWingOrder })
+      });
+    }
+    if (bonelessOrder.size) {
+      const price = bonelessOrder.size.price + wingDipExtraCharge(bonelessOrder);
+      lines.push({
+        id:"boneless", category:"🍗 Wings",
+        name: `Boneless Wings (${bonelessOrder.size.pcs})`,
+        details: [bonelessOrder.flavors.length>0?`Flavors: ${bonelessOrder.flavors.join(", ")}`:null, Object.keys(bonelessOrder.dips||{}).length>0?`Dips: ${Object.entries(bonelessOrder.dips).map(([d,q])=>q>1?`${d}x${q}`:d).join(", ")}`:null].filter(Boolean).join(" | "),
+        notes: bonelessOrder.notes, qty:1, price,
+        onRemove: () => setBonelessOrder({ ...emptyWingOrder })
+      });
+    }
+
+    // Starters
+    Object.entries(starterCart).forEach(([name, qty]) => {
+      const item = starterItems.find(i=>i.name===name);
+      if (!item) return;
+      lines.push({ id:`starter-${name}`, category:"🥗 Starters", name, details:"", notes:"", qty, price:item.price, onRemove: () => setStarterCart(p => { const r={...p}; delete r[name]; return r; }) });
+    });
+    if (starterNotes) lines.filter(l=>l.category==="🥗 Starters").forEach(l=>l.notes=starterNotes);
+
+    // Salads
+    Object.entries(saladCart).forEach(([name, qty]) => {
+      const size = saladSize[name] || "Individual";
+      const basePrice = saladSizes.find(s=>s.label===size)?.price || 9.99;
+      const ing = saladIngredients[name] || { removed:[], added:[] };
+      const addedCharge = ing.added.length * saladExtraCharge[size];
+      const dressingMap = saladDressing[name] || {};
+      const dressingCharge = Math.max(0, Object.values(dressingMap).reduce((s,q)=>s+q,0)-(freeDressings[size]||2)) * dressingExtraCharge;
+      const price = basePrice + addedCharge + dressingCharge;
+      const dressStr = Object.entries(dressingMap).map(([d,q])=>q>1?`${d}x${q}`:d).join(", ");
+      lines.push({
+        id:`salad-${name}`, category:"🥙 Salads",
+        name: `${name} (${size})`,
+        details: [dressStr?`Dressing: ${dressStr}`:null, ing.removed.length>0?`No: ${ing.removed.join(", ")}`:null, ing.added.length>0?`Extra: ${ing.added.join(", ")}`:null].filter(Boolean).join(" | "),
+        notes: saladNotes, qty, price,
+        onRemove: () => setSaladCart(p => { const r={...p}; delete r[name]; return r; })
+      });
+    });
+
+    // Beverages
+    Object.entries(beverageCart).forEach(([name, qty]) => {
+      const item = beverageItems.find(i=>i.name===name);
+      if (!item) return;
+      lines.push({ id:`bev-${name}`, category:"🥤 Beverages", name, details:"", notes:"", qty, price:item.price, onRemove: () => setBeverageCart(p => { const r={...p}; delete r[name]; return r; }) });
+    });
+
+    // Desserts
+    Object.entries(dessertCart).forEach(([name, qty]) => {
+      const item = dessertItems.find(i=>i.name===name);
+      if (!item) return;
+      lines.push({ id:`des-${name}`, category:"🍮 Desserts", name, details:"", notes:"", qty, price:item.price, onRemove: () => setDessertCart(p => { const r={...p}; delete r[name]; return r; }) });
+    });
+    if (dessertNotes) lines.filter(l=>l.category==="🍮 Desserts").forEach(l=>l.notes=dessertNotes);
+
+    return lines;
+  };
+
+  const cartLines = buildCartLines();
+  const cartItemCount = cartLines.reduce((s, l) => s + l.qty, 0);
+  const cartSubtotal = cartLines.reduce((s, l) => s + l.price * l.qty, 0);
+  const deliveryFee = orderType === "delivery" ? 3.99 : 0;
+  const cartTotal = cartSubtotal + deliveryFee;
+
+  const handlePlaceOrder = () => {
+    const num = "SBH-" + Date.now().toString().slice(-6);
+    setOrderNumber(num);
+    setOrderPlaced(true);
+    setCheckoutStep(4);
+  };
+
+  const handleNewOrder = () => {
+    setBuildOrders([{ ...emptyBuild }]);
+    setSpecOrders([{ ...emptySpec }]);
+    setSliceOrders([{ ...emptySlice }]);
+    setCalzoneToppings({}); setCalzoneNotes({});
+    setPastaToppings({}); setPastaNotes({});
+    setMacToppings({}); setMacNotes({});
+    setMedCart({}); setMedNotes("");
+    setDesiCart({}); setNaanCart({}); setDesiNotes("");
+    setStarterCart({}); setStarterNotes("");
+    setSaladCart({}); setSaladDressing({}); setSaladSize({}); setSaladIngredients({}); setSaladNotes("");
+    setBeverageCart({}); setBeverageNotes("");
+    setDessertCart({}); setDessertNotes("");
+    setBoneInOrder({ ...emptyWingOrder });
+    setBonelessOrder({ ...emptyWingOrder });
+    setCustomerInfo({ name:"", phone:"", address:"", city:"", zip:"", notes:"" });
+    setOrderType("pickup");
+    setOrderPlaced(false);
+    setCheckoutStep(0);
+  };
+
   // ── Qty control component ─────────────────────────────────────────────────────
   const QtyControl = ({ qty, onDec, onInc, price, accentClass = "bg-red-600 hover:bg-red-500" }) => (
     qty === 0
@@ -336,6 +581,11 @@ export default function Home() {
           );
         })}
         <div className="mt-auto px-2 pt-4 border-t border-zinc-700">
+          <button onClick={() => setCheckoutStep(1)}
+            className="relative w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black text-xs text-center py-3 rounded-xl transition mb-2 flex items-center justify-center gap-2">
+            🛒 View Cart
+            {cartItemCount > 0 && <span className="bg-black text-yellow-400 text-[10px] font-black px-2 py-0.5 rounded-full">{cartItemCount} items</span>}
+          </button>
           <a href="tel:3175372068" className="block bg-red-600 hover:bg-red-700 text-white font-black text-xs text-center py-3 rounded-xl transition">📞 Call to Order</a>
           <p className="text-gray-500 text-[10px] text-center mt-2">317-537-2068</p>
         </div>
@@ -370,7 +620,16 @@ export default function Home() {
             <p className="text-gray-400 text-[10px]">American • Mediterranean • Desi</p>
           </div>
         </div>
-        <a href="tel:3175372068" className="bg-red-600 hover:bg-red-700 text-white font-black text-xs px-4 py-2 rounded-xl transition hidden sm:block">📞 ORDER NOW</a>
+        <div className="flex items-center gap-2">
+          <a href="tel:3175372068" className="bg-zinc-800 hover:bg-zinc-700 text-white font-black text-xs px-3 py-2 rounded-xl transition hidden sm:block">📞 Call</a>
+          <button onClick={() => setCheckoutStep(1)}
+            className="relative bg-red-600 hover:bg-red-700 text-white font-black text-xs px-4 py-2 rounded-xl transition flex items-center gap-2">
+            🛒 Cart
+            {cartItemCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-yellow-400 text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center">{cartItemCount}</span>
+            )}
+          </button>
+        </div>
       </header>
 
       {/* ── MOBILE TAB BAR ── */}
@@ -568,11 +827,11 @@ export default function Home() {
               <p className="text-yellow-400 font-bold text-sm mb-4">Additional toppings: <span className="text-green-400">$0.75 each</span></p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {[
-                  { img:"calzone.jpg",  name:"Chicken Club",      desc:"Signature sauce, chicken, bacon, tomatoes & Bermuda onions." },
-                  { img:"calzon1.jpg",  name:"Vegetarian",        desc:"Signature sauce, onions, mushrooms, green peppers & spinach." },
-                  { img:"calzon1.jpg",  name:"Customer Choice",   desc:"Choose any four ingredients your way." },
+                  { img:"calzone.jpg",  name:"Chicken Club",      desc:"Pizza sauce, chicken, bacon, tomatoes & Bermuda onions." },
+                  { img:"calzon1.jpg",  name:"Vegetarian",        desc:"Pizza sauce, onions, mushrooms, green peppers & spinach." },
+                  { img:"calzon1.jpg",  name:"Signature\u2019s Choice", desc:"Choose any four ingredients your way." },
                   { img:"calzon1.jpg",  name:"Signature Wrap",    desc:"Pepperoni, sausage, onion, mushrooms, peppers & black olive." },
-                  { img:"calzone.jpg",  name:"Cheese Wrap",       desc:"Signature sauce & melted mozzarella." },
+                  { img:"calzone.jpg",  name:"Cheese Wrap",       desc:"Signature pizza sauce & melted mozzarella." },
                   { img:"calzone.jpg",  name:"Italian Sausage Wrap", desc:"Sausage, fresh mushroom & green pepper, mozzarella." },
                 ].map(item => {
                   const itemToppings = calzoneToppings[item.name] || [];
@@ -1048,10 +1307,301 @@ export default function Home() {
         </main>
       </div>
 
-      {/* MOBILE STICKY CALL BAR */}
-      <div className="lg:hidden flex-shrink-0 bg-black/95 border-t border-zinc-800 p-3">
-        <a href="tel:3175372068" className="block bg-red-600 hover:bg-red-700 text-white font-black text-sm py-3 rounded-xl text-center transition">📞 Call to Order — 317-537-2068</a>
+      {/* MOBILE STICKY BOTTOM BAR */}
+      <div className="lg:hidden flex-shrink-0 bg-black/95 border-t border-zinc-800 p-3 flex gap-2">
+        <a href="tel:3175372068" className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-black text-sm py-3 rounded-xl text-center transition">📞 Call</a>
+        <button onClick={() => setCheckoutStep(1)}
+          className="flex-1 relative bg-red-600 hover:bg-red-700 text-white font-black text-sm py-3 rounded-xl text-center transition flex items-center justify-center gap-2">
+          🛒 Cart
+          {cartItemCount > 0 && <span className="bg-yellow-400 text-black text-xs font-black px-2 py-0.5 rounded-full">{cartItemCount}</span>}
+        </button>
       </div>
+
+      {/* ── CART DRAWER / CHECKOUT MODAL OVERLAY ── */}
+      {checkoutStep > 0 && (
+        <div className="fixed inset-0 z-50 flex">
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => !orderPlaced && setCheckoutStep(0)} />
+
+          {/* Panel — slides in from right */}
+          <div className="relative ml-auto w-full max-w-md bg-zinc-900 h-full flex flex-col shadow-2xl border-l border-zinc-700 overflow-hidden">
+
+            {/* ── STEP 1: CART REVIEW ── */}
+            {checkoutStep === 1 && (
+              <>
+                <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-700 bg-zinc-900">
+                  <h2 className="text-xl font-black text-white">🛒 Your Cart</h2>
+                  <button onClick={() => setCheckoutStep(0)} className="text-gray-400 hover:text-white text-2xl font-black transition">✕</button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+                  {cartLines.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-full text-center py-20">
+                      <p className="text-6xl mb-4">🛒</p>
+                      <p className="text-white font-black text-xl mb-2">Your cart is empty</p>
+                      <p className="text-gray-400 text-sm">Add items from the menu to get started!</p>
+                      <button onClick={() => setCheckoutStep(0)} className="mt-6 bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-xl transition">Browse Menu</button>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Group by category */}
+                      {Array.from(new Set(cartLines.map(l => l.category))).map(cat => (
+                        <div key={cat}>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 px-1">{cat}</p>
+                          {cartLines.filter(l => l.category === cat).map(line => (
+                            <div key={line.id} className="bg-zinc-800 rounded-xl p-3 mb-2 border border-zinc-700">
+                              <div className="flex justify-between items-start gap-2">
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-white font-bold text-sm leading-tight">{line.name}</p>
+                                  {line.details && <p className="text-gray-400 text-xs mt-0.5 leading-relaxed">{line.details}</p>}
+                                  {line.notes && <p className="text-yellow-400 text-xs mt-0.5 italic">📝 {line.notes}</p>}
+                                </div>
+                                <div className="flex flex-col items-end gap-1 shrink-0">
+                                  <span className="text-yellow-400 font-black text-sm">${(line.price * line.qty).toFixed(2)}</span>
+                                  {line.qty > 1 && <span className="text-gray-500 text-xs">x{line.qty} @ ${line.price.toFixed(2)}</span>}
+                                  <button onClick={line.onRemove} className="text-red-400 hover:text-red-300 text-xs font-bold transition mt-1">🗑 Remove</button>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+
+                {cartLines.length > 0 && (
+                  <div className="px-4 py-4 border-t border-zinc-700 bg-zinc-900">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-gray-400 text-sm">Subtotal ({cartItemCount} item{cartItemCount!==1?"s":""})</span>
+                      <span className="text-white font-black">${cartSubtotal.toFixed(2)}</span>
+                    </div>
+                    <p className="text-gray-500 text-xs mb-4">Taxes & fees calculated at checkout</p>
+                    <button onClick={() => setCheckoutStep(2)}
+                      className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-2xl text-base transition">
+                      Proceed to Checkout →
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* ── STEP 2: ORDER TYPE ── */}
+            {checkoutStep === 2 && (
+              <>
+                <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-700">
+                  <div>
+                    <button onClick={() => setCheckoutStep(1)} className="text-gray-400 hover:text-white text-xs font-bold mb-1">← Back</button>
+                    <h2 className="text-xl font-black text-white">How would you like your order?</h2>
+                  </div>
+                  <button onClick={() => setCheckoutStep(0)} className="text-gray-400 hover:text-white text-2xl font-black transition">✕</button>
+                </div>
+
+                <div className="flex-1 px-5 py-6">
+                  {/* Progress */}
+                  <CheckoutProgress step={2} />
+
+                  <div className="grid grid-cols-2 gap-4 mt-6 mb-6">
+                    <button onClick={() => setOrderType("pickup")}
+                      className={`rounded-2xl p-5 border-2 transition flex flex-col items-center gap-3 ${orderType==="pickup"?"bg-red-600/20 border-red-500":"bg-zinc-800 border-zinc-700 hover:border-zinc-500"}`}>
+                      <span className="text-4xl">🏃</span>
+                      <p className="text-white font-black text-base">Pickup</p>
+                      <p className="text-gray-400 text-xs text-center">Ready in ~20 min</p>
+                      <p className="text-green-400 font-black text-sm">FREE</p>
+                      {orderType==="pickup" && <span className="text-green-400 font-black text-xs">✓ Selected</span>}
+                    </button>
+                    <button onClick={() => setOrderType("delivery")}
+                      className={`rounded-2xl p-5 border-2 transition flex flex-col items-center gap-3 ${orderType==="delivery"?"bg-red-600/20 border-red-500":"bg-zinc-800 border-zinc-700 hover:border-zinc-500"}`}>
+                      <span className="text-4xl">🚗</span>
+                      <p className="text-white font-black text-base">Delivery</p>
+                      <p className="text-gray-400 text-xs text-center">Estimate 35–50 min</p>
+                      <p className="text-yellow-400 font-black text-sm">+$3.99</p>
+                      {orderType==="delivery" && <span className="text-green-400 font-black text-xs">✓ Selected</span>}
+                    </button>
+                  </div>
+
+                  <div className="bg-zinc-800 rounded-2xl p-4 text-sm text-gray-300 space-y-1">
+                    <p>📍 <span className="text-white font-bold">7233 Fishers Landing Dr, Fishers, IN 46038</span></p>
+                    <p>🕒 <span className="text-white font-bold">Open daily 11 AM – 12 AM</span></p>
+                    <p>📞 <span className="text-white font-bold">317-537-2068</span></p>
+                  </div>
+                </div>
+
+                <div className="px-5 py-4 border-t border-zinc-700">
+                  <div className="flex justify-between mb-3">
+                    <span className="text-gray-400 text-sm">Subtotal</span><span className="text-white font-black">${cartSubtotal.toFixed(2)}</span>
+                  </div>
+                  {orderType === "delivery" && (
+                    <div className="flex justify-between mb-3">
+                      <span className="text-gray-400 text-sm">Delivery fee</span><span className="text-yellow-400 font-black">$3.99</span>
+                    </div>
+                  )}
+                  <button onClick={() => setCheckoutStep(3)}
+                    className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-2xl text-base transition">
+                    Continue →
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* ── STEP 3: CUSTOMER DETAILS ── */}
+            {checkoutStep === 3 && (
+              <>
+                <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-700">
+                  <div>
+                    <button onClick={() => setCheckoutStep(2)} className="text-gray-400 hover:text-white text-xs font-bold mb-1">← Back</button>
+                    <h2 className="text-xl font-black text-white">Your Details</h2>
+                  </div>
+                  <button onClick={() => setCheckoutStep(0)} className="text-gray-400 hover:text-white text-2xl font-black transition">✕</button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto px-5 py-4">
+                  <CheckoutProgress step={3} />
+
+                  <div className="mt-5 space-y-3">
+                    <div>
+                      <label className="text-white font-black text-xs uppercase tracking-widest block mb-1">Full Name *</label>
+                      <input value={customerInfo.name} onChange={e => setCustomerInfo(p=>({...p,name:e.target.value}))}
+                        placeholder="John Smith"
+                        className="w-full bg-zinc-800 border-2 border-zinc-700 focus:border-yellow-500 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 outline-none transition" />
+                    </div>
+                    <div>
+                      <label className="text-white font-black text-xs uppercase tracking-widest block mb-1">Phone Number *</label>
+                      <input value={customerInfo.phone} onChange={e => setCustomerInfo(p=>({...p,phone:e.target.value}))}
+                        placeholder="(317) 555-0123" type="tel"
+                        className="w-full bg-zinc-800 border-2 border-zinc-700 focus:border-yellow-500 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 outline-none transition" />
+                    </div>
+
+                    {orderType === "delivery" && (
+                      <>
+                        <div>
+                          <label className="text-white font-black text-xs uppercase tracking-widest block mb-1">Street Address *</label>
+                          <input value={customerInfo.address} onChange={e => setCustomerInfo(p=>({...p,address:e.target.value}))}
+                            placeholder="123 Main Street"
+                            className="w-full bg-zinc-800 border-2 border-zinc-700 focus:border-yellow-500 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 outline-none transition" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="text-white font-black text-xs uppercase tracking-widest block mb-1">City *</label>
+                            <input value={customerInfo.city} onChange={e => setCustomerInfo(p=>({...p,city:e.target.value}))}
+                              placeholder="Fishers"
+                              className="w-full bg-zinc-800 border-2 border-zinc-700 focus:border-yellow-500 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 outline-none transition" />
+                          </div>
+                          <div>
+                            <label className="text-white font-black text-xs uppercase tracking-widest block mb-1">ZIP *</label>
+                            <input value={customerInfo.zip} onChange={e => setCustomerInfo(p=>({...p,zip:e.target.value}))}
+                              placeholder="46038"
+                              className="w-full bg-zinc-800 border-2 border-zinc-700 focus:border-yellow-500 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 outline-none transition" />
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    <div>
+                      <label className="text-white font-black text-xs uppercase tracking-widest block mb-1">Order Notes (optional)</label>
+                      <textarea value={customerInfo.notes} onChange={e => setCustomerInfo(p=>({...p,notes:e.target.value}))}
+                        placeholder="Ring the doorbell, leave at door, etc."
+                        rows={2}
+                        className="w-full bg-zinc-800 border-2 border-zinc-700 focus:border-yellow-500 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 outline-none transition resize-none" />
+                    </div>
+
+                    {/* Order summary preview */}
+                    <div className="bg-zinc-800 rounded-2xl p-4 mt-4">
+                      <p className="text-white font-black text-sm mb-3 uppercase tracking-widest">Order Summary</p>
+                      <div className="space-y-1 max-h-36 overflow-y-auto pr-1">
+                        {cartLines.map(line => (
+                          <div key={line.id} className="flex justify-between text-xs">
+                            <span className="text-gray-300 truncate mr-2">{line.qty > 1 ? `${line.name} x${line.qty}` : line.name}</span>
+                            <span className="text-yellow-400 font-bold shrink-0">${(line.price * line.qty).toFixed(2)}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="border-t border-zinc-700 mt-3 pt-3 space-y-1">
+                        <div className="flex justify-between text-sm"><span className="text-gray-400">Subtotal</span><span className="text-white font-bold">${cartSubtotal.toFixed(2)}</span></div>
+                        {orderType==="delivery" && <div className="flex justify-between text-sm"><span className="text-gray-400">Delivery fee</span><span className="text-yellow-400 font-bold">$3.99</span></div>}
+                        <div className="flex justify-between text-base font-black"><span className="text-white">Total</span><span className="text-green-400">${cartTotal.toFixed(2)}</span></div>
+                      </div>
+                      <p className="text-gray-500 text-[10px] mt-2">💳 Payment collected at {orderType === "delivery" ? "door" : "pickup"}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="px-5 py-4 border-t border-zinc-700">
+                  <button
+                    onClick={handlePlaceOrder}
+                    disabled={!customerInfo.name || !customerInfo.phone || (orderType==="delivery" && (!customerInfo.address || !customerInfo.city || !customerInfo.zip))}
+                    className="w-full bg-green-600 hover:bg-green-500 disabled:bg-zinc-700 disabled:text-gray-500 disabled:cursor-not-allowed text-white font-black py-4 rounded-2xl text-base transition">
+                    ✅ Place Order — ${cartTotal.toFixed(2)}
+                  </button>
+                  {(!customerInfo.name || !customerInfo.phone) && <p className="text-red-400 text-xs text-center mt-2">Please fill in your name and phone number</p>}
+                </div>
+              </>
+            )}
+
+            {/* ── STEP 4: CONFIRMATION ── */}
+            {checkoutStep === 4 && (
+              <div className="flex-1 flex flex-col items-center justify-center px-6 text-center py-10 overflow-y-auto">
+                <div className="text-7xl mb-4 animate-bounce">🎉</div>
+                <h2 className="text-3xl font-black text-green-400 mb-2">Order Placed!</h2>
+                <p className="text-gray-400 text-sm mb-4">Thank you, <span className="text-white font-bold">{customerInfo.name}</span>!</p>
+
+                <div className="bg-zinc-800 rounded-2xl p-5 w-full mb-6 text-left">
+                  <div className="flex justify-between items-center mb-3">
+                    <p className="text-white font-black text-sm uppercase tracking-widest">Order #{orderNumber}</p>
+                    <span className={`text-xs font-black px-3 py-1 rounded-full ${orderType==="delivery"?"bg-blue-600 text-white":"bg-green-600 text-white"}`}>
+                      {orderType === "delivery" ? "🚗 Delivery" : "🏃 Pickup"}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1 max-h-40 overflow-y-auto mb-3">
+                    {cartLines.map(line => (
+                      <div key={line.id} className="flex justify-between text-xs">
+                        <span className="text-gray-300 truncate mr-2">{line.qty>1?`${line.name} x${line.qty}`:line.name}</span>
+                        <span className="text-yellow-400 font-bold shrink-0">${(line.price*line.qty).toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="border-t border-zinc-700 pt-3 space-y-1">
+                    <div className="flex justify-between text-sm"><span className="text-gray-400">Subtotal</span><span className="text-white">${cartSubtotal.toFixed(2)}</span></div>
+                    {orderType==="delivery" && <div className="flex justify-between text-sm"><span className="text-gray-400">Delivery</span><span className="text-yellow-400">$3.99</span></div>}
+                    <div className="flex justify-between text-base font-black"><span className="text-white">Total Due</span><span className="text-green-400">${cartTotal.toFixed(2)}</span></div>
+                  </div>
+                </div>
+
+                {orderType === "delivery" ? (
+                  <div className="bg-zinc-800 rounded-2xl p-4 w-full mb-4 text-left">
+                    <p className="text-white font-black text-xs uppercase tracking-widest mb-2">📍 Delivering To</p>
+                    <p className="text-gray-300 text-sm">{customerInfo.address}</p>
+                    <p className="text-gray-300 text-sm">{customerInfo.city}, IN {customerInfo.zip}</p>
+                    <p className="text-yellow-400 text-xs mt-2 font-bold">Estimated arrival: 35–50 min</p>
+                  </div>
+                ) : (
+                  <div className="bg-zinc-800 rounded-2xl p-4 w-full mb-4 text-left">
+                    <p className="text-white font-black text-xs uppercase tracking-widest mb-2">📍 Pickup At</p>
+                    <p className="text-gray-300 text-sm">7233 Fishers Landing Dr, Fishers, IN 46038</p>
+                    <p className="text-yellow-400 text-xs mt-2 font-bold">⏱ Ready in approximately 20 minutes</p>
+                  </div>
+                )}
+
+                <div className="bg-zinc-800 rounded-2xl p-4 w-full mb-6 text-left">
+                  <p className="text-white font-black text-xs uppercase tracking-widest mb-1">💳 Payment</p>
+                  <p className="text-gray-300 text-sm">Pay <span className="text-green-400 font-black">${cartTotal.toFixed(2)}</span> {orderType==="delivery" ? "at the door" : "when you pick up"}</p>
+                  <p className="text-gray-500 text-xs mt-1">We accept cash & all major cards</p>
+                </div>
+
+                <a href="tel:3175372068" className="w-full block bg-zinc-800 hover:bg-zinc-700 text-white font-black py-3 rounded-xl text-sm text-center transition mb-3">
+                  📞 Call us — 317-537-2068
+                </a>
+                <button onClick={handleNewOrder} className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-3 rounded-xl text-sm transition">
+                  🍕 Start New Order
+                </button>
+              </div>
+            )}
+
+          </div>
+        </div>
+      )}
 
     </div>
   );
@@ -1132,6 +1682,30 @@ function OrderSummary({ title, items, notes, onNotesChange, onReset, borderColor
         <span className={`font-black text-lg ${totalColor}`}>${items.reduce((s,{price,qty}) => s+price*qty,0).toFixed(2)}</span>
       </div>
       <button onClick={onReset} className="mt-3 bg-zinc-700 hover:bg-zinc-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition">🔄 Reset Order</button>
+    </div>
+  );
+}
+
+function CheckoutProgress({ step }) {
+  const steps = ["Cart", "Order Type", "Details", "Confirmed"];
+  return (
+    <div className="flex items-center gap-1 mt-2">
+      {steps.map((label, i) => {
+        const s = i + 1;
+        const done = step > s;
+        const active = step === s;
+        return (
+          <div key={label} className="flex items-center gap-1 flex-1">
+            <div className="flex flex-col items-center">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition ${done ? "bg-green-500 text-white" : active ? "bg-red-600 text-white" : "bg-zinc-700 text-gray-500"}`}>
+                {done ? "✓" : s}
+              </div>
+              <p className={`text-[9px] font-bold mt-0.5 whitespace-nowrap ${active ? "text-white" : done ? "text-green-400" : "text-gray-600"}`}>{label}</p>
+            </div>
+            {i < steps.length - 1 && <div className={`h-0.5 flex-1 rounded mb-4 ${done ? "bg-green-500" : "bg-zinc-700"}`} />}
+          </div>
+        );
+      })}
     </div>
   );
 }
