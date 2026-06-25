@@ -515,7 +515,7 @@ export default function Home() {
   const cartLines = buildCartLines();
   const cartItemCount = cartLines.reduce((s, l) => s + l.qty, 0);
   const cartSubtotal = cartLines.reduce((s, l) => s + l.price * l.qty, 0);
-  const deliveryFee = orderType === "delivery" ? 3.99 : 0;
+  const deliveryFee = orderType === "delivery" ? 5.99 : 0;
   const cartTotal = cartSubtotal + deliveryFee;
 
   const handlePlaceOrder = () => {
@@ -1330,43 +1330,160 @@ export default function Home() {
             {checkoutStep === 1 && (
               <>
                 <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-700 bg-zinc-900">
-                  <h2 className="text-xl font-black text-white">🛒 Your Cart</h2>
+                  <div>
+                    <h2 className="text-xl font-black text-white">🛒 Your Cart</h2>
+                    {cartItemCount > 0 && <p className="text-gray-400 text-xs">{cartItemCount} item{cartItemCount!==1?"s":""} · ${cartSubtotal.toFixed(2)}</p>}
+                  </div>
                   <button onClick={() => setCheckoutStep(0)} className="text-gray-400 hover:text-white text-2xl font-black transition">✕</button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+                <div className="flex-1 overflow-y-auto px-4 py-4">
                   {cartLines.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center py-20">
                       <p className="text-6xl mb-4">🛒</p>
                       <p className="text-white font-black text-xl mb-2">Your cart is empty</p>
-                      <p className="text-gray-400 text-sm">Add items from the menu to get started!</p>
-                      <button onClick={() => setCheckoutStep(0)} className="mt-6 bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-xl transition">Browse Menu</button>
+                      <p className="text-gray-400 text-sm mb-6">Add items from the menu to get started!</p>
+                      <button onClick={() => setCheckoutStep(0)} className="bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-xl transition">Browse Menu</button>
                     </div>
                   ) : (
-                    <>
-                      {/* Group by category */}
+                    <div className="space-y-1">
                       {Array.from(new Set(cartLines.map(l => l.category))).map(cat => (
-                        <div key={cat}>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 px-1">{cat}</p>
-                          {cartLines.filter(l => l.category === cat).map(line => (
-                            <div key={line.id} className="bg-zinc-800 rounded-xl p-3 mb-2 border border-zinc-700">
-                              <div className="flex justify-between items-start gap-2">
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-white font-bold text-sm leading-tight">{line.name}</p>
-                                  {line.details && <p className="text-gray-400 text-xs mt-0.5 leading-relaxed">{line.details}</p>}
-                                  {line.notes && <p className="text-yellow-400 text-xs mt-0.5 italic">📝 {line.notes}</p>}
+                        <div key={cat} className="mb-4">
+                          {/* Category header */}
+                          <div className="flex items-center gap-2 mb-2">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">{cat}</p>
+                            <div className="h-px flex-1 bg-zinc-800" />
+                          </div>
+
+                          {cartLines.filter(l => l.category === cat).map(line => {
+                            // Detect if this line supports simple qty changes (non-pizza/wings/calzone)
+                            const isQtyable = ["🌯 Mediterranean","🍛 Desi","🫓 Naan","🥗 Starters","🥙 Salads","🥤 Beverages","🍮 Desserts"].includes(line.category);
+                            const qtyDec = () => line.onRemove(); // will remove at qty=0 via onRemove
+                            // Simple qty adjusters for cart-managed items
+                            const getQtyChanger = () => {
+                              if (line.category === "🌯 Mediterranean") return {
+                                dec: () => updateMedQty(line.id.replace("med-",""), -1),
+                                inc: () => updateMedQty(line.id.replace("med-",""), 1),
+                                qty: medCart[line.id.replace("med-","")] || 0
+                              };
+                              if (line.category === "🍛 Desi") return {
+                                dec: () => updateDesiQty(line.id.replace("desi-",""), -1),
+                                inc: () => updateDesiQty(line.id.replace("desi-",""), 1),
+                                qty: desiCart[line.id.replace("desi-","")] || 0
+                              };
+                              if (line.category === "🫓 Naan") return {
+                                dec: () => updateNaanQty(line.id.replace("naan-",""), -1),
+                                inc: () => updateNaanQty(line.id.replace("naan-",""), 1),
+                                qty: naanCart[line.id.replace("naan-","")] || 0
+                              };
+                              if (line.category === "🥗 Starters") return {
+                                dec: () => updateStarterQty(line.id.replace("starter-",""), -1),
+                                inc: () => updateStarterQty(line.id.replace("starter-",""), 1),
+                                qty: starterCart[line.id.replace("starter-","")] || 0
+                              };
+                              if (line.category === "🥤 Beverages") return {
+                                dec: () => updateBeverageQty(line.id.replace("bev-",""), -1),
+                                inc: () => updateBeverageQty(line.id.replace("bev-",""), 1),
+                                qty: beverageCart[line.id.replace("bev-","")] || 0
+                              };
+                              if (line.category === "🍮 Desserts") return {
+                                dec: () => updateDessertQty(line.id.replace("des-",""), -1),
+                                inc: () => updateDessertQty(line.id.replace("des-",""), 1),
+                                qty: dessertCart[line.id.replace("des-","")] || 0
+                              };
+                              if (line.category === "🥙 Salads") {
+                                const name = line.id.replace("salad-","");
+                                return {
+                                  dec: () => updateSaladQty(name, -1),
+                                  inc: () => updateSaladQty(name, 1),
+                                  qty: saladCart[name] || 0
+                                };
+                              }
+                              return null;
+                            };
+                            const qtyCtrl = isQtyable ? getQtyChanger() : null;
+
+                            // Edit section mapping
+                            const editSectionMap = {
+                              "🍕 Pizza": "section-pizza",
+                              "🫓 Calzone": "section-calzone",
+                              "🍗 Wings": line.id === "bonein" ? "section-bonein" : "section-boneless",
+                              "🍝 Pasta": "section-pasta",
+                              "🧀 Mac & Cheese": "section-mac",
+                              "🌯 Mediterranean": "section-med",
+                              "🍛 Desi": "section-desi",
+                              "🫓 Naan": "section-desi",
+                              "🥗 Starters": "section-starters",
+                              "🥙 Salads": "section-salads",
+                              "🥤 Beverages": "section-beverages",
+                              "🍮 Desserts": "section-desserts",
+                            };
+                            const editSection = editSectionMap[line.category];
+
+                            return (
+                              <div key={line.id} className="bg-zinc-800 rounded-2xl p-3 mb-2 border border-zinc-700">
+                                {/* Item name + price */}
+                                <div className="flex justify-between items-start gap-2 mb-2">
+                                  <p className="text-white font-bold text-sm leading-snug flex-1">{line.name}</p>
+                                  <span className="text-yellow-400 font-black text-sm shrink-0">${(line.price * line.qty).toFixed(2)}</span>
                                 </div>
-                                <div className="flex flex-col items-end gap-1 shrink-0">
-                                  <span className="text-yellow-400 font-black text-sm">${(line.price * line.qty).toFixed(2)}</span>
-                                  {line.qty > 1 && <span className="text-gray-500 text-xs">x{line.qty} @ ${line.price.toFixed(2)}</span>}
-                                  <button onClick={line.onRemove} className="text-red-400 hover:text-red-300 text-xs font-bold transition mt-1">🗑 Remove</button>
+
+                                {/* Details + notes */}
+                                {line.details && <p className="text-gray-400 text-xs mb-1 leading-relaxed">{line.details}</p>}
+                                {line.notes && <p className="text-yellow-400 text-xs mb-2 italic">📝 {line.notes}</p>}
+
+                                {/* Controls row */}
+                                <div className="flex items-center justify-between mt-2 pt-2 border-t border-zinc-700 gap-2">
+
+                                  {/* Left: qty stepper OR unit price */}
+                                  {qtyCtrl ? (
+                                    <div className="flex items-center gap-2">
+                                      <button
+                                        onClick={() => { if (qtyCtrl.qty <= 1) line.onRemove(); else qtyCtrl.dec(); }}
+                                        className="bg-zinc-700 hover:bg-zinc-600 text-white w-8 h-8 rounded-lg text-base font-black transition flex items-center justify-center">
+                                        {qtyCtrl.qty <= 1 ? "🗑" : "−"}
+                                      </button>
+                                      <span className="text-white font-black text-base w-6 text-center">{qtyCtrl.qty}</span>
+                                      <button
+                                        onClick={qtyCtrl.inc}
+                                        className="bg-zinc-700 hover:bg-zinc-600 text-white w-8 h-8 rounded-lg text-base font-black transition">+</button>
+                                      <span className="text-gray-500 text-xs ml-1">× ${line.price.toFixed(2)}</span>
+                                    </div>
+                                  ) : (
+                                    <span className="text-gray-500 text-xs">${line.price.toFixed(2)}{line.qty > 1 ? ` × ${line.qty}` : ""}</span>
+                                  )}
+
+                                  {/* Right: Edit + Remove */}
+                                  <div className="flex items-center gap-2">
+                                    {editSection && (
+                                      <button
+                                        onClick={() => { setCheckoutStep(0); setTimeout(() => scrollToSection(editSection), 100); }}
+                                        className="text-xs font-black text-blue-400 hover:text-blue-300 transition bg-zinc-700 hover:bg-zinc-600 px-2.5 py-1.5 rounded-lg">
+                                        ✏️ Edit
+                                      </button>
+                                    )}
+                                    <button
+                                      onClick={line.onRemove}
+                                      className="text-xs font-black text-red-400 hover:text-red-300 transition bg-zinc-700 hover:bg-zinc-600 px-2.5 py-1.5 rounded-lg">
+                                      🗑 Remove
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       ))}
-                    </>
+
+                      {/* Clear all */}
+                      <button
+                        onClick={() => {
+                          if (window.confirm("Remove all items from your cart?")) handleNewOrder();
+                        }}
+                        className="w-full text-xs text-red-400 hover:text-red-300 font-bold py-2 transition text-center">
+                        🗑 Clear entire cart
+                      </button>
+                    </div>
                   )}
                 </div>
 
@@ -1415,7 +1532,7 @@ export default function Home() {
                       <span className="text-4xl">🚗</span>
                       <p className="text-white font-black text-base">Delivery</p>
                       <p className="text-gray-400 text-xs text-center">Estimate 35–50 min</p>
-                      <p className="text-yellow-400 font-black text-sm">+$3.99</p>
+                      <p className="text-yellow-400 font-black text-sm">+$5.99</p>
                       {orderType==="delivery" && <span className="text-green-400 font-black text-xs">✓ Selected</span>}
                     </button>
                   </div>
@@ -1433,7 +1550,7 @@ export default function Home() {
                   </div>
                   {orderType === "delivery" && (
                     <div className="flex justify-between mb-3">
-                      <span className="text-gray-400 text-sm">Delivery fee</span><span className="text-yellow-400 font-black">$3.99</span>
+                      <span className="text-gray-400 text-sm">Delivery fee</span><span className="text-yellow-400 font-black">$5.99</span>
                     </div>
                   )}
                   <button onClick={() => setCheckoutStep(3)}
@@ -1518,7 +1635,7 @@ export default function Home() {
                       </div>
                       <div className="border-t border-zinc-700 mt-3 pt-3 space-y-1">
                         <div className="flex justify-between text-sm"><span className="text-gray-400">Subtotal</span><span className="text-white font-bold">${cartSubtotal.toFixed(2)}</span></div>
-                        {orderType==="delivery" && <div className="flex justify-between text-sm"><span className="text-gray-400">Delivery fee</span><span className="text-yellow-400 font-bold">$3.99</span></div>}
+                        {orderType==="delivery" && <div className="flex justify-between text-sm"><span className="text-gray-400">Delivery fee</span><span className="text-yellow-400 font-bold">$5.99</span></div>}
                         <div className="flex justify-between text-base font-black"><span className="text-white">Total</span><span className="text-green-400">${cartTotal.toFixed(2)}</span></div>
                       </div>
                       <p className="text-gray-500 text-[10px] mt-2">💳 Payment collected at {orderType === "delivery" ? "door" : "pickup"}</p>
@@ -1564,7 +1681,7 @@ export default function Home() {
 
                   <div className="border-t border-zinc-700 pt-3 space-y-1">
                     <div className="flex justify-between text-sm"><span className="text-gray-400">Subtotal</span><span className="text-white">${cartSubtotal.toFixed(2)}</span></div>
-                    {orderType==="delivery" && <div className="flex justify-between text-sm"><span className="text-gray-400">Delivery</span><span className="text-yellow-400">$3.99</span></div>}
+                    {orderType==="delivery" && <div className="flex justify-between text-sm"><span className="text-gray-400">Delivery</span><span className="text-yellow-400">$5.99</span></div>}
                     <div className="flex justify-between text-base font-black"><span className="text-white">Total Due</span><span className="text-green-400">${cartTotal.toFixed(2)}</span></div>
                   </div>
                 </div>
