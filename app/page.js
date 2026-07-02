@@ -885,8 +885,8 @@ export default function Home() {
                   { img:"https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=800", name:"Chicken Cavatappi", desc:"Olive oil, chicken, spinach, mushrooms, red onions, parmesan & parsley." },
                   { img:"m.jpg", name:"Mostaccioli w/ Marinara", desc:"Traditional mostaccioli with marinara, parmesan & parsley." },
                   { img:"bm.jpg", name:"Baked Mostaccioli w/ Mozzarella", desc:"Mostaccioli, marinara, mozzarella baked to perfection." },
-                  { img:"https://images.unsplash.com/photo-1645112411341-6c4fd023882f?q=80&w=800", name:"Alfredo Cavatappi w/ Chicken", desc:"Cavatappi, chicken, mushrooms & spinach, parmesan." },
-                  { img:"https://images.unsplash.com/photo-1612369997610-a07a4b9e8a0c?q=80&w=800", name:"Alfredo Cavatappi", desc:"Cavatappi noodles, alfredo sauce, parmesan & parsley." },
+                  { img:"cava p.jpg", name:"Alfredo Cavatappi w/ Chicken", desc:"Cavatappi, chicken, mushrooms & spinach, parmesan." },
+                  { img:"cava p.jpg", name:"Alfredo Cavatappi", desc:"Cavatappi noodles, alfredo sauce, parmesan & parsley." },
                   { img:"https://images.unsplash.com/photo-1595295333158-4742f28fbd85?q=80&w=800", name:"Tomato Cream Penne", desc:"Penne in creamy alfredo marinara, parmesan & parsley." },
                 ].map(item => {
                   const its = pastaToppings[item.name] || [];
