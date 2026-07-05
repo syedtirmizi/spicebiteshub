@@ -230,6 +230,7 @@ export default function Home() {
   const [desiChickenType, setDesiChickenType] = useState({});
   const setChickenType = (name, type) => setDesiChickenType(prev => ({ ...prev, [name]: type }));
   const desiChickenCharge = (name) => (desiChickenType[name] || defaultChickenType) === "Boneless" ? bonelessUpcharge : 0;
+  const [desiItemNotes, setDesiItemNotes] = useState({});
   const updateDesiQty = (name, delta) => setDesiCart(prev => { const n = Math.max(0, (prev[name] || 0) + delta); if (!n) { const r = { ...prev }; delete r[name]; return r; } return { ...prev, [name]: n }; });
   const updateNaanQty = (name, delta) => setNaanCart(prev => { const n = Math.max(0, (prev[name] || 0) + delta); if (!n) { const r = { ...prev }; delete r[name]; return r; } return { ...prev, [name]: n }; });
   const desiTotal = [...Object.entries(desiCart).map(([name, qty]) => {
@@ -260,6 +261,7 @@ export default function Home() {
   const updateStarterDip = (name, dip, delta) => setStarterDips(prev => { const cur = prev[name] || {}; const qty = Math.max(0, (cur[dip] || 0) + delta); if (!qty) { const n = { ...cur }; delete n[dip]; return { ...prev, [name]: n }; } return { ...prev, [name]: { ...cur, [dip]: qty } }; });
   const starterDipTotalQty = (name) => Object.values(starterDips[name] || {}).reduce((s, q) => s + q, 0);
   const starterDipCharge = (name) => Math.max(0, starterDipTotalQty(name) - freeStarterDips) * starterDipExtraCharge;
+  const [starterItemNotes, setStarterItemNotes] = useState({});
   const starterTotal = Object.entries(starterCart).map(([name, qty]) => {
     const base = starterItems.find(i => i.name === name)?.price || 0;
     const dipMap = starterDips[name] || {};
@@ -422,8 +424,8 @@ export default function Home() {
       const chickenStr = item.hasChickenOption ? `🍗 ${desiChickenType[name] || defaultChickenType} Chicken | ` : "";
       lines.push({
         id: `desi-${name}`, category:"🍛 Desi",
-        name, details: `${chickenStr}🌶️ Spice Level: ${desiSpiceLevel[name] || defaultSpiceLevel}`, notes: "", qty, price: item.price + desiChickenCharge(name),
-        onRemove: () => { setDesiCart(p => { const r={...p}; delete r[name]; return r; }); setDesiSpiceLevel(p => { const r={...p}; delete r[name]; return r; }); setDesiChickenType(p => { const r={...p}; delete r[name]; return r; }); }
+        name, details: `${chickenStr}🌶️ Spice Level: ${desiSpiceLevel[name] || defaultSpiceLevel}`, notes: desiItemNotes[name] || "", qty, price: item.price + desiChickenCharge(name),
+        onRemove: () => { setDesiCart(p => { const r={...p}; delete r[name]; return r; }); setDesiSpiceLevel(p => { const r={...p}; delete r[name]; return r; }); setDesiChickenType(p => { const r={...p}; delete r[name]; return r; }); setDesiItemNotes(p => { const r={...p}; delete r[name]; return r; }); }
       });
     });
 
@@ -437,7 +439,7 @@ export default function Home() {
         onRemove: () => setNaanCart(p => { const r={...p}; delete r[name]; return r; })
       });
     });
-    if (desiNotes) lines.filter(l=>l.category==="🍛 Desi"||l.category==="🫓 Naan").forEach(l => l.notes = desiNotes);
+    if (desiNotes) lines.filter(l=>l.category==="🫓 Naan").forEach(l => l.notes = desiNotes);
 
     // Pasta
     Object.entries(pastaToppings).forEach(([name, tops]) => {
@@ -502,11 +504,10 @@ export default function Home() {
       lines.push({
         id:`starter-${name}`, category:"🥗 Starters", name,
         details: dipStr ? `🥫 Dip: ${dipStr}` : "",
-        notes:"", qty, price: item.price + starterDipCharge(name),
-        onRemove: () => { setStarterCart(p => { const r={...p}; delete r[name]; return r; }); setStarterDips(p => { const r={...p}; delete r[name]; return r; }); }
+        notes: starterItemNotes[name] || "", qty, price: item.price + starterDipCharge(name),
+        onRemove: () => { setStarterCart(p => { const r={...p}; delete r[name]; return r; }); setStarterDips(p => { const r={...p}; delete r[name]; return r; }); setStarterItemNotes(p => { const r={...p}; delete r[name]; return r; }); }
       });
     });
-    if (starterNotes) lines.filter(l=>l.category==="🥗 Starters").forEach(l=>l.notes=starterNotes);
 
     // Salads
     Object.entries(saladCart).forEach(([name, qty]) => {
@@ -566,8 +567,8 @@ export default function Home() {
     setPastaToppings({}); setPastaNotes({});
     setMacToppings({}); setMacNotes({});
     setMedCart({}); setMedNotes("");
-    setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiChickenType({}); setDesiNotes("");
-    setStarterCart({}); setStarterDips({}); setStarterNotes("");
+    setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiChickenType({}); setDesiItemNotes({}); setDesiNotes("");
+    setStarterCart({}); setStarterDips({}); setStarterItemNotes({}); setStarterNotes("");
     setSaladCart({}); setSaladDressing({}); setSaladSize({}); setSaladIngredients({}); setSaladNotes("");
     setBeverageCart({}); setBeverageNotes("");
     setDessertCart({}); setDessertNotes("");
@@ -739,6 +740,7 @@ export default function Home() {
                             );
                           })}
                         </div>
+                        <SpecialRequests value={starterItemNotes[item.name] || ""} onChange={v => setStarterItemNotes(p => ({...p,[item.name]:v}))} />
                         <QtyControl qty={qty} onDec={() => updateStarterQty(item.name,-1)} onInc={() => updateStarterQty(item.name,1)} price={price} />
                       </div>
                     </div>
@@ -746,7 +748,7 @@ export default function Home() {
                 })}
               </div>
               {starterTotal.length > 0 && (
-                <OrderSummary title="🧾 Starters Order" items={starterTotal} notes={starterNotes} onNotesChange={setStarterNotes} onReset={() => { setStarterCart({}); setStarterNotes(""); }} borderColor="border-red-500" totalColor="text-red-400" />
+                <OrderSummary title="🧾 Starters Order" items={starterTotal} notes={starterNotes} onNotesChange={setStarterNotes} onReset={() => { setStarterCart({}); setStarterDips({}); setStarterItemNotes({}); setStarterNotes(""); }} borderColor="border-red-500" totalColor="text-red-400" />
               )}
             </section>
 
@@ -1082,6 +1084,7 @@ export default function Home() {
                             </button>
                           ))}
                         </div>
+                        <SpecialRequests value={desiItemNotes[item.name] || ""} onChange={v => setDesiItemNotes(p => ({...p,[item.name]:v}))} />
                         <QtyControl qty={qty} onDec={() => updateDesiQty(item.name,-1)} onInc={() => updateDesiQty(item.name,1)} price={price} accentClass="bg-green-600 hover:bg-green-500" />
                       </div>
                     </div>
@@ -1106,7 +1109,7 @@ export default function Home() {
                 </div>
               </div>
               {desiTotal.length > 0 && (
-                <OrderSummary title="🧾 Desi Order" items={desiTotal} notes={desiNotes} onNotesChange={setDesiNotes} onReset={() => { setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiChickenType({}); setDesiNotes(""); }} borderColor="border-green-500" totalColor="text-green-400" />
+                <OrderSummary title="🧾 Desi Order" items={desiTotal} notes={desiNotes} onNotesChange={setDesiNotes} onReset={() => { setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiChickenType({}); setDesiItemNotes({}); setDesiNotes(""); }} borderColor="border-green-500" totalColor="text-green-400" />
               )}
             </section>
 
