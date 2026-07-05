@@ -244,10 +244,10 @@ export default function Home() {
 
   // ── Salads ────────────────────────────────────────────────────────────────────
   const saladItems = [
-    { img:"https://superbrecipe.com/wp-content/uploads/2025/07/Chicken-Caesar-Salad-1.png", name:"Classic Chicken Caesar Salad", desc:"Romaine, parmesan, asiago, croutons, tomatoes & marinated chicken.", baseIngredients:["Romaine Lettuce","Fresh Parmesan","Asiago Cheese","Croutons","Fresh Tomatoes","Marinated Chicken"] },
+    { img:"chicken ceaser.jpg", name:"Chicken Caesar Salad", desc:"Romaine, parmesan, asiago, croutons, tomatoes & marinated chicken.", baseIngredients:["Romaine Lettuce","Fresh Parmesan","Asiago Cheese","Croutons","Fresh Tomatoes","Marinated Chicken"] },
     { img:"g salad.jpg", name:"Garden Salad", desc:"Romaine, fresh tomatoes, bermuda onions, mushrooms, green peppers.", baseIngredients:["Romaine Lettuce","Fresh Tomatoes","Bermuda Onions","Fresh Mushrooms","Green Peppers"] },
     { img:"salad1.jpg", name:"Classic Caesar Salad", desc:"Romaine, fresh parmesan, asiago, croutons and fresh tomatoes.", baseIngredients:["Romaine Lettuce","Fresh Parmesan","Asiago Cheese","Croutons","Fresh Tomatoes"] },
-    { img:"https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=800", name:"Chopped Chicken Salad", desc:"Romaine, mozzarella, bermuda onions, bacon, chicken.", baseIngredients:["Romaine Lettuce","Mozzarella Cheese","Bermuda Onions","Bacon","Chicken"] },
+    { img:"chopped ch.jpg", name:"Chopped Chicken Salad", desc:"Romaine, mozzarella, bermuda onions, bacon, chicken.", baseIngredients:["Romaine Lettuce","Mozzarella Cheese","Bermuda Onions","Bacon","Chicken"] },
     { img:"sig salad.jpg", name:"Signature House Salad", desc:"Romaine with artichoke hearts, green peppers, kalamata olives, tomatoes, onions & feta.", baseIngredients:["Romaine Lettuce","Artichoke Hearts","Green Peppers","Kalamata Olives","Fresh Tomatoes","Bermuda Onions","Feta Cheese"] },
   ];
   const saladSizes = [{ label:"Individual", price:9.99 }, { label:"Family", price:19.99 }, { label:"Party", price:32.99 }];
