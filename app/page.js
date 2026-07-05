@@ -240,7 +240,19 @@ export default function Home() {
   const [starterCart, setStarterCart] = useState({});
   const [starterNotes, setStarterNotes] = useState("");
   const updateStarterQty = (name, delta) => setStarterCart(prev => { const n = Math.max(0, (prev[name] || 0) + delta); if (!n) { const r = { ...prev }; delete r[name]; return r; } return { ...prev, [name]: n }; });
-  const starterTotal = Object.entries(starterCart).map(([name, qty]) => ({ name, qty, price: starterItems.find(i => i.name === name)?.price || 0 }));
+  const starterDipOptions = ["Marinara","Ketchup","Ranch"];
+  const freeStarterDips = 1;
+  const starterDipExtraCharge = 0.50;
+  const [starterDips, setStarterDips] = useState({});
+  const updateStarterDip = (name, dip, delta) => setStarterDips(prev => { const cur = prev[name] || {}; const qty = Math.max(0, (cur[dip] || 0) + delta); if (!qty) { const n = { ...cur }; delete n[dip]; return { ...prev, [name]: n }; } return { ...prev, [name]: { ...cur, [dip]: qty } }; });
+  const starterDipTotalQty = (name) => Object.values(starterDips[name] || {}).reduce((s, q) => s + q, 0);
+  const starterDipCharge = (name) => Math.max(0, starterDipTotalQty(name) - freeStarterDips) * starterDipExtraCharge;
+  const starterTotal = Object.entries(starterCart).map(([name, qty]) => {
+    const base = starterItems.find(i => i.name === name)?.price || 0;
+    const dipMap = starterDips[name] || {};
+    const dipStr = Object.entries(dipMap).map(([d, q]) => q > 1 ? `${d} x${q}` : d).join(", ");
+    return { name: dipStr ? `${name} (${dipStr})` : name, qty, price: base + starterDipCharge(name) };
+  });
 
   // ── Salads ────────────────────────────────────────────────────────────────────
   const saladItems = [
@@ -471,7 +483,14 @@ export default function Home() {
     Object.entries(starterCart).forEach(([name, qty]) => {
       const item = starterItems.find(i=>i.name===name);
       if (!item) return;
-      lines.push({ id:`starter-${name}`, category:"🥗 Starters", name, details:"", notes:"", qty, price:item.price, onRemove: () => setStarterCart(p => { const r={...p}; delete r[name]; return r; }) });
+      const dipMap = starterDips[name] || {};
+      const dipStr = Object.entries(dipMap).map(([d,q]) => q>1?`${d} x${q}`:d).join(", ");
+      lines.push({
+        id:`starter-${name}`, category:"🥗 Starters", name,
+        details: dipStr ? `🥫 Dip: ${dipStr}` : "",
+        notes:"", qty, price: item.price + starterDipCharge(name),
+        onRemove: () => { setStarterCart(p => { const r={...p}; delete r[name]; return r; }); setStarterDips(p => { const r={...p}; delete r[name]; return r; }); }
+      });
     });
     if (starterNotes) lines.filter(l=>l.category==="🥗 Starters").forEach(l=>l.notes=starterNotes);
 
@@ -534,7 +553,7 @@ export default function Home() {
     setMacToppings({}); setMacNotes({});
     setMedCart({}); setMedNotes("");
     setDesiCart({}); setNaanCart({}); setDesiNotes("");
-    setStarterCart({}); setStarterNotes("");
+    setStarterCart({}); setStarterDips({}); setStarterNotes("");
     setSaladCart({}); setSaladDressing({}); setSaladSize({}); setSaladIngredients({}); setSaladNotes("");
     setBeverageCart({}); setBeverageNotes("");
     setDessertCart({}); setDessertNotes("");
@@ -1035,13 +1054,36 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                 {starterItems.map(item => {
                   const qty = starterCart[item.name] || 0;
+                  const dipMap = starterDips[item.name] || {};
+                  const totalDipQty = Object.values(dipMap).reduce((s, q) => s + q, 0);
+                  const dipCharge = Math.max(0, totalDipQty - freeStarterDips) * starterDipExtraCharge;
+                  const price = item.price + dipCharge;
                   return (
                     <div key={item.name} className={`bg-zinc-900 rounded-2xl overflow-hidden border-2 transition ${qty>0?"border-red-500":"border-zinc-800"}`}>
                       <img src={item.img} alt={item.name} className="h-40 w-full object-cover" />
                       <div className="p-4">
-                        <div className="flex justify-between items-center mb-1"><h3 className="text-lg font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">${item.price.toFixed(2)}</span></div>
+                        <div className="flex justify-between items-center mb-1"><h3 className="text-lg font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">${price.toFixed(2)}</span></div>
                         <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
-                        <QtyControl qty={qty} onDec={() => updateStarterQty(item.name,-1)} onInc={() => updateStarterQty(item.name,1)} price={item.price} />
+                        <Label>🥫 Dipping Sauce <span className="text-gray-400 normal-case font-normal text-[10px] ml-1">({freeStarterDips} free, +$0.50 extra)</span></Label>
+                        <div className="grid grid-cols-3 gap-1 mb-3">
+                          {starterDipOptions.map(d => {
+                            const dQty = dipMap[d] || 0;
+                            const atFree = totalDipQty < freeStarterDips;
+                            return (
+                              <div key={d} className={`rounded-lg border-2 transition ${dQty>0?"border-red-500 bg-zinc-700":"border-zinc-700 bg-zinc-800"}`}>
+                                <div className="flex items-center justify-between px-2 py-1 gap-1">
+                                  <span className={`text-xs font-bold truncate ${dQty>0?"text-white":"text-gray-300"}`}>{d}</span>
+                                  <div className="flex items-center gap-1 shrink-0">
+                                    {dQty > 0 && <button onClick={() => updateStarterDip(item.name,d,-1)} className="bg-zinc-600 text-white w-5 h-5 rounded text-xs font-black">−</button>}
+                                    {dQty > 0 && <span className="text-yellow-400 font-black text-xs w-4 text-center">{dQty}</span>}
+                                    <button onClick={() => updateStarterDip(item.name,d,1)} className={`w-5 h-5 rounded text-xs font-black text-white ${atFree||dQty>0?"bg-red-600":"bg-yellow-600"}`}>+</button>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <QtyControl qty={qty} onDec={() => updateStarterQty(item.name,-1)} onInc={() => updateStarterQty(item.name,1)} price={price} />
                       </div>
                     </div>
                   );
