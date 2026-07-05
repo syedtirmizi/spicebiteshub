@@ -41,6 +41,7 @@ const NAV_SECTIONS = [
   { id: "section-salads",     label: "🥙 Salads",           group: "extra"    },
   { id: "section-beverages",  label: "🥤 Beverages",        group: "extra"    },
   { id: "section-desserts",   label: "🍮 Desserts",         group: "extra"    },
+  { id: "section-location",   label: "📍 Location & Hours", group: "story"    },
   { id: "section-story",      label: "📖 Our Story",        group: "story"    },
 ];
 
@@ -53,6 +54,21 @@ const GROUP_LABELS = {
   extra:    { label: "🍽️ More",            color: "text-purple-400 border-purple-700"},
   story:    { label: "ℹ️ About Us",         color: "text-orange-400 border-orange-700"},
 };
+
+// ─── Location & hours ──────────────────────────────────────────────────────
+const restaurantAddress = "7233 Fishers Landing Dr, Fishers, IN 46038";
+const restaurantPhone = "(317) 537-2058";
+const restaurantPhoneTel = "3175372058";
+const directionsUrl = "https://www.google.com/maps/dir/?api=1&destination=7233+Fishers+Landing+Dr+Fishers+IN+46038";
+const hoursData = [
+  { day: "Monday",    hours: "11:00 AM – 12:00 AM" },
+  { day: "Tuesday",   hours: "11:00 AM – 12:00 AM" },
+  { day: "Wednesday", hours: "11:00 AM – 12:00 AM" },
+  { day: "Thursday",  hours: "11:00 AM – 12:00 AM" },
+  { day: "Friday",    hours: "11:00 AM – 12:00 AM" },
+  { day: "Saturday",  hours: "11:00 AM – 12:00 AM" },
+  { day: "Sunday",    hours: "11:00 AM – 12:00 AM" },
+];
 
 // ─── Pizza cooking instruction options ────────────────────────────────────────
 const sauceTypeOptions = ["Pizza Sauce", "White Sauce"];
@@ -748,8 +764,8 @@ export default function Home() {
             🛒 View Cart
             {cartItemCount > 0 && <span className="bg-black text-yellow-400 text-[10px] font-black px-2 py-0.5 rounded-full">{cartItemCount} items</span>}
           </button>
-          <a href="tel:3175372068" className="block bg-red-600 hover:bg-red-700 text-white font-black text-xs text-center py-3 rounded-xl transition">📞 Call to Order</a>
-          <p className="text-gray-500 text-[10px] text-center mt-2">317-537-2068</p>
+          <a href="tel:3175372058" className="block bg-red-600 hover:bg-red-700 text-white font-black text-xs text-center py-3 rounded-xl transition">📞 Call to Order</a>
+          <p className="text-gray-500 text-[10px] text-center mt-2">317-537-2058</p>
         </div>
       </nav>
     );
@@ -783,7 +799,7 @@ export default function Home() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <a href="tel:3175372068" className="bg-zinc-800 hover:bg-zinc-700 text-white font-black text-xs px-3 py-2 rounded-xl transition hidden sm:block">📞 Call</a>
+          <a href="tel:3175372058" className="bg-zinc-800 hover:bg-zinc-700 text-white font-black text-xs px-3 py-2 rounded-xl transition hidden sm:block">📞 Call</a>
           <button onClick={() => setCheckoutStep(1)}
             className="relative bg-red-600 hover:bg-red-700 text-white font-black text-xs px-4 py-2 rounded-xl transition flex items-center gap-2">
             🛒 Cart
@@ -1752,6 +1768,37 @@ export default function Home() {
               )}
             </section>
 
+            {/* ═══════════════ LOCATION & HOURS ════════════════ */}
+            <section id="section-location">
+              <SectionHeader emoji="📍" title="Location & Hours" color="text-red-500" />
+              <div className="bg-zinc-900 rounded-2xl p-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5 pb-5 border-b border-zinc-700">
+                  <div>
+                    <h3 className="text-xl font-black text-yellow-400">Spice &amp; Bites Hub</h3>
+                    <p className="text-gray-300 text-sm mt-1">{restaurantAddress}</p>
+                    <p className="text-gray-300 text-sm">{restaurantPhone}</p>
+                  </div>
+                  <a href={directionsUrl} target="_blank" rel="noopener noreferrer"
+                    className="inline-block bg-red-600 hover:bg-red-700 text-white font-black text-sm px-5 py-3 rounded-xl transition text-center whitespace-nowrap">
+                    🧭 Get Directions
+                  </a>
+                </div>
+                <div className="space-y-1">
+                  {hoursData.map(({ day, hours }) => {
+                    const isToday = new Date().toLocaleDateString("en-US", { weekday: "long" }) === day;
+                    return (
+                      <div key={day} className={`flex justify-between items-center px-3 py-2 rounded-lg ${isToday ? "bg-red-600/20 border border-red-500" : ""}`}>
+                        <span className={`text-sm font-bold ${isToday ? "text-yellow-400" : "text-white"}`}>
+                          {day}{isToday && <span className="ml-2 text-[10px] text-green-400 font-black uppercase align-middle">Today</span>}
+                        </span>
+                        <span className={`text-sm font-bold ${hours === "Closed" ? "text-red-400" : "text-gray-300"}`}>{hours}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </section>
+
             {/* ═══════════════ OUR STORY ════════════════ */}
             <section id="section-story">
               <SectionHeader emoji="📖" title="Our Story" color="text-yellow-400" />
@@ -1816,7 +1863,7 @@ export default function Home() {
                   <h3 className="text-lg font-black text-yellow-400 mb-2">Serving the Indiana Community</h3>
                   <p className="text-gray-300 text-sm leading-relaxed mb-2">Located at 7233 Fishers Landing Dr in Fishers, Indiana, we are proud to serve families, professionals, students and food lovers of all backgrounds.</p>
                   <p className="text-gray-300 text-sm leading-relaxed">Our doors are open seven days a week from 11 AM to midnight. We are not just feeding appetites — we are building memories, one plate at a time.</p>
-                  <a href="tel:3175372068" className="mt-4 inline-block bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-xl transition text-sm">📞 Call to Order — 317-537-2068</a>
+                  <a href="tel:3175372058" className="mt-4 inline-block bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-xl transition text-sm">📞 Call to Order — 317-537-2058</a>
                 </div>
               </div>
             </section>
@@ -1826,10 +1873,10 @@ export default function Home() {
               <h2 className="text-2xl font-black text-red-500 uppercase mb-4">Visit Us</h2>
               <div className="space-y-2 text-gray-300 text-sm">
                 <p>📍 7233 Fishers Landing Dr, Fishers, IN 46038</p>
-                <p>📞 317-537-2068</p>
+                <p>📞 317-537-2058</p>
                 <p>🕒 Mon–Sun: 11:00 AM – 12:00 AM</p>
               </div>
-              <a href="tel:3175372068" className="mt-5 inline-block bg-red-600 hover:bg-red-700 text-white font-black px-8 py-3 rounded-xl transition">📞 Call to Order</a>
+              <a href="tel:3175372058" className="mt-5 inline-block bg-red-600 hover:bg-red-700 text-white font-black px-8 py-3 rounded-xl transition">📞 Call to Order</a>
             </section>
 
           </div>{/* end content */}
@@ -1838,7 +1885,7 @@ export default function Home() {
 
       {/* MOBILE STICKY BOTTOM BAR */}
       <div className="lg:hidden flex-shrink-0 bg-black/95 border-t border-zinc-800 p-3 flex gap-2">
-        <a href="tel:3175372068" className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-black text-sm py-3 rounded-xl text-center transition">📞 Call</a>
+        <a href="tel:3175372058" className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-black text-sm py-3 rounded-xl text-center transition">📞 Call</a>
         <button onClick={() => setCheckoutStep(1)}
           className="flex-1 relative bg-red-600 hover:bg-red-700 text-white font-black text-sm py-3 rounded-xl text-center transition flex items-center justify-center gap-2">
           🛒 Cart
@@ -2070,7 +2117,7 @@ export default function Home() {
                   <div className="bg-zinc-800 rounded-2xl p-4 text-sm text-gray-300 space-y-1">
                     <p>📍 <span className="text-white font-bold">7233 Fishers Landing Dr, Fishers, IN 46038</span></p>
                     <p>🕒 <span className="text-white font-bold">Open daily 11 AM – 12 AM</span></p>
-                    <p>📞 <span className="text-white font-bold">317-537-2068</span></p>
+                    <p>📞 <span className="text-white font-bold">317-537-2058</span></p>
                   </div>
                 </div>
 
@@ -2237,8 +2284,8 @@ export default function Home() {
                   <p className="text-gray-500 text-xs mt-1">We accept cash & all major cards</p>
                 </div>
 
-                <a href="tel:3175372068" className="w-full block bg-zinc-800 hover:bg-zinc-700 text-white font-black py-3 rounded-xl text-sm text-center transition mb-3">
-                  📞 Call us — 317-537-2068
+                <a href="tel:3175372058" className="w-full block bg-zinc-800 hover:bg-zinc-700 text-white font-black py-3 rounded-xl text-sm text-center transition mb-3">
+                  📞 Call us — 317-537-2058
                 </a>
                 <button onClick={handleNewOrder} className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-3 rounded-xl text-sm transition">
                   🍕 Start New Order
