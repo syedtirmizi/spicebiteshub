@@ -28,6 +28,7 @@ function SpecialRequests({ value, onChange, placeholder }) {
 
 // ─── Sidebar nav items ────────────────────────────────────────────────────────
 const NAV_SECTIONS = [
+  { id: "section-deals",      label: "🔥 Deals",            group: "deals"    },
   { id: "section-starters",   label: "🥗 Starters",         group: "starters" },
   { id: "section-pizza",      label: "🍕 Pizza",            group: "american" },
   { id: "section-calzone",    label: "🫓 Calzone",          group: "american" },
@@ -44,6 +45,7 @@ const NAV_SECTIONS = [
 ];
 
 const GROUP_LABELS = {
+  deals:    { label: "🔥 Deals",            color: "text-red-500 border-red-700"      },
   starters: { label: "🥗 Starters",         color: "text-pink-400 border-pink-700"    },
   american: { label: "🇺🇸 American",      color: "text-red-400 border-red-700"      },
   med:      { label: "🫒 Mediterranean",   color: "text-yellow-400 border-yellow-700"},
@@ -186,6 +188,48 @@ export default function Home() {
   const [sliceOrders, setSliceOrders] = useState([{ ...emptySlice }]);
   const updateSlice = (i, f, v) => setSliceOrders(p => p.map((o, idx) => idx === i ? { ...o, [f]: v } : o));
   const toggleSliceTopping = (i, t) => setSliceOrders(p => p.map((o, idx) => idx === i ? { ...o, toppings: o.toppings.includes(t) ? o.toppings.filter(x => x !== t) : [...o.toppings, t] } : o));
+
+  // ── Deals: Family Deal ──────────────────────────────────────────────────────
+  const familyDealPrice = 34.99;
+  const familyDealToppingRate = parseFloat((toppingPrices['16"'] || "$0").replace("$", ""));
+  const dealBeverageOptions = ["2 Liter", "6-Pack Cans"];
+  const emptyFamilyDeal = { crust: "", toppings: [], sauceType: "", sauceAmount: "", bake: "", cut: "", wingFlavor: "", dipSauce: "", beverage: "", notes: "" };
+  const [familyDealOrders, setFamilyDealOrders] = useState([{ ...emptyFamilyDeal }]);
+  const updateFamilyDeal = (i, f, v) => setFamilyDealOrders(p => p.map((o, idx) => idx === i ? { ...o, [f]: v } : o));
+  const toggleFamilyDealTopping = (i, t) => setFamilyDealOrders(p => p.map((o, idx) => idx === i ? { ...o, toppings: o.toppings.includes(t) ? o.toppings.filter(x => x !== t) : [...o.toppings, t] } : o));
+  const familyDealExtraToppingCount = (o) => Math.max(0, o.toppings.length - 1);
+  const familyDealExtraToppingCost = (o) => familyDealExtraToppingCount(o) * familyDealToppingRate;
+  const familyDealTotal = (o) => familyDealPrice + familyDealExtraToppingCost(o);
+
+  // ── Deals: 2 Large 2-Topping Pizzas ─────────────────────────────────────────
+  const twoLargeDealPrice = 31.99;
+  const twoLargeDealToppingRate = parseFloat((toppingPrices['14"'] || "$0").replace("$", ""));
+  const emptyTwoLargePizza = { crust: "", toppings: [], sauceType: "", sauceAmount: "", bake: "", cut: "" };
+  const emptyTwoLargeDeal = { pizza1: { ...emptyTwoLargePizza }, pizza2: { ...emptyTwoLargePizza }, notes: "" };
+  const [twoLargeDealOrders, setTwoLargeDealOrders] = useState([{ ...emptyTwoLargeDeal }]);
+  const updateTwoLargePizza = (orderIndex, pizzaKey, field, value) => setTwoLargeDealOrders(p => p.map((o, idx) => idx === orderIndex ? { ...o, [pizzaKey]: { ...o[pizzaKey], [field]: value } } : o));
+  const toggleTwoLargeTopping = (orderIndex, pizzaKey, topping) => setTwoLargeDealOrders(p => p.map((o, idx) => idx === orderIndex ? { ...o, [pizzaKey]: { ...o[pizzaKey], toppings: o[pizzaKey].toppings.includes(topping) ? o[pizzaKey].toppings.filter(t => t !== topping) : [...o[pizzaKey].toppings, topping] } } : o));
+  const updateTwoLargeNotes = (orderIndex, value) => setTwoLargeDealOrders(p => p.map((o, idx) => idx === orderIndex ? { ...o, notes: value } : o));
+  const twoLargePizzaExtraCount = (pizza) => Math.max(0, pizza.toppings.length - 2);
+  const twoLargePizzaExtraCost = (pizza) => twoLargePizzaExtraCount(pizza) * twoLargeDealToppingRate;
+  const twoLargeDealExtraCost = (o) => twoLargePizzaExtraCost(o.pizza1) + twoLargePizzaExtraCost(o.pizza2);
+  const twoLargeDealTotal = (o) => twoLargeDealPrice + twoLargeDealExtraCost(o);
+
+  // ── Deals: 2 Medium 2-Topping Pizzas ────────────────────────────────────────
+  const twoMediumDealPrice = 22.99;
+  const twoMediumDealToppingRate = parseFloat((toppingPrices['12"'] || "$0").replace("$", ""));
+  const emptyTwoMediumPizza = { crust: "", toppings: [], sauceType: "", sauceAmount: "", bake: "", cut: "" };
+  const emptyTwoMediumDeal = { pizza1: { ...emptyTwoMediumPizza }, pizza2: { ...emptyTwoMediumPizza }, notes: "" };
+  const [twoMediumDealOrders, setTwoMediumDealOrders] = useState([{ ...emptyTwoMediumDeal }]);
+  const updateTwoMediumPizza = (orderIndex, pizzaKey, field, value) => setTwoMediumDealOrders(p => p.map((o, idx) => idx === orderIndex ? { ...o, [pizzaKey]: { ...o[pizzaKey], [field]: value } } : o));
+  const toggleTwoMediumTopping = (orderIndex, pizzaKey, topping) => setTwoMediumDealOrders(p => p.map((o, idx) => idx === orderIndex ? { ...o, [pizzaKey]: { ...o[pizzaKey], toppings: o[pizzaKey].toppings.includes(topping) ? o[pizzaKey].toppings.filter(t => t !== topping) : [...o[pizzaKey].toppings, topping] } } : o));
+  const updateTwoMediumNotes = (orderIndex, value) => setTwoMediumDealOrders(p => p.map((o, idx) => idx === orderIndex ? { ...o, notes: value } : o));
+  const twoMediumPizzaExtraCount = (pizza) => Math.max(0, pizza.toppings.length - 2);
+  const twoMediumPizzaExtraCost = (pizza) => twoMediumPizzaExtraCount(pizza) * twoMediumDealToppingRate;
+  const twoMediumDealExtraCost = (o) => twoMediumPizzaExtraCost(o.pizza1) + twoMediumPizzaExtraCost(o.pizza2);
+  const twoMediumDealTotal = (o) => twoMediumDealPrice + twoMediumDealExtraCost(o);
+
+  const [selectedDeal, setSelectedDeal] = useState("family");
 
   // ── Calzone / Pasta / Mac ───────────────────────────────────────────────────
   const [calzoneToppings, setCalzoneToppings] = useState({});
@@ -404,6 +448,66 @@ export default function Home() {
       });
     });
 
+    // Deals: Family Deal
+    familyDealOrders.forEach((o, i) => {
+      if (!o.crust) return;
+      const total = familyDealTotal(o);
+      const cookingStr = [o.sauceType, o.sauceAmount, o.bake, o.cut].filter(Boolean).join(", ");
+      const detailParts = [
+        `🫓 ${o.crust}`,
+        `🧄 ${o.toppings.length > 0 ? o.toppings.join(", ") : "Plain cheese"}`,
+        cookingStr ? `🍅 ${cookingStr}` : null,
+        o.wingFlavor ? `🍗 Wing Flavor: ${o.wingFlavor}` : null,
+        o.dipSauce ? `🥣 Dip: ${o.dipSauce}` : null,
+        o.beverage ? `🥤 ${o.beverage}` : null,
+      ].filter(Boolean);
+      lines.push({
+        id: `familydeal-${i}`, category:"🎉 Deals",
+        name: `Family Deal #${i+1}`,
+        details: detailParts.join(" | "),
+        notes: o.notes, qty: 1, price: total,
+        onRemove: () => setFamilyDealOrders(p => p.length > 1 ? p.filter((_,idx)=>idx!==i) : [{ ...emptyFamilyDeal }])
+      });
+    });
+
+    // Deals: 2 Large 2-Topping Pizzas
+    twoLargeDealOrders.forEach((o, i) => {
+      if (!o.pizza1.crust) return;
+      const total = twoLargeDealTotal(o);
+      const describePizza = (pizza, label) => {
+        const cookingStr = [pizza.sauceType, pizza.sauceAmount, pizza.bake, pizza.cut].filter(Boolean).join(", ");
+        let str = `${label} (${pizza.crust || "No crust selected"}): ${pizza.toppings.length > 0 ? pizza.toppings.join(", ") : "Plain cheese"}`;
+        if (cookingStr) str += ` — 🍅 ${cookingStr}`;
+        return str;
+      };
+      const details = [describePizza(o.pizza1, "🍕 Pizza 1"), describePizza(o.pizza2, "🍕 Pizza 2")].join(" | ");
+      lines.push({
+        id: `twolarge-${i}`, category:"🎉 Deals",
+        name: `2 Large 2-Topping Pizzas Deal #${i+1}`,
+        details, notes: o.notes, qty: 1, price: total,
+        onRemove: () => setTwoLargeDealOrders(p => p.length > 1 ? p.filter((_,idx)=>idx!==i) : [{ ...emptyTwoLargeDeal }])
+      });
+    });
+
+    // Deals: 2 Medium 2-Topping Pizzas
+    twoMediumDealOrders.forEach((o, i) => {
+      if (!o.pizza1.crust) return;
+      const total = twoMediumDealTotal(o);
+      const describePizza = (pizza, label) => {
+        const cookingStr = [pizza.sauceType, pizza.sauceAmount, pizza.bake, pizza.cut].filter(Boolean).join(", ");
+        let str = `${label} (${pizza.crust || "No crust selected"}): ${pizza.toppings.length > 0 ? pizza.toppings.join(", ") : "Plain cheese"}`;
+        if (cookingStr) str += ` — 🍅 ${cookingStr}`;
+        return str;
+      };
+      const details = [describePizza(o.pizza1, "🍕 Pizza 1"), describePizza(o.pizza2, "🍕 Pizza 2")].join(" | ");
+      lines.push({
+        id: `twomedium-${i}`, category:"🎉 Deals",
+        name: `2 Medium 2-Topping Pizzas Deal #${i+1}`,
+        details, notes: o.notes, qty: 1, price: total,
+        onRemove: () => setTwoMediumDealOrders(p => p.length > 1 ? p.filter((_,idx)=>idx!==i) : [{ ...emptyTwoMediumDeal }])
+      });
+    });
+
     // Calzones
     Object.entries(calzoneToppings).forEach(([name, tops]) => {
       if (!tops || tops.length === 0) return;
@@ -584,6 +688,9 @@ export default function Home() {
     setBuildOrders([{ ...emptyBuild }]);
     setSpecOrders([{ ...emptySpec }]);
     setSliceOrders([{ ...emptySlice }]);
+    setFamilyDealOrders([{ ...emptyFamilyDeal }]);
+    setTwoLargeDealOrders([{ ...emptyTwoLargeDeal }]);
+    setTwoMediumDealOrders([{ ...emptyTwoMediumDeal }]);
     setCalzoneToppings({}); setCalzoneNotes({});
     setPastaToppings({}); setPastaNotes({});
     setMacToppings({}); setMacNotes({});
@@ -614,7 +721,7 @@ export default function Home() {
 
   // ── Sidebar component ─────────────────────────────────────────────────────────
   const SidebarNav = () => {
-    const groups = ["starters", "american", "desi", "med", "extra", "story"];
+    const groups = ["deals", "starters", "american", "desi", "med", "extra", "story"];
     return (
       <nav className="h-full flex flex-col gap-1 py-4 px-2 overflow-y-auto">
         <div className="px-2 mb-3">
@@ -725,6 +832,230 @@ export default function Home() {
 
           {/* ── CONTENT SECTIONS ── */}
           <div className="px-4 md:px-6 py-6 space-y-12 max-w-5xl mx-auto pb-24">
+
+            {/* ═══════════════ DEALS ════════════════ */}
+            <section id="section-deals">
+              <SectionHeader emoji="🎉" title="Deals" color="text-red-500" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <button onClick={() => setSelectedDeal("family")}
+                  className={`text-left rounded-2xl p-5 border-2 transition ${selectedDeal === "family" ? "bg-red-600/20 border-red-500" : "bg-zinc-900 border-zinc-800 hover:border-red-500"}`}>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-lg font-black text-yellow-400">🍕 FAMILY DEAL</h3>
+                    <span className="text-red-400 font-black text-xl">$34.99</span>
+                  </div>
+                  <p className="text-gray-400 text-xs leading-relaxed">(XL) 16&quot; 1 topping pizza, 10&quot; cheesy garlic bread, 6pc wings &amp; 2 liter <span className="text-gray-500 italic">(Additional toppings extra)</span></p>
+                  {selectedDeal === "family" && <span className="inline-block mt-3 text-green-400 font-black text-xs">✓ Selected</span>}
+                </button>
+
+                <button onClick={() => setSelectedDeal("twolarge")}
+                  className={`text-left rounded-2xl p-5 border-2 transition ${selectedDeal === "twolarge" ? "bg-red-600/20 border-red-500" : "bg-zinc-900 border-zinc-800 hover:border-red-500"}`}>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-lg font-black text-yellow-400">🍕🍕 2 LARGE 2 TOPPING PIZZAS</h3>
+                    <span className="text-red-400 font-black text-xl">$31.99</span>
+                  </div>
+                  <p className="text-gray-400 text-xs leading-relaxed">2- (LG) 14&quot; 2 topping pizzas <span className="text-gray-500 italic">(Additional toppings extra)</span></p>
+                  {selectedDeal === "twolarge" && <span className="inline-block mt-3 text-green-400 font-black text-xs">✓ Selected</span>}
+                </button>
+
+                <button onClick={() => setSelectedDeal("twomedium")}
+                  className={`text-left rounded-2xl p-5 border-2 transition ${selectedDeal === "twomedium" ? "bg-red-600/20 border-red-500" : "bg-zinc-900 border-zinc-800 hover:border-red-500"}`}>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-lg font-black text-yellow-400">🍕🍕 2 MEDIUM 2 TOPPING PIZZAS</h3>
+                    <span className="text-red-400 font-black text-xl">$22.99</span>
+                  </div>
+                  <p className="text-gray-400 text-xs leading-relaxed">2- (MD) 12&quot; 2 topping pizzas <span className="text-gray-500 italic">(Additional toppings extra)</span></p>
+                  {selectedDeal === "twomedium" && <span className="inline-block mt-3 text-green-400 font-black text-xs">✓ Selected</span>}
+                </button>
+              </div>
+
+              {selectedDeal === "family" && (
+                <div className="bg-zinc-900 rounded-2xl p-5">
+                  <h4 className="text-base font-black text-yellow-400 mb-1">🍕 Build Your Family Deal</h4>
+                  <p className="text-gray-400 text-sm italic mb-4">Start this pizza off with signature pizza sauce, mozzarella cheese and your choice of crust &amp; toppings.</p>
+
+                  {familyDealOrders.map((order, index) => {
+                    const extraCount = familyDealExtraToppingCount(order);
+                    const extraCost = familyDealExtraToppingCost(order);
+                    const total = familyDealTotal(order);
+                    return (
+                      <div key={index} className="bg-zinc-800 rounded-2xl p-4 mb-4 border border-zinc-700">
+                        <div className="flex justify-between items-center mb-4">
+                          <h5 className="text-base font-black text-yellow-400">Family Deal #{index + 1}</h5>
+                          {familyDealOrders.length > 1 && <button onClick={() => setFamilyDealOrders(p => p.filter((_,i) => i !== index))} className="bg-red-700 text-white px-3 py-1 rounded-xl text-xs font-bold">✕ Remove</button>}
+                        </div>
+
+                        <Label>🫓 Crust</Label>
+                        <div className="flex gap-2 mb-4">
+                          {crustTypes.map(c => <Chip key={c} active={order.crust === c} onClick={() => updateFamilyDeal(index,"crust",c)} color="yellow">{c}</Chip>)}
+                        </div>
+
+                        <Label>🧄 Toppings <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">(1st topping included, additional ${familyDealToppingRate.toFixed(2)} each)</span></Label>
+                        <ToppingGrid selectedToppings={order.toppings} onToggle={t => toggleFamilyDealTopping(index,t)} toppingList={toppings} />
+
+                        <CookingInstructions order={order} onUpdate={(f,v) => updateFamilyDeal(index,f,v)} />
+
+                        <Label>🍗 Wing Flavor <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">(choose 1)</span></Label>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {wingFlavors.map(flavor => (
+                            <button key={flavor} onClick={() => updateFamilyDeal(index,"wingFlavor", order.wingFlavor === flavor ? "" : flavor)}
+                              className={`px-3 py-1.5 rounded-full text-xs font-bold border-2 transition ${order.wingFlavor===flavor?"bg-red-600 border-red-600 text-white":"bg-zinc-700 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
+                              {order.wingFlavor===flavor?"✅ ":""}{flavor}
+                            </button>
+                          ))}
+                        </div>
+
+                        <Label>🥣 Dipping Sauce <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">(choose 1)</span></Label>
+                        <div className="flex gap-2 mb-4">
+                          {wingDips.map(dip => (
+                            <button key={dip} onClick={() => updateFamilyDeal(index,"dipSauce", order.dipSauce === dip ? "" : dip)}
+                              className={`flex-1 py-2 rounded-xl text-xs font-black border-2 transition ${order.dipSauce===dip?"bg-yellow-500 border-yellow-500 text-black":"bg-zinc-700 border-zinc-600 text-gray-300 hover:border-yellow-500"}`}>
+                              {order.dipSauce===dip?"✅ ":""}{dip}
+                            </button>
+                          ))}
+                        </div>
+
+                        <Label>🥤 Beverage <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">(choose 1)</span></Label>
+                        <div className="flex gap-2 mb-4">
+                          {dealBeverageOptions.map(bev => (
+                            <button key={bev} onClick={() => updateFamilyDeal(index,"beverage", order.beverage === bev ? "" : bev)}
+                              className={`flex-1 py-2 rounded-xl text-xs font-black border-2 transition ${order.beverage===bev?"bg-green-600 border-green-600 text-white":"bg-zinc-700 border-zinc-600 text-gray-300 hover:border-green-500"}`}>
+                              {order.beverage===bev?"✅ ":""}{bev}
+                            </button>
+                          ))}
+                        </div>
+
+                        <SpecialRequests value={order.notes} onChange={v => updateFamilyDeal(index,"notes",v)} />
+
+                        {order.crust && (
+                          <SummaryBox>
+                            <SummaryRow label="🎉 Family Deal Base" value={`$${familyDealPrice.toFixed(2)}`} />
+                            <SummaryRow label={`🫓 ${order.crust}`} />
+                            <SummaryRow label={`🧄 ${order.toppings.length > 0 ? order.toppings.join(", ") : "Plain cheese"}`} />
+                            {extraCount > 0 && <SummaryRow label={`🧄 ${extraCount} extra topping${extraCount>1?"s":""} x $${familyDealToppingRate.toFixed(2)}`} value={`+$${extraCost.toFixed(2)}`} valueClass="text-green-400" />}
+                            {[order.sauceType, order.sauceAmount, order.bake, order.cut].filter(Boolean).length > 0 && <SummaryRow label={`🍅 ${[order.sauceType, order.sauceAmount, order.bake, order.cut].filter(Boolean).join(", ")}`} />}
+                            {order.wingFlavor && <SummaryRow label={`🍗 ${order.wingFlavor}`} />}
+                            {order.dipSauce && <SummaryRow label={`🥣 ${order.dipSauce}`} />}
+                            {order.beverage && <SummaryRow label={`🥤 ${order.beverage}`} />}
+                            <SummaryTotal value={`$${total.toFixed(2)}`} />
+                          </SummaryBox>
+                        )}
+                      </div>
+                    );
+                  })}
+                  <button onClick={() => setFamilyDealOrders(p => [...p, { ...emptyFamilyDeal }])} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black text-sm py-3 rounded-2xl transition">➕ Add Another Family Deal</button>
+                </div>
+              )}
+
+              {selectedDeal === "twolarge" && (
+                <div className="bg-zinc-900 rounded-2xl p-5">
+                  <h4 className="text-base font-black text-yellow-400 mb-1">🍕🍕 Build Your 2 Large 2 Topping Pizzas</h4>
+                  <p className="text-gray-400 text-sm italic mb-4">Start these pizzas off with signature pizza sauce, mozzarella cheese and your choice of crust &amp; toppings.</p>
+
+                  {twoLargeDealOrders.map((order, index) => {
+                    const total = twoLargeDealTotal(order);
+                    const extra1 = twoLargePizzaExtraCount(order.pizza1);
+                    const extra2 = twoLargePizzaExtraCount(order.pizza2);
+                    const extraCost1 = twoLargePizzaExtraCost(order.pizza1);
+                    const extraCost2 = twoLargePizzaExtraCost(order.pizza2);
+                    const renderPizzaBuilder = (pizzaKey, label) => {
+                      const pizza = order[pizzaKey];
+                      return (
+                        <div className="bg-zinc-900 rounded-2xl p-4 mb-4 border border-zinc-700">
+                          <h6 className="text-sm font-black text-white uppercase tracking-widest mb-3">{label}</h6>
+                          <Label>🫓 Crust</Label>
+                          <div className="flex gap-2 mb-4">
+                            {crustTypes.map(c => <Chip key={c} active={pizza.crust === c} onClick={() => updateTwoLargePizza(index,pizzaKey,"crust",c)} color="yellow">{c}</Chip>)}
+                          </div>
+                          <Label>🧄 Toppings <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">(first 2 included, additional ${twoLargeDealToppingRate.toFixed(2)} each)</span></Label>
+                          <ToppingGrid selectedToppings={pizza.toppings} onToggle={t => toggleTwoLargeTopping(index,pizzaKey,t)} toppingList={toppings} />
+                          <CookingInstructions order={pizza} onUpdate={(f,v) => updateTwoLargePizza(index,pizzaKey,f,v)} />
+                        </div>
+                      );
+                    };
+                    return (
+                      <div key={index} className="bg-zinc-800 rounded-2xl p-4 mb-4 border border-zinc-700">
+                        <div className="flex justify-between items-center mb-4">
+                          <h5 className="text-base font-black text-yellow-400">2 Large Deal #{index + 1}</h5>
+                          {twoLargeDealOrders.length > 1 && <button onClick={() => setTwoLargeDealOrders(p => p.filter((_,i) => i !== index))} className="bg-red-700 text-white px-3 py-1 rounded-xl text-xs font-bold">✕ Remove</button>}
+                        </div>
+
+                        {renderPizzaBuilder("pizza1", "🍕 Pizza 1")}
+                        {renderPizzaBuilder("pizza2", "🍕 Pizza 2")}
+
+                        <SpecialRequests value={order.notes} onChange={v => updateTwoLargeNotes(index, v)} />
+
+                        {order.pizza1.crust && (
+                          <SummaryBox>
+                            <SummaryRow label="🎉 2 Large 2 Topping Pizzas Base" value={`$${twoLargeDealPrice.toFixed(2)}`} />
+                            <SummaryRow label={`🍕 Pizza 1 (${order.pizza1.crust || "No crust"}): ${order.pizza1.toppings.length > 0 ? order.pizza1.toppings.join(", ") : "Plain cheese"}`} />
+                            {extra1 > 0 && <SummaryRow label={`🧄 ${extra1} extra topping${extra1>1?"s":""} x $${twoLargeDealToppingRate.toFixed(2)}`} value={`+$${extraCost1.toFixed(2)}`} valueClass="text-green-400" />}
+                            <SummaryRow label={`🍕 Pizza 2 (${order.pizza2.crust || "No crust"}): ${order.pizza2.toppings.length > 0 ? order.pizza2.toppings.join(", ") : "Plain cheese"}`} />
+                            {extra2 > 0 && <SummaryRow label={`🧄 ${extra2} extra topping${extra2>1?"s":""} x $${twoLargeDealToppingRate.toFixed(2)}`} value={`+$${extraCost2.toFixed(2)}`} valueClass="text-green-400" />}
+                            <SummaryTotal value={`$${total.toFixed(2)}`} />
+                          </SummaryBox>
+                        )}
+                      </div>
+                    );
+                  })}
+                  <button onClick={() => setTwoLargeDealOrders(p => [...p, { ...emptyTwoLargeDeal }])} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black text-sm py-3 rounded-2xl transition">➕ Add Another 2 Large Deal</button>
+                </div>
+              )}
+
+              {selectedDeal === "twomedium" && (
+                <div className="bg-zinc-900 rounded-2xl p-5">
+                  <h4 className="text-base font-black text-yellow-400 mb-1">🍕🍕 Build Your 2 Medium 2 Topping Pizzas</h4>
+                  <p className="text-gray-400 text-sm italic mb-4">Start these pizzas off with Papa Ray&apos;s pizza sauce, mozzarella cheese and your choice of crust &amp; toppings.</p>
+
+                  {twoMediumDealOrders.map((order, index) => {
+                    const total = twoMediumDealTotal(order);
+                    const extra1 = twoMediumPizzaExtraCount(order.pizza1);
+                    const extra2 = twoMediumPizzaExtraCount(order.pizza2);
+                    const extraCost1 = twoMediumPizzaExtraCost(order.pizza1);
+                    const extraCost2 = twoMediumPizzaExtraCost(order.pizza2);
+                    const renderPizzaBuilder = (pizzaKey, label) => {
+                      const pizza = order[pizzaKey];
+                      return (
+                        <div className="bg-zinc-900 rounded-2xl p-4 mb-4 border border-zinc-700">
+                          <h6 className="text-sm font-black text-white uppercase tracking-widest mb-3">{label}</h6>
+                          <Label>🫓 Crust</Label>
+                          <div className="flex gap-2 mb-4">
+                            {crustTypes.map(c => <Chip key={c} active={pizza.crust === c} onClick={() => updateTwoMediumPizza(index,pizzaKey,"crust",c)} color="yellow">{c}</Chip>)}
+                          </div>
+                          <Label>🧄 Toppings <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">(first 2 included, additional ${twoMediumDealToppingRate.toFixed(2)} each)</span></Label>
+                          <ToppingGrid selectedToppings={pizza.toppings} onToggle={t => toggleTwoMediumTopping(index,pizzaKey,t)} toppingList={toppings} />
+                          <CookingInstructions order={pizza} onUpdate={(f,v) => updateTwoMediumPizza(index,pizzaKey,f,v)} />
+                        </div>
+                      );
+                    };
+                    return (
+                      <div key={index} className="bg-zinc-800 rounded-2xl p-4 mb-4 border border-zinc-700">
+                        <div className="flex justify-between items-center mb-4">
+                          <h5 className="text-base font-black text-yellow-400">2 Medium Deal #{index + 1}</h5>
+                          {twoMediumDealOrders.length > 1 && <button onClick={() => setTwoMediumDealOrders(p => p.filter((_,i) => i !== index))} className="bg-red-700 text-white px-3 py-1 rounded-xl text-xs font-bold">✕ Remove</button>}
+                        </div>
+
+                        {renderPizzaBuilder("pizza1", "🍕 Pizza 1")}
+                        {renderPizzaBuilder("pizza2", "🍕 Pizza 2")}
+
+                        <SpecialRequests value={order.notes} onChange={v => updateTwoMediumNotes(index, v)} />
+
+                        {order.pizza1.crust && (
+                          <SummaryBox>
+                            <SummaryRow label="🎉 2 Medium 2 Topping Pizzas Base" value={`$${twoMediumDealPrice.toFixed(2)}`} />
+                            <SummaryRow label={`🍕 Pizza 1 (${order.pizza1.crust || "No crust"}): ${order.pizza1.toppings.length > 0 ? order.pizza1.toppings.join(", ") : "Plain cheese"}`} />
+                            {extra1 > 0 && <SummaryRow label={`🧄 ${extra1} extra topping${extra1>1?"s":""} x $${twoMediumDealToppingRate.toFixed(2)}`} value={`+$${extraCost1.toFixed(2)}`} valueClass="text-green-400" />}
+                            <SummaryRow label={`🍕 Pizza 2 (${order.pizza2.crust || "No crust"}): ${order.pizza2.toppings.length > 0 ? order.pizza2.toppings.join(", ") : "Plain cheese"}`} />
+                            {extra2 > 0 && <SummaryRow label={`🧄 ${extra2} extra topping${extra2>1?"s":""} x $${twoMediumDealToppingRate.toFixed(2)}`} value={`+$${extraCost2.toFixed(2)}`} valueClass="text-green-400" />}
+                            <SummaryTotal value={`$${total.toFixed(2)}`} />
+                          </SummaryBox>
+                        )}
+                      </div>
+                    );
+                  })}
+                  <button onClick={() => setTwoMediumDealOrders(p => [...p, { ...emptyTwoMediumDeal }])} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black text-sm py-3 rounded-2xl transition">➕ Add Another 2 Medium Deal</button>
+                </div>
+              )}
+            </section>
 
             {/* ═══════════════ STARTERS ════════════════ */}
             <section id="section-starters">
@@ -1603,6 +1934,7 @@ export default function Home() {
 
                             // Edit section mapping
                             const editSectionMap = {
+                              "🎉 Deals": "section-deals",
                               "🍕 Pizza": "section-pizza",
                               "🫓 Calzone": "section-calzone",
                               "🍗 Wings": line.id === "bonein" ? "section-bonein" : "section-boneless",
