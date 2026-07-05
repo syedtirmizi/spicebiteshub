@@ -52,6 +52,12 @@ const GROUP_LABELS = {
   story:    { label: "ℹ️ About Us",         color: "text-orange-400 border-orange-700"},
 };
 
+// ─── Pizza cooking instruction options ────────────────────────────────────────
+const sauceTypeOptions = ["Pizza Sauce", "White Sauce"];
+const sauceAmountOptions = ["Extra Sauce", "Lite Sauce", "No Sauce"];
+const bakeOptions = ["Lite Bake", "Well Done"];
+const cutOptions = ["Pie Cut", "Square Cut", "Do Not Cut", "Double Cut"];
+
 export default function Home() {
   const heroSlides = ["biryani.jpg", "signature pizza.jpg", "calzone.jpg", "gyro.jpg"];
   const [slide, setSlide] = useState(0);
@@ -164,12 +170,13 @@ export default function Home() {
     { name: "Chicken Tikka Pizza", img: "https://flavorry.com/wp-content/uploads/2025/09/teamgreen1001_httpss.mj_.run9zT8Sikxhn8_An_ultra-close-up_AND__ecff3b71-758f-4b56-a1ea-7797418d9935_1.png", desc: "Garlic sauce, marinated chicken, melted mozzarella." },
     { name: "Lamb Pizza", img: "lamb pizza.jpg", desc: "Garlic sauce, lamb, melted mozzarella." },
   ];
-  const emptyBuild = { size: "", crust: "", toppings: [], notes: "" };
+  const emptyBuild = { size: "", crust: "", isHalf: false, toppings: [], half1Toppings: [], half2Toppings: [], sauceType: "", sauceAmount: "", bake: "", cut: "", notes: "" };
   const [buildOrders, setBuildOrders] = useState([{ ...emptyBuild }]);
   const updateBuild = (i, f, v) => setBuildOrders(p => p.map((o, idx) => idx === i ? { ...o, [f]: v } : o));
   const toggleBuildTopping = (i, t) => setBuildOrders(p => p.map((o, idx) => idx === i ? { ...o, toppings: o.toppings.includes(t) ? o.toppings.filter(x => x !== t) : [...o.toppings, t] } : o));
+  const toggleBuildHalfTopping = (i, half, t) => setBuildOrders(p => p.map((o, idx) => idx === i ? { ...o, [half]: o[half].includes(t) ? o[half].filter(x => x !== t) : [...o[half], t] } : o));
 
-  const emptySpec = { name: "", size: "", crust: "", toppings: [], notes: "" };
+  const emptySpec = { name: "", name2: "", size: "", crust: "", isHalf: false, toppings: [], sauceType: "", sauceAmount: "", bake: "", cut: "", notes: "" };
   const [specOrders, setSpecOrders] = useState([{ ...emptySpec }]);
   const updateSpec = (i, f, v) => setSpecOrders(p => p.map((o, idx) => idx === i ? { ...o, [f]: v } : o));
   const toggleSpecTopping = (i, t) => setSpecOrders(p => p.map((o, idx) => idx === i ? { ...o, toppings: o.toppings.includes(t) ? o.toppings.filter(x => x !== t) : [...o.toppings, t] } : o));
@@ -344,13 +351,22 @@ export default function Home() {
     buildOrders.forEach((o, i) => {
       if (!o.size) return;
       const base = parseFloat(buildSizes.find(s=>s.size===o.size)?.price.replace("$","") || 0);
-      const topCost = o.toppings.length * parseFloat((toppingPrices[o.size]||"$0").replace("$",""));
+      const toppingRate = parseFloat((toppingPrices[o.size]||"$0").replace("$",""));
+      const toppingCount = o.isHalf ? (o.half1Toppings.length + o.half2Toppings.length) : o.toppings.length;
+      const topCost = toppingCount * toppingRate;
       const total = base + topCost;
+      const cookingStr = [o.sauceType, o.sauceAmount, o.bake, o.cut].filter(Boolean).join(", ");
+      let details;
+      if (o.isHalf) {
+        details = `Half & Half — 1st Half: ${o.half1Toppings.length > 0 ? o.half1Toppings.join(", ") : "Plain cheese"} | 2nd Half: ${o.half2Toppings.length > 0 ? o.half2Toppings.join(", ") : "Plain cheese"}`;
+      } else {
+        details = o.toppings.length > 0 ? `Toppings: ${o.toppings.join(", ")}` : "Plain cheese";
+      }
+      if (cookingStr) details += ` | 🍅 ${cookingStr}`;
       if (total > 0) lines.push({
         id: `build-${i}`, category:"🍕 Pizza",
-        name: `Build-Your-Own Pizza #${i+1} (${o.size}${o.crust ? `, ${o.crust}` : ""})`,
-        details: o.toppings.length > 0 ? `Toppings: ${o.toppings.join(", ")}` : "Plain cheese",
-        notes: o.notes, qty: 1, price: total,
+        name: `Build-Your-Own Pizza #${i+1} (${o.size}${o.crust ? `, ${o.crust}` : ""}${o.isHalf ? ", Half & Half" : ""})`,
+        details, notes: o.notes, qty: 1, price: total,
         onRemove: () => setBuildOrders(p => p.length > 1 ? p.filter((_,idx)=>idx!==i) : [{ ...emptyBuild }])
       });
     });
@@ -358,12 +374,17 @@ export default function Home() {
     // Specialty pizzas
     specOrders.forEach((o, i) => {
       if (!o.name || !o.size) return;
+      if (o.isHalf && !o.name2) return;
       const base = parseFloat(specSizes.find(s=>s.size===o.size)?.price.replace("$","") || 0);
       const topCost = o.toppings.length * parseFloat((toppingPrices[o.size]||"$0").replace("$",""));
+      const pizzaName = o.isHalf ? `${o.name} / ${o.name2} (Half & Half)` : o.name;
+      const cookingStr = [o.sauceType, o.sauceAmount, o.bake, o.cut].filter(Boolean).join(", ");
+      let details = o.toppings.length > 0 ? `Extra: ${o.toppings.join(", ")}` : "";
+      if (cookingStr) details = details ? `${details} | 🍅 ${cookingStr}` : `🍅 ${cookingStr}`;
       lines.push({
         id: `spec-${i}`, category:"🍕 Pizza",
-        name: `${o.name} (${o.size}${o.crust ? `, ${o.crust}` : ""})`,
-        details: o.toppings.length > 0 ? `Extra: ${o.toppings.join(", ")}` : "",
+        name: `${pizzaName} (${o.size}${o.crust ? `, ${o.crust}` : ""})`,
+        details,
         notes: o.notes, qty: 1, price: base + topCost,
         onRemove: () => setSpecOrders(p => p.length > 1 ? p.filter((_,idx)=>idx!==i) : [{ ...emptySpec }])
       });
@@ -776,15 +797,46 @@ export default function Home() {
                     <div className="flex gap-2 mb-4">
                       {crustTypes.map(c => <Chip key={c} active={order.crust === c} onClick={() => updateBuild(index,"crust",c)} color="yellow">{c}</Chip>)}
                     </div>
-                    <Label>🧄 Toppings {order.size && <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">({toppingPrices[order.size]} each)</span>}</Label>
-                    <ToppingGrid selectedToppings={order.toppings} onToggle={t => toggleBuildTopping(index,t)} toppingList={toppings} />
+                    <CookingInstructions order={order} onUpdate={(f,v) => updateBuild(index,f,v)} />
+                    <Label>🍕 Style</Label>
+                    <div className="flex gap-2 mb-4">
+                      <button onClick={() => updateBuild(index,"isHalf",false)}
+                        className={`flex-1 py-2 rounded-xl text-xs font-black border-2 transition ${!order.isHalf?"bg-red-600 border-red-600 text-white":"bg-zinc-700 border-zinc-600 text-gray-300"}`}>Whole Pizza</button>
+                      <button onClick={() => updateBuild(index,"isHalf",true)}
+                        className={`flex-1 py-2 rounded-xl text-xs font-black border-2 transition ${order.isHalf?"bg-red-600 border-red-600 text-white":"bg-zinc-700 border-zinc-600 text-gray-300"}`}>🍕🍕 Half & Half</button>
+                    </div>
+                    {order.isHalf ? (
+                      <>
+                        <Label>🧄 First Half Toppings {order.size && <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">({toppingPrices[order.size]} each)</span>}</Label>
+                        <ToppingGrid selectedToppings={order.half1Toppings} onToggle={t => toggleBuildHalfTopping(index,"half1Toppings",t)} toppingList={toppings} />
+                        <Label>🧄 Second Half Toppings {order.size && <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">({toppingPrices[order.size]} each)</span>}</Label>
+                        <ToppingGrid selectedToppings={order.half2Toppings} onToggle={t => toggleBuildHalfTopping(index,"half2Toppings",t)} toppingList={toppings} />
+                      </>
+                    ) : (
+                      <>
+                        <Label>🧄 Toppings {order.size && <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">({toppingPrices[order.size]} each)</span>}</Label>
+                        <ToppingGrid selectedToppings={order.toppings} onToggle={t => toggleBuildTopping(index,t)} toppingList={toppings} />
+                      </>
+                    )}
                     <SpecialRequests value={order.notes} onChange={v => updateBuild(index,"notes",v)} />
                     {order.size && (
                       <SummaryBox>
                         <SummaryRow label={`📏 ${order.size} Base`} value={buildSizes.find(s => s.size === order.size)?.price} />
                         {order.crust && <SummaryRow label={`🫓 ${order.crust}`} />}
-                        {order.toppings.length > 0 && <SummaryRow label={`🧄 ${order.toppings.length} topping${order.toppings.length>1?"s":""} x ${toppingPrices[order.size]}`} value={`+$${(order.toppings.length * parseFloat(toppingPrices[order.size].replace("$",""))).toFixed(2)}`} valueClass="text-green-400" />}
-                        <SummaryTotal value={`$${(parseFloat(buildSizes.find(s=>s.size===order.size)?.price.replace("$","")||0)+(order.toppings.length*parseFloat((toppingPrices[order.size]||"$0").replace("$","")))).toFixed(2)}`} />
+                        {[order.sauceType, order.sauceAmount, order.bake, order.cut].filter(Boolean).length > 0 && <SummaryRow label={`🍅 ${[order.sauceType, order.sauceAmount, order.bake, order.cut].filter(Boolean).join(", ")}`} />}
+                        {order.isHalf ? (
+                          <>
+                            <SummaryRow label={`🍕 1st Half: ${order.half1Toppings.length > 0 ? order.half1Toppings.join(", ") : "Plain cheese"}`} />
+                            <SummaryRow label={`🍕 2nd Half: ${order.half2Toppings.length > 0 ? order.half2Toppings.join(", ") : "Plain cheese"}`} />
+                            {(order.half1Toppings.length + order.half2Toppings.length) > 0 && <SummaryRow label={`🧄 ${order.half1Toppings.length + order.half2Toppings.length} topping${(order.half1Toppings.length + order.half2Toppings.length)>1?"s":""} x ${toppingPrices[order.size]}`} value={`+$${((order.half1Toppings.length + order.half2Toppings.length) * parseFloat(toppingPrices[order.size].replace("$",""))).toFixed(2)}`} valueClass="text-green-400" />}
+                            <SummaryTotal value={`$${(parseFloat(buildSizes.find(s=>s.size===order.size)?.price.replace("$","")||0)+((order.half1Toppings.length + order.half2Toppings.length)*parseFloat((toppingPrices[order.size]||"$0").replace("$","")))).toFixed(2)}`} />
+                          </>
+                        ) : (
+                          <>
+                            {order.toppings.length > 0 && <SummaryRow label={`🧄 ${order.toppings.length} topping${order.toppings.length>1?"s":""} x ${toppingPrices[order.size]}`} value={`+$${(order.toppings.length * parseFloat(toppingPrices[order.size].replace("$",""))).toFixed(2)}`} valueClass="text-green-400" />}
+                            <SummaryTotal value={`$${(parseFloat(buildSizes.find(s=>s.size===order.size)?.price.replace("$","")||0)+(order.toppings.length*parseFloat((toppingPrices[order.size]||"$0").replace("$","")))).toFixed(2)}`} />
+                          </>
+                        )}
                       </SummaryBox>
                     )}
                   </div>
@@ -808,15 +860,47 @@ export default function Home() {
                       <h5 className="text-base font-black text-yellow-400">Order #{index + 1}</h5>
                       {specOrders.length > 1 && <button onClick={() => setSpecOrders(p => p.filter((_,i) => i !== index))} className="bg-red-700 text-white px-3 py-1 rounded-xl text-xs font-bold">✕ Remove</button>}
                     </div>
-                    <Label>🍕 Select Pizza</Label>
-                    <div className="grid grid-cols-2 gap-2 mb-4">
-                      {specialtyPizzas.map(p => (
-                        <button key={p.name} onClick={() => updateSpec(index,"name",p.name)}
-                          className={`px-2 py-2 rounded-xl text-xs font-bold border-2 transition text-left ${order.name === p.name ? "bg-red-600 border-red-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
-                          {order.name === p.name ? "✅ " : ""}{p.name}
-                        </button>
-                      ))}
+                    <Label>🍕 Style</Label>
+                    <div className="flex gap-2 mb-4">
+                      <button onClick={() => updateSpec(index,"isHalf",false)}
+                        className={`flex-1 py-2 rounded-xl text-xs font-black border-2 transition ${!order.isHalf?"bg-red-600 border-red-600 text-white":"bg-zinc-700 border-zinc-600 text-gray-300"}`}>Whole Pizza</button>
+                      <button onClick={() => updateSpec(index,"isHalf",true)}
+                        className={`flex-1 py-2 rounded-xl text-xs font-black border-2 transition ${order.isHalf?"bg-red-600 border-red-600 text-white":"bg-zinc-700 border-zinc-600 text-gray-300"}`}>🍕🍕 Half & Half</button>
                     </div>
+                    {order.isHalf ? (
+                      <>
+                        <Label>🍕 First Half</Label>
+                        <div className="grid grid-cols-2 gap-2 mb-4">
+                          {specialtyPizzas.map(p => (
+                            <button key={p.name} onClick={() => updateSpec(index,"name",p.name)}
+                              className={`px-2 py-2 rounded-xl text-xs font-bold border-2 transition text-left ${order.name === p.name ? "bg-red-600 border-red-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
+                              {order.name === p.name ? "✅ " : ""}{p.name}
+                            </button>
+                          ))}
+                        </div>
+                        <Label>🍕 Second Half</Label>
+                        <div className="grid grid-cols-2 gap-2 mb-4">
+                          {specialtyPizzas.map(p => (
+                            <button key={p.name} onClick={() => updateSpec(index,"name2",p.name)}
+                              className={`px-2 py-2 rounded-xl text-xs font-bold border-2 transition text-left ${order.name2 === p.name ? "bg-red-600 border-red-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
+                              {order.name2 === p.name ? "✅ " : ""}{p.name}
+                            </button>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <Label>🍕 Select Pizza</Label>
+                        <div className="grid grid-cols-2 gap-2 mb-4">
+                          {specialtyPizzas.map(p => (
+                            <button key={p.name} onClick={() => updateSpec(index,"name",p.name)}
+                              className={`px-2 py-2 rounded-xl text-xs font-bold border-2 transition text-left ${order.name === p.name ? "bg-red-600 border-red-600 text-white" : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
+                              {order.name === p.name ? "✅ " : ""}{p.name}
+                            </button>
+                          ))}
+                        </div>
+                      </>
+                    )}
                     <Label>📏 Size</Label>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {specSizes.map(({ size, price }) => (
@@ -829,13 +913,24 @@ export default function Home() {
                     <div className="flex gap-2 mb-4">
                       {crustTypes.map(c => <Chip key={c} active={order.crust === c} onClick={() => updateSpec(index,"crust",c)} color="yellow">{c}</Chip>)}
                     </div>
+                    <CookingInstructions order={order} onUpdate={(f,v) => updateSpec(index,f,v)} />
                     <Label>🧄 Extra Toppings {order.size && <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">({toppingPrices[order.size]} each)</span>}</Label>
                     <ToppingGrid selectedToppings={order.toppings} onToggle={t => toggleSpecTopping(index,t)} toppingList={toppings} />
                     <SpecialRequests value={order.notes} onChange={v => updateSpec(index,"notes",v)} />
                     {order.size && (
                       <SummaryBox>
-                        {order.name && <SummaryRow label={`🍕 ${order.name}`} />}
+                        {order.isHalf ? (
+                          <>
+                            {order.name && <SummaryRow label={`🍕 1st Half: ${order.name}`} />}
+                            {order.name2 && <SummaryRow label={`🍕 2nd Half: ${order.name2}`} />}
+                            {!order.name2 && <p className="text-orange-400 text-xs mt-1 mb-1">⚠️ Select a second half pizza</p>}
+                          </>
+                        ) : (
+                          order.name && <SummaryRow label={`🍕 ${order.name}`} />
+                        )}
                         <SummaryRow label={`📏 ${order.size} Base`} value={specSizes.find(s=>s.size===order.size)?.price} />
+                        {order.crust && <SummaryRow label={`🫓 ${order.crust}`} />}
+                        {[order.sauceType, order.sauceAmount, order.bake, order.cut].filter(Boolean).length > 0 && <SummaryRow label={`🍅 ${[order.sauceType, order.sauceAmount, order.bake, order.cut].filter(Boolean).join(", ")}`} />}
                         {order.toppings.length > 0 && <SummaryRow label={`🧄 ${order.toppings.length} extra topping${order.toppings.length>1?"s":""} x ${toppingPrices[order.size]}`} value={`+$${(order.toppings.length*parseFloat(toppingPrices[order.size].replace("$",""))).toFixed(2)}`} valueClass="text-green-400" />}
                         <SummaryTotal value={`$${(parseFloat(specSizes.find(s=>s.size===order.size)?.price.replace("$","")||0)+(order.toppings.length*parseFloat((toppingPrices[order.size]||"$0").replace("$","")))).toFixed(2)}`} />
                       </SummaryBox>
@@ -1863,6 +1958,32 @@ function Chip({ active, onClick, children, color = "red" }) {
       className={`px-3 py-2 rounded-xl font-black border-2 transition text-xs flex flex-col items-center ${active ? activeClass : "bg-zinc-700 border-zinc-600 text-gray-300 hover:border-red-500"}`}>
       {children}
     </button>
+  );
+}
+
+function CookingInstructions({ order, onUpdate }) {
+  const toggle = (field, value) => onUpdate(field, order[field] === value ? "" : value);
+  const OptionRow = ({ options, field }) => (
+    <div className="flex flex-wrap gap-2 mb-3">
+      {options.map(opt => (
+        <button key={opt} onClick={() => toggle(field, opt)}
+          className={`px-3 py-2 rounded-lg text-xs font-bold border-2 transition ${order[field]===opt?"bg-red-600 border-red-600 text-white":"bg-zinc-800 border-zinc-700 text-gray-300 hover:border-red-500"}`}>
+          {order[field]===opt ? "✅ " : ""}{opt}
+        </button>
+      ))}
+    </div>
+  );
+  return (
+    <div className="mb-4">
+      <Label>🍅 Sauce Type</Label>
+      <OptionRow options={sauceTypeOptions} field="sauceType" />
+      <Label>🥄 Sauce Amount</Label>
+      <OptionRow options={sauceAmountOptions} field="sauceAmount" />
+      <Label>🔥 Bake</Label>
+      <OptionRow options={bakeOptions} field="bake" />
+      <Label>🔪 Cut</Label>
+      <OptionRow options={cutOptions} field="cut" />
+    </div>
   );
 }
 
