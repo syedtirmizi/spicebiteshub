@@ -205,11 +205,11 @@ export default function Home() {
   // ── Desi ─────────────────────────────────────────────────────────────────────
   const desiItems = [
     { img:"korma.jpg",       name:"Chicken Korma",    price:13.99, desc:"Creamy curry with aromatic spices." },
-    { img:"karahi.jpg",      name:"Chicken Karahi",   price:14.99, desc:"Fresh tomato-based karahi with ginger & garlic." },
+    { img:"karahi.jpg",      name:"Chicken Karahi",   price:14.99, desc:"Fresh tomato-based karahi with ginger & garlic.", hasChickenOption:true },
     { img:"chana daal.jpg",  name:"Daal Chana",       price:10.99, desc:"Slow-cooked chana daal with Pakistani spices." },
     { img:"butter chicken.jpg", name:"Butter Chicken", price:14.99, desc:"Chicken in rich buttery tomato cream sauce." },
     { img:"nihari.jpg",      name:"Lamb Nihari",      price:16.99, desc:"Slow-cooked traditional desi curry." },
-    { img:"biryani.jpg",     name:"Signature Biryani", price:15.99, desc:"Aromatic basmati layered with spices & tender meat." },
+    { img:"biryani.jpg",     name:"Signature Biryani", price:15.99, desc:"Aromatic basmati layered with spices & tender meat.", hasChickenOption:true },
   ];
   const naanItems = [
     { img:"pn.png", name:"Plain Naan",  price:1.99, desc:"Soft, fluffy tandoor-baked flatbread." },
@@ -223,9 +223,19 @@ export default function Home() {
   const defaultSpiceLevel = "Medium";
   const [desiSpiceLevel, setDesiSpiceLevel] = useState({});
   const setSpiceLevel = (name, level) => setDesiSpiceLevel(prev => ({ ...prev, [name]: level }));
+  const chickenTypes = ["Bone-in", "Boneless"];
+  const defaultChickenType = "Bone-in";
+  const bonelessUpcharge = 2.00;
+  const [desiChickenType, setDesiChickenType] = useState({});
+  const setChickenType = (name, type) => setDesiChickenType(prev => ({ ...prev, [name]: type }));
+  const desiChickenCharge = (name) => (desiChickenType[name] || defaultChickenType) === "Boneless" ? bonelessUpcharge : 0;
   const updateDesiQty = (name, delta) => setDesiCart(prev => { const n = Math.max(0, (prev[name] || 0) + delta); if (!n) { const r = { ...prev }; delete r[name]; return r; } return { ...prev, [name]: n }; });
   const updateNaanQty = (name, delta) => setNaanCart(prev => { const n = Math.max(0, (prev[name] || 0) + delta); if (!n) { const r = { ...prev }; delete r[name]; return r; } return { ...prev, [name]: n }; });
-  const desiTotal = [...Object.entries(desiCart).map(([name, qty]) => ({ name: `${name} (${desiSpiceLevel[name] || defaultSpiceLevel} Spice)`, qty, price: desiItems.find(i => i.name === name)?.price || 0 })), ...Object.entries(naanCart).map(([name, qty]) => ({ name, qty, price: naanItems.find(i => i.name === name)?.price || 0 }))];
+  const desiTotal = [...Object.entries(desiCart).map(([name, qty]) => {
+    const item = desiItems.find(i => i.name === name);
+    const chickenStr = item?.hasChickenOption ? ` (${desiChickenType[name] || defaultChickenType} Chicken)` : "";
+    return { name: `${name}${chickenStr} (${desiSpiceLevel[name] || defaultSpiceLevel} Spice)`, qty, price: (item?.price || 0) + desiChickenCharge(name) };
+  }), ...Object.entries(naanCart).map(([name, qty]) => ({ name, qty, price: naanItems.find(i => i.name === name)?.price || 0 }))];
 
   // ── Starters ─────────────────────────────────────────────────────────────────
   const starterItems = [
@@ -408,10 +418,11 @@ export default function Home() {
     Object.entries(desiCart).forEach(([name, qty]) => {
       const item = desiItems.find(i=>i.name===name);
       if (!item) return;
+      const chickenStr = item.hasChickenOption ? `🍗 ${desiChickenType[name] || defaultChickenType} Chicken | ` : "";
       lines.push({
         id: `desi-${name}`, category:"🍛 Desi",
-        name, details: `🌶️ Spice Level: ${desiSpiceLevel[name] || defaultSpiceLevel}`, notes: "", qty, price: item.price,
-        onRemove: () => { setDesiCart(p => { const r={...p}; delete r[name]; return r; }); setDesiSpiceLevel(p => { const r={...p}; delete r[name]; return r; }); }
+        name, details: `${chickenStr}🌶️ Spice Level: ${desiSpiceLevel[name] || defaultSpiceLevel}`, notes: "", qty, price: item.price + desiChickenCharge(name),
+        onRemove: () => { setDesiCart(p => { const r={...p}; delete r[name]; return r; }); setDesiSpiceLevel(p => { const r={...p}; delete r[name]; return r; }); setDesiChickenType(p => { const r={...p}; delete r[name]; return r; }); }
       });
     });
 
@@ -554,7 +565,7 @@ export default function Home() {
     setPastaToppings({}); setPastaNotes({});
     setMacToppings({}); setMacNotes({});
     setMedCart({}); setMedNotes("");
-    setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiNotes("");
+    setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiChickenType({}); setDesiNotes("");
     setStarterCart({}); setStarterDips({}); setStarterNotes("");
     setSaladCart({}); setSaladDressing({}); setSaladSize({}); setSaladIngredients({}); setSaladNotes("");
     setBeverageCart({}); setBeverageNotes("");
@@ -1017,12 +1028,27 @@ export default function Home() {
                 {desiItems.map(item => {
                   const qty = desiCart[item.name] || 0;
                   const level = desiSpiceLevel[item.name] || defaultSpiceLevel;
+                  const chickenType = desiChickenType[item.name] || defaultChickenType;
+                  const price = item.price + desiChickenCharge(item.name);
                   return (
                     <div key={item.name} className={`bg-zinc-900 rounded-2xl overflow-hidden border-2 transition ${qty>0?"border-yellow-400":"border-zinc-800"}`}>
                       <img src={item.img} alt={item.name} className="h-40 w-full object-cover" />
                       <div className="p-4">
-                        <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">${item.price.toFixed(2)}</span></div>
+                        <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">${price.toFixed(2)}</span></div>
                         <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
+                        {item.hasChickenOption && (
+                          <>
+                            <Label>🍗 Chicken Type</Label>
+                            <div className="flex gap-2 mb-3">
+                              {chickenTypes.map(t => (
+                                <button key={t} onClick={() => setChickenType(item.name, t)}
+                                  className={`flex-1 py-2 rounded-lg text-xs font-bold border-2 transition ${chickenType===t?"bg-green-600 border-green-600 text-white":"bg-zinc-800 border-zinc-700 text-gray-300 hover:border-green-500"}`}>
+                                  {t}{t==="Boneless" ? <span className={`block text-[10px] ${chickenType===t?"text-white":"text-yellow-400"}`}>+$2.00</span> : null}
+                                </button>
+                              ))}
+                            </div>
+                          </>
+                        )}
                         <Label>🌶️ Spice Level</Label>
                         <div className="flex gap-2 mb-3">
                           {spiceLevels.map(lvl => (
@@ -1032,7 +1058,7 @@ export default function Home() {
                             </button>
                           ))}
                         </div>
-                        <QtyControl qty={qty} onDec={() => updateDesiQty(item.name,-1)} onInc={() => updateDesiQty(item.name,1)} price={item.price} accentClass="bg-green-600 hover:bg-green-500" />
+                        <QtyControl qty={qty} onDec={() => updateDesiQty(item.name,-1)} onInc={() => updateDesiQty(item.name,1)} price={price} accentClass="bg-green-600 hover:bg-green-500" />
                       </div>
                     </div>
                   );
@@ -1056,7 +1082,7 @@ export default function Home() {
                 </div>
               </div>
               {desiTotal.length > 0 && (
-                <OrderSummary title="🧾 Desi Order" items={desiTotal} notes={desiNotes} onNotesChange={setDesiNotes} onReset={() => { setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiNotes(""); }} borderColor="border-green-500" totalColor="text-green-400" />
+                <OrderSummary title="🧾 Desi Order" items={desiTotal} notes={desiNotes} onNotesChange={setDesiNotes} onReset={() => { setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiChickenType({}); setDesiNotes(""); }} borderColor="border-green-500" totalColor="text-green-400" />
               )}
             </section>
 
