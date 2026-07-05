@@ -887,13 +887,19 @@ export default function Home() {
                   { img:"bm.jpg", name:"Baked Mostaccioli w/ Mozzarella", desc:"Mostaccioli, marinara, mozzarella baked to perfection." },
                   { img:"cava p.jpg", name:"Alfredo Cavatappi w/ Chicken", desc:"Cavatappi, chicken, mushrooms & spinach, parmesan." },
                   { img:"cava p.jpg", name:"Alfredo Cavatappi", desc:"Cavatappi noodles, alfredo sauce, parmesan & parsley." },
-                  { img:"https://images.unsplash.com/photo-1595295333158-4742f28fbd85?q=80&w=800", name:"Tomato Cream Penne", desc:"Penne in creamy alfredo marinara, parmesan & parsley." },
+                  { img:"COMING_SOON", name:"Tomato Cream Penne", desc:"Penne in creamy alfredo marinara, parmesan & parsley." },
                 ].map(item => {
                   const its = pastaToppings[item.name] || [];
                   const extra = its.length;
                   return (
                     <div key={item.name} className="bg-zinc-900 rounded-2xl overflow-hidden">
-                      <img src={item.img} alt={item.name} className="h-36 w-full object-cover" />
+                      {item.img === "COMING_SOON" ? (
+                        <div className="h-36 w-full bg-zinc-800 flex items-center justify-center">
+                          <p className="text-gray-500 font-black text-sm uppercase tracking-widest">📷 Coming Soon</p>
+                        </div>
+                      ) : (
+                        <img src={item.img} alt={item.name} className="h-36 w-full object-cover" />
+                      )}
                       <div className="p-4">
                         <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">$9.99</span></div>
                         <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
@@ -920,19 +926,25 @@ export default function Home() {
               <SectionHeader emoji="🧀" title="Mac & Cheese" color="text-red-500" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {[
-                  { img:"https://images.unsplash.com/photo-1548340748-6811e9f45f0a?q=80&w=800", name:"Buffalo Chicken Mac", desc:"Chopped chicken, Bermuda onions, spicy sauce, mozzarella & cheddar." },
-                  { img:"https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=800", name:"Double BFT", desc:"Bacon, feta, tomato smothered in mozzarella & cheddar." },
-                  { img:"https://images.unsplash.com/photo-1543339308-43e59d6b73a6?q=80&w=800", name:"Signature\u2019s Choice", desc:"Four toppings of your choice, mozzarella & cheddar." },
-                  { img:"https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=800", name:"BBQ Mac", desc:"BBQ bacon, Bermuda onions, cilantro, mozzarella & cheddar." },
+                  { img:"COMING_SOON", name:"Buffalo Chicken Mac", desc:"Chopped chicken, Bermuda onions, spicy sauce, mozzarella & cheddar." },
+                  { img:"COMING_SOON", name:"Double BFT", desc:"Bacon, feta, tomato smothered in mozzarella & cheddar." },
+                  { img:"COMING_SOON", name:"Signature\u2019s Choice", desc:"Four toppings of your choice, mozzarella & cheddar." },
+                  { img:"COMING_SOON", name:"BBQ Mac", desc:"BBQ bacon, Bermuda onions, cilantro, mozzarella & cheddar." },
                   { img:"mcnc.jpg", name:"Mac n Cheese", desc:"Classic mac smothered in mozzarella & cheddar." },
-                  { img:"https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?q=80&w=800", name:"Alfredo Mac", desc:"Creamy alfredo with fresh mushrooms & spinach." },
-                  { img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800", name:"Burger Mac", desc:"Ground beef, onions, tomato, mushrooms, mozzarella & cheddar." },
+                  { img:"COMING_SOON", name:"Alfredo Mac", desc:"Creamy alfredo with fresh mushrooms & spinach." },
+                  { img:"COMING_SOON", name:"Burger Mac", desc:"Ground beef, onions, tomato, mushrooms, mozzarella & cheddar." },
                 ].map(item => {
                   const its = macToppings[item.name] || [];
                   const extra = its.length;
                   return (
                     <div key={item.name} className="bg-zinc-900 rounded-2xl overflow-hidden">
-                      <img src={item.img} alt={item.name} className="h-36 w-full object-cover" />
+                      {item.img === "COMING_SOON" ? (
+                        <div className="h-36 w-full bg-zinc-800 flex items-center justify-center">
+                          <p className="text-gray-500 font-black text-sm uppercase tracking-widest">📷 Coming Soon</p>
+                        </div>
+                      ) : (
+                        <img src={item.img} alt={item.name} className="h-36 w-full object-cover" />
+                      )}
                       <div className="p-4">
                         <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">$9.99</span></div>
                         <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
