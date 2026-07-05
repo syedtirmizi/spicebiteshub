@@ -221,9 +221,13 @@ export default function Home() {
   const [desiCart, setDesiCart] = useState({});
   const [naanCart, setNaanCart] = useState({});
   const [desiNotes, setDesiNotes] = useState("");
+  const spiceLevels = ["Low", "Medium", "High"];
+  const defaultSpiceLevel = "Medium";
+  const [desiSpiceLevel, setDesiSpiceLevel] = useState({});
+  const setSpiceLevel = (name, level) => setDesiSpiceLevel(prev => ({ ...prev, [name]: level }));
   const updateDesiQty = (name, delta) => setDesiCart(prev => { const n = Math.max(0, (prev[name] || 0) + delta); if (!n) { const r = { ...prev }; delete r[name]; return r; } return { ...prev, [name]: n }; });
   const updateNaanQty = (name, delta) => setNaanCart(prev => { const n = Math.max(0, (prev[name] || 0) + delta); if (!n) { const r = { ...prev }; delete r[name]; return r; } return { ...prev, [name]: n }; });
-  const desiTotal = [...Object.entries(desiCart).map(([name, qty]) => ({ name, qty, price: desiItems.find(i => i.name === name)?.price || 0 })), ...Object.entries(naanCart).map(([name, qty]) => ({ name, qty, price: naanItems.find(i => i.name === name)?.price || 0 }))];
+  const desiTotal = [...Object.entries(desiCart).map(([name, qty]) => ({ name: `${name} (${desiSpiceLevel[name] || defaultSpiceLevel} Spice)`, qty, price: desiItems.find(i => i.name === name)?.price || 0 })), ...Object.entries(naanCart).map(([name, qty]) => ({ name, qty, price: naanItems.find(i => i.name === name)?.price || 0 }))];
 
   // ── Starters ─────────────────────────────────────────────────────────────────
   const starterItems = [
@@ -408,8 +412,8 @@ export default function Home() {
       if (!item) return;
       lines.push({
         id: `desi-${name}`, category:"🍛 Desi",
-        name, details: "", notes: "", qty, price: item.price,
-        onRemove: () => setDesiCart(p => { const r={...p}; delete r[name]; return r; })
+        name, details: `🌶️ Spice Level: ${desiSpiceLevel[name] || defaultSpiceLevel}`, notes: "", qty, price: item.price,
+        onRemove: () => { setDesiCart(p => { const r={...p}; delete r[name]; return r; }); setDesiSpiceLevel(p => { const r={...p}; delete r[name]; return r; }); }
       });
     });
 
@@ -552,7 +556,7 @@ export default function Home() {
     setPastaToppings({}); setPastaNotes({});
     setMacToppings({}); setMacNotes({});
     setMedCart({}); setMedNotes("");
-    setDesiCart({}); setNaanCart({}); setDesiNotes("");
+    setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiNotes("");
     setStarterCart({}); setStarterDips({}); setStarterNotes("");
     setSaladCart({}); setSaladDressing({}); setSaladSize({}); setSaladIngredients({}); setSaladNotes("");
     setBeverageCart({}); setBeverageNotes("");
@@ -1014,12 +1018,22 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                 {desiItems.map(item => {
                   const qty = desiCart[item.name] || 0;
+                  const level = desiSpiceLevel[item.name] || defaultSpiceLevel;
                   return (
                     <div key={item.name} className={`bg-zinc-900 rounded-2xl overflow-hidden border-2 transition ${qty>0?"border-yellow-400":"border-zinc-800"}`}>
                       <img src={item.img} alt={item.name} className="h-40 w-full object-cover" />
                       <div className="p-4">
                         <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">${item.price.toFixed(2)}</span></div>
                         <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
+                        <Label>🌶️ Spice Level</Label>
+                        <div className="flex gap-2 mb-3">
+                          {spiceLevels.map(lvl => (
+                            <button key={lvl} onClick={() => setSpiceLevel(item.name, lvl)}
+                              className={`flex-1 py-2 rounded-lg text-xs font-bold border-2 transition ${level===lvl?"bg-green-600 border-green-600 text-white":"bg-zinc-800 border-zinc-700 text-gray-300 hover:border-green-500"}`}>
+                              {lvl}
+                            </button>
+                          ))}
+                        </div>
                         <QtyControl qty={qty} onDec={() => updateDesiQty(item.name,-1)} onInc={() => updateDesiQty(item.name,1)} price={item.price} accentClass="bg-green-600 hover:bg-green-500" />
                       </div>
                     </div>
@@ -1044,7 +1058,7 @@ export default function Home() {
                 </div>
               </div>
               {desiTotal.length > 0 && (
-                <OrderSummary title="🧾 Desi Order" items={desiTotal} notes={desiNotes} onNotesChange={setDesiNotes} onReset={() => { setDesiCart({}); setNaanCart({}); setDesiNotes(""); }} borderColor="border-green-500" totalColor="text-green-400" />
+                <OrderSummary title="🧾 Desi Order" items={desiTotal} notes={desiNotes} onNotesChange={setDesiNotes} onReset={() => { setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiNotes(""); }} borderColor="border-green-500" totalColor="text-green-400" />
               )}
             </section>
 
