@@ -261,7 +261,7 @@ export default function Home() {
     { img:"chana daal.jpg",  name:"Daal Chana",       price:10.99, desc:"Slow-cooked chana daal with Pakistani spices." },
     { img:"butter chicken.jpg", name:"Butter Chicken", price:14.99, desc:"Chicken in rich buttery tomato cream sauce." },
     { img:"nihari.jpg",      name:"Lamb Nihari",      price:16.99, desc:"Slow-cooked traditional desi curry." },
-    { img:"biryani.jpg",     name:"Signature Biryani", price:15.99, desc:"Aromatic basmati layered with spices & tender meat.", hasChickenOption:true },
+    { img:"biryani.jpg",     name:"Signature Biryani", price:15.99, desc:"Aromatic basmati layered with spices & tender meat." },
   ];
   const naanItems = [
     { img:"pn.png", name:"Plain Naan",  price:1.99, desc:"Soft, fluffy tandoor-baked flatbread." },
@@ -1004,7 +1004,7 @@ export default function Home() {
               {selectedDeal === "twomedium" && (
                 <div className="bg-zinc-900 rounded-2xl p-5">
                   <h4 className="text-base font-black text-yellow-400 mb-1">🍕🍕 Build Your 2 Medium 2 Topping Pizzas</h4>
-                  <p className="text-gray-400 text-sm italic mb-4">Start these pizzas off with Papa Ray&apos;s pizza sauce, mozzarella cheese and your choice of crust &amp; toppings.</p>
+                  <p className="text-gray-400 text-sm italic mb-4">Start these pizzas off with signature pizza sauce, mozzarella cheese and your choice of crust &amp; toppings.</p>
 
                   {twoMediumDealOrders.map((order, index) => {
                     const total = twoMediumDealTotal(order);
