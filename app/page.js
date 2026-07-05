@@ -28,15 +28,15 @@ function SpecialRequests({ value, onChange, placeholder }) {
 
 // ─── Sidebar nav items ────────────────────────────────────────────────────────
 const NAV_SECTIONS = [
+  { id: "section-starters",   label: "🥗 Starters",         group: "starters" },
   { id: "section-pizza",      label: "🍕 Pizza",            group: "american" },
   { id: "section-calzone",    label: "🫓 Calzone",          group: "american" },
   { id: "section-bonein",     label: "🍗 Bone-in Wings",    group: "american" },
   { id: "section-boneless",   label: "🍗 Boneless Wings",   group: "american" },
   { id: "section-pasta",      label: "🍝 Pasta",            group: "american" },
   { id: "section-mac",        label: "🧀 Mac & Cheese",     group: "american" },
-  { id: "section-med",        label: "🌯 Mediterranean",    group: "med"      },
   { id: "section-desi",       label: "🍛 Desi",             group: "desi"     },
-  { id: "section-starters",   label: "🥗 Starters",         group: "extra"    },
+  { id: "section-med",        label: "🌯 Mediterranean",    group: "med"      },
   { id: "section-salads",     label: "🥙 Salads",           group: "extra"    },
   { id: "section-beverages",  label: "🥤 Beverages",        group: "extra"    },
   { id: "section-desserts",   label: "🍮 Desserts",         group: "extra"    },
@@ -44,6 +44,7 @@ const NAV_SECTIONS = [
 ];
 
 const GROUP_LABELS = {
+  starters: { label: "🥗 Starters",         color: "text-pink-400 border-pink-700"    },
   american: { label: "🇺🇸 American",      color: "text-red-400 border-red-700"      },
   med:      { label: "🫒 Mediterranean",   color: "text-yellow-400 border-yellow-700"},
   desi:     { label: "🌿 Desi",            color: "text-green-400 border-green-700"  },
@@ -591,7 +592,7 @@ export default function Home() {
 
   // ── Sidebar component ─────────────────────────────────────────────────────────
   const SidebarNav = () => {
-    const groups = ["american", "med", "desi", "extra", "story"];
+    const groups = ["starters", "american", "desi", "med", "extra", "story"];
     return (
       <nav className="h-full flex flex-col gap-1 py-4 px-2 overflow-y-auto">
         <div className="px-2 mb-3">
@@ -702,6 +703,52 @@ export default function Home() {
 
           {/* ── CONTENT SECTIONS ── */}
           <div className="px-4 md:px-6 py-6 space-y-12 max-w-5xl mx-auto pb-24">
+
+            {/* ═══════════════ STARTERS ════════════════ */}
+            <section id="section-starters">
+              <SectionHeader emoji="🥗" title="Starters" color="text-red-500" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+                {starterItems.map(item => {
+                  const qty = starterCart[item.name] || 0;
+                  const dipMap = starterDips[item.name] || {};
+                  const totalDipQty = Object.values(dipMap).reduce((s, q) => s + q, 0);
+                  const dipCharge = Math.max(0, totalDipQty - freeStarterDips) * starterDipExtraCharge;
+                  const price = item.price + dipCharge;
+                  return (
+                    <div key={item.name} className={`bg-zinc-900 rounded-2xl overflow-hidden border-2 transition ${qty>0?"border-red-500":"border-zinc-800"}`}>
+                      <img src={item.img} alt={item.name} className="h-40 w-full object-cover" />
+                      <div className="p-4">
+                        <div className="flex justify-between items-center mb-1"><h3 className="text-lg font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">${price.toFixed(2)}</span></div>
+                        <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
+                        <Label>🥫 Dipping Sauce <span className="text-gray-400 normal-case font-normal text-[10px] ml-1">({freeStarterDips} free, +$0.50 extra)</span></Label>
+                        <div className="grid grid-cols-3 gap-1 mb-3">
+                          {starterDipOptions.map(d => {
+                            const dQty = dipMap[d] || 0;
+                            const atFree = totalDipQty < freeStarterDips;
+                            return (
+                              <div key={d} className={`rounded-lg border-2 transition ${dQty>0?"border-red-500 bg-zinc-700":"border-zinc-700 bg-zinc-800"}`}>
+                                <div className="flex items-center justify-between px-2 py-1 gap-1">
+                                  <span className={`text-xs font-bold truncate ${dQty>0?"text-white":"text-gray-300"}`}>{d}</span>
+                                  <div className="flex items-center gap-1 shrink-0">
+                                    {dQty > 0 && <button onClick={() => updateStarterDip(item.name,d,-1)} className="bg-zinc-600 text-white w-5 h-5 rounded text-xs font-black">−</button>}
+                                    {dQty > 0 && <span className="text-yellow-400 font-black text-xs w-4 text-center">{dQty}</span>}
+                                    <button onClick={() => updateStarterDip(item.name,d,1)} className={`w-5 h-5 rounded text-xs font-black text-white ${atFree||dQty>0?"bg-red-600":"bg-yellow-600"}`}>+</button>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <QtyControl qty={qty} onDec={() => updateStarterQty(item.name,-1)} onInc={() => updateStarterQty(item.name,1)} price={price} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {starterTotal.length > 0 && (
+                <OrderSummary title="🧾 Starters Order" items={starterTotal} notes={starterNotes} onNotesChange={setStarterNotes} onReset={() => { setStarterCart({}); setStarterNotes(""); }} borderColor="border-red-500" totalColor="text-red-400" />
+              )}
+            </section>
 
             {/* ═══════════════ PIZZA ════════════════ */}
             <section id="section-pizza">
@@ -998,29 +1045,6 @@ export default function Home() {
               </div>
             </section>
 
-            {/* ═══════════════ MEDITERRANEAN ════════════════ */}
-            <section id="section-med">
-              <SectionHeader emoji="🌯" title="Mediterranean Menu" color="text-yellow-400" />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-                {medItems.map(item => {
-                  const qty = medCart[item.name] || 0;
-                  return (
-                    <div key={item.name} className={`bg-zinc-900 rounded-2xl overflow-hidden border-2 transition ${qty>0?"border-yellow-400":"border-zinc-800"}`}>
-                      <img src={item.img} alt={item.name} className="h-40 w-full object-cover" />
-                      <div className="p-4">
-                        <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">${item.price.toFixed(2)}</span></div>
-                        <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
-                        <QtyControl qty={qty} onDec={() => updateMedQty(item.name,-1)} onInc={() => updateMedQty(item.name,1)} price={item.price} accentClass="bg-yellow-500 hover:bg-yellow-400 text-black" />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              {medTotal.length > 0 && (
-                <OrderSummary title="🧾 Mediterranean Order" items={medTotal} notes={medNotes} onNotesChange={setMedNotes} onReset={() => { setMedCart({}); setMedNotes(""); }} borderColor="border-yellow-400" totalColor="text-yellow-400" />
-              )}
-            </section>
-
             {/* ═══════════════ DESI ════════════════ */}
             <section id="section-desi">
               <SectionHeader emoji="🍛" title="Desi Menu" color="text-green-400" />
@@ -1086,49 +1110,33 @@ export default function Home() {
               )}
             </section>
 
-            {/* ═══════════════ STARTERS ════════════════ */}
-            <section id="section-starters">
-              <SectionHeader emoji="🥗" title="Starters" color="text-red-500" />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-                {starterItems.map(item => {
-                  const qty = starterCart[item.name] || 0;
-                  const dipMap = starterDips[item.name] || {};
-                  const totalDipQty = Object.values(dipMap).reduce((s, q) => s + q, 0);
-                  const dipCharge = Math.max(0, totalDipQty - freeStarterDips) * starterDipExtraCharge;
-                  const price = item.price + dipCharge;
+            {/* ═══════════════ MEDITERRANEAN ════════════════ */}
+            <section id="section-med">
+              <SectionHeader emoji="🌯" title="Mediterranean Menu" color="text-yellow-400" />
+              <div className="bg-zinc-800 border-2 border-yellow-500/40 rounded-2xl p-4 mb-5 text-center">
+                <p className="text-yellow-400 font-black text-sm uppercase tracking-widest">🚧 Coming Soon</p>
+                <p className="text-gray-400 text-xs mt-1">This menu is temporarily on hold — check back soon!</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6 opacity-50 pointer-events-none grayscale select-none">
+                {medItems.map(item => {
+                  const qty = medCart[item.name] || 0;
                   return (
-                    <div key={item.name} className={`bg-zinc-900 rounded-2xl overflow-hidden border-2 transition ${qty>0?"border-red-500":"border-zinc-800"}`}>
+                    <div key={item.name} className="relative bg-zinc-900 rounded-2xl overflow-hidden border-2 border-zinc-800">
+                      <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50">
+                        <span className="text-white font-black text-sm uppercase tracking-widest bg-black/70 px-3 py-1 rounded-lg">Coming Soon</span>
+                      </div>
                       <img src={item.img} alt={item.name} className="h-40 w-full object-cover" />
                       <div className="p-4">
-                        <div className="flex justify-between items-center mb-1"><h3 className="text-lg font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">${price.toFixed(2)}</span></div>
+                        <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">${item.price.toFixed(2)}</span></div>
                         <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
-                        <Label>🥫 Dipping Sauce <span className="text-gray-400 normal-case font-normal text-[10px] ml-1">({freeStarterDips} free, +$0.50 extra)</span></Label>
-                        <div className="grid grid-cols-3 gap-1 mb-3">
-                          {starterDipOptions.map(d => {
-                            const dQty = dipMap[d] || 0;
-                            const atFree = totalDipQty < freeStarterDips;
-                            return (
-                              <div key={d} className={`rounded-lg border-2 transition ${dQty>0?"border-red-500 bg-zinc-700":"border-zinc-700 bg-zinc-800"}`}>
-                                <div className="flex items-center justify-between px-2 py-1 gap-1">
-                                  <span className={`text-xs font-bold truncate ${dQty>0?"text-white":"text-gray-300"}`}>{d}</span>
-                                  <div className="flex items-center gap-1 shrink-0">
-                                    {dQty > 0 && <button onClick={() => updateStarterDip(item.name,d,-1)} className="bg-zinc-600 text-white w-5 h-5 rounded text-xs font-black">−</button>}
-                                    {dQty > 0 && <span className="text-yellow-400 font-black text-xs w-4 text-center">{dQty}</span>}
-                                    <button onClick={() => updateStarterDip(item.name,d,1)} className={`w-5 h-5 rounded text-xs font-black text-white ${atFree||dQty>0?"bg-red-600":"bg-yellow-600"}`}>+</button>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                        <QtyControl qty={qty} onDec={() => updateStarterQty(item.name,-1)} onInc={() => updateStarterQty(item.name,1)} price={price} />
+                        <button disabled className="w-full bg-zinc-700 text-gray-400 font-black py-2.5 rounded-xl text-sm cursor-not-allowed">➕ Add to Order</button>
                       </div>
                     </div>
                   );
                 })}
               </div>
-              {starterTotal.length > 0 && (
-                <OrderSummary title="🧾 Starters Order" items={starterTotal} notes={starterNotes} onNotesChange={setStarterNotes} onReset={() => { setStarterCart({}); setStarterNotes(""); }} borderColor="border-red-500" totalColor="text-red-400" />
+              {medTotal.length > 0 && (
+                <OrderSummary title="🧾 Mediterranean Order" items={medTotal} notes={medNotes} onNotesChange={setMedNotes} onReset={() => { setMedCart({}); setMedNotes(""); }} borderColor="border-yellow-400" totalColor="text-yellow-400" />
               )}
             </section>
 
