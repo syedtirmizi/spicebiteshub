@@ -179,7 +179,7 @@ export default function Home() {
   ];
   const specialtyPizzas = [
     { name: "Pepperoni Pizza", img: "pep pizza.jpg", desc: "Signature pizza sauce with pepperoni, melted mozzarella." },
-    { name: "Signature Pizza", img: "signature p.jpg", desc: "Pepperoni, sausage, onion, mushrooms, green peppers & black olive." },
+    { name: "Signature Pizza", img: "signature p.png", desc: "Pepperoni, sausage, onion, mushrooms, green peppers & black olive." },
     { name: "Pepperoni & Sausage", img: "psp.jpg", desc: "Double sausage & double pepperoni, melted mozzarella." },
     { name: "Buffalo Chicken Pizza", img: "buffalo chicken pizza.jpg", desc: "Hot sauce, Bermuda onions & fresh chicken, melted mozzarella." },
     { name: "Italian Sausage Pizza", img: "https://www.thursdaynightpizza.com/wp-content/uploads/2020/11/cut-overhead_STAMP.png", desc: "Sausage, fresh mushroom & green pepper, melted mozzarella." },
