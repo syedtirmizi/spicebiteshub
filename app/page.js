@@ -36,7 +36,7 @@ const NAV_SECTIONS = [
   { id: "section-boneless",   label: "🍗 Boneless Wings",   group: "american" },
   { id: "section-pasta",      label: "🍝 Pasta",            group: "american" },
   { id: "section-mac",        label: "🧀 Mac & Cheese",     group: "american" },
-  { id: "section-desi",       label: "🍛 Desi",             group: "desi"     },
+  { id: "section-desi",       label: "🍛 Pakistani & Indian Cuisine", group: "desi"     },
   { id: "section-med",        label: "🌯 Mediterranean",    group: "med"      },
   { id: "section-salads",     label: "🥙 Salads",           group: "extra"    },
   { id: "section-beverages",  label: "🥤 Beverages",        group: "extra"    },
@@ -50,7 +50,7 @@ const GROUP_LABELS = {
   starters: { label: "🥗 Starters",         color: "text-pink-400 border-pink-700"    },
   american: { label: "🇺🇸 American",      color: "text-red-400 border-red-700"      },
   med:      { label: "🫒 Mediterranean",   color: "text-yellow-400 border-yellow-700"},
-  desi:     { label: "🌿 Desi",            color: "text-green-400 border-green-700"  },
+  desi:     { label: "🌿 Pakistani & Indian Cuisine", color: "text-green-400 border-green-700"  },
   extra:    { label: "🍽️ More",            color: "text-purple-400 border-purple-700"},
   story:    { label: "ℹ️ About Us",         color: "text-orange-400 border-orange-700"},
 };
@@ -179,7 +179,7 @@ export default function Home() {
   ];
   const specialtyPizzas = [
     { name: "Pepperoni Pizza", img: "pep pizza.jpg", desc: "Signature pizza sauce with pepperoni, melted mozzarella." },
-    { name: "Signature Pizza", img: "signature p.png", desc: "Pepperoni, sausage, onion, mushrooms, green peppers & black olive." },
+    { name: "Signature Pizza", img: "signature pizza.jpg", desc: "Pepperoni, sausage, onion, mushrooms, green peppers & black olive." },
     { name: "Pepperoni & Sausage", img: "psp.jpg", desc: "Double sausage & double pepperoni, melted mozzarella." },
     { name: "Buffalo Chicken Pizza", img: "buffalo chicken pizza.jpg", desc: "Hot sauce, Bermuda onions & fresh chicken, melted mozzarella." },
     { name: "Italian Sausage Pizza", img: "https://www.thursdaynightpizza.com/wp-content/uploads/2020/11/cut-overhead_STAMP.png", desc: "Sausage, fresh mushroom & green pepper, melted mozzarella." },
@@ -275,9 +275,10 @@ export default function Home() {
     { img:"korma.jpg",       name:"Chicken Korma",    price:13.99, desc:"Creamy curry with aromatic spices." },
     { img:"karahi.jpg",      name:"Chicken Karahi",   price:14.99, desc:"Fresh tomato-based karahi with ginger & garlic.", hasChickenOption:true },
     { img:"chana daal.jpg",  name:"Daal Chana",       price:10.99, desc:"Slow-cooked chana daal with Pakistani spices." },
-    { img:"butter c.png",    name:"Butter Chicken",   price:14.99, desc:"Chicken in rich buttery tomato cream sauce." },
+    { img:"butter chicken.jpg", name:"Butter Chicken", price:14.99, desc:"Chicken in rich buttery tomato cream sauce." },
     { img:"nihari.jpg",      name:"Lamb Nihari",      price:16.99, desc:"Slow-cooked traditional desi curry." },
     { img:"biryani.jpg",     name:"Signature Biryani", price:15.99, desc:"Aromatic basmati layered with spices & tender meat." },
+    { img:"karahi.jpg",      name:"Special Signature Karahi", price:17.99, desc:"Our chef's signature karahi — rich tomato-ginger blend of spices with tender meat.", hasChickenOption:true },
   ];
   const naanItems = [
     { img:"pn.png", name:"Plain Naan",  price:1.99, desc:"Soft, fluffy tandoor-baked flatbread." },
@@ -287,8 +288,13 @@ export default function Home() {
   const [desiCart, setDesiCart] = useState({});
   const [naanCart, setNaanCart] = useState({});
   const [desiNotes, setDesiNotes] = useState("");
-  const spiceLevels = ["Low", "Medium", "High"];
+  const spiceLevels = ["Mild", "Medium", "Spicy"];
   const defaultSpiceLevel = "Medium";
+  const spiceLevelColors = {
+    Mild:   "bg-yellow-500 border-yellow-500 text-black",
+    Medium: "bg-orange-500 border-orange-500 text-white",
+    Spicy:  "bg-red-600 border-red-600 text-white",
+  };
   const [desiSpiceLevel, setDesiSpiceLevel] = useState({});
   const setSpiceLevel = (name, level) => setDesiSpiceLevel(prev => ({ ...prev, [name]: level }));
   const chickenTypes = ["Bone-in", "Boneless"];
@@ -564,7 +570,7 @@ export default function Home() {
       if (!item) return;
       const chickenStr = item.hasChickenOption ? `🍗 ${desiChickenType[name] || defaultChickenType} Chicken | ` : "";
       lines.push({
-        id: `desi-${name}`, category:"🍛 Desi",
+        id: `desi-${name}`, category:"🍛 Pakistani & Indian",
         name, details: `${chickenStr}🌶️ Spice Level: ${desiSpiceLevel[name] || defaultSpiceLevel}`, notes: desiItemNotes[name] || "", qty, price: item.price + desiChickenCharge(name),
         onRemove: () => { setDesiCart(p => { const r={...p}; delete r[name]; return r; }); setDesiSpiceLevel(p => { const r={...p}; delete r[name]; return r; }); setDesiChickenType(p => { const r={...p}; delete r[name]; return r; }); setDesiItemNotes(p => { const r={...p}; delete r[name]; return r; }); }
       });
@@ -795,7 +801,7 @@ export default function Home() {
           <img src="/logo.png" alt="Spice & Bites Hub" className="h-10 w-auto" />
           <div>
             <p className="text-white font-black text-sm leading-tight">Spice &amp; Bites Hub</p>
-            <p className="text-gray-400 text-[10px]">American • Mediterranean • Desi</p>
+            <p className="text-gray-400 text-[10px]">American • Mediterranean • Pakistani &amp; Indian</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -828,7 +834,7 @@ export default function Home() {
 
           {/* HERO SLIDESHOW */}
           <div className="relative h-48 md:h-64 overflow-hidden flex-shrink-0">
-            {["biryani.jpg","signature p.png","calzone.jpg","butter c.png"].map((src, i) => (
+            {["biryani.jpg","signature pizza.jpg","calzone.jpg","gyro.jpg"].map((src, i) => (
               <div key={src} className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${i === slide ? "opacity-100" : "opacity-0"}`}
                 style={{ backgroundImage: `url('${src}')` }} />
             ))}
@@ -1491,7 +1497,7 @@ export default function Home() {
 
             {/* ═══════════════ DESI ════════════════ */}
             <section id="section-desi">
-              <SectionHeader emoji="🍛" title="Desi Menu" color="text-green-400" />
+              <SectionHeader emoji="🍛" title="Pakistani & Indian Cuisine" color="text-green-400" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                 {desiItems.map(item => {
                   const qty = desiCart[item.name] || 0;
@@ -1521,7 +1527,7 @@ export default function Home() {
                         <div className="flex gap-2 mb-3">
                           {spiceLevels.map(lvl => (
                             <button key={lvl} onClick={() => setSpiceLevel(item.name, lvl)}
-                              className={`flex-1 py-2 rounded-lg text-xs font-bold border-2 transition ${level===lvl?"bg-green-600 border-green-600 text-white":"bg-zinc-800 border-zinc-700 text-gray-300 hover:border-green-500"}`}>
+                              className={`flex-1 py-2 rounded-lg text-xs font-bold border-2 transition ${level===lvl?spiceLevelColors[lvl]:"bg-zinc-800 border-zinc-700 text-gray-300 hover:border-yellow-500"}`}>
                               {lvl}
                             </button>
                           ))}
@@ -1551,7 +1557,7 @@ export default function Home() {
                 </div>
               </div>
               {desiTotal.length > 0 && (
-                <OrderSummary title="🧾 Desi Order" items={desiTotal} notes={desiNotes} onNotesChange={setDesiNotes} onReset={() => { setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiChickenType({}); setDesiItemNotes({}); setDesiNotes(""); }} borderColor="border-green-500" totalColor="text-green-400" />
+                <OrderSummary title="🧾 Pakistani & Indian Order" items={desiTotal} notes={desiNotes} onNotesChange={setDesiNotes} onReset={() => { setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiChickenType({}); setDesiItemNotes({}); setDesiNotes(""); }} borderColor="border-green-500" totalColor="text-green-400" />
               )}
             </section>
 
@@ -1817,7 +1823,7 @@ export default function Home() {
               <div className="bg-zinc-900 rounded-2xl p-5 mb-4">
                 <h3 className="text-lg font-black text-yellow-400 mb-3">Who We Are</h3>
                 <p className="text-gray-300 text-sm leading-relaxed mb-3">Spice &amp; Bites Hub was born from a simple but powerful idea — that great food has no borders. Nestled in the heart of Fishers, Indiana, we are more than just a restaurant.</p>
-                <p className="text-gray-300 text-sm leading-relaxed mb-3">Our founders brought together decades of culinary passion spanning three rich food traditions — American comfort food, Mediterranean freshness, and bold Desi flavors — all under one roof.</p>
+                <p className="text-gray-300 text-sm leading-relaxed mb-3">Our founders brought together decades of culinary passion spanning three rich food traditions — American comfort food, Mediterranean freshness, and bold Pakistani &amp; Indian flavors — all under one roof.</p>
                 <p className="text-gray-300 text-sm leading-relaxed">From the first slice of our hand-tossed Signature Pizza to the last spoonful of slow-cooked Lamb Nihari, every dish carries the heart of our kitchen.</p>
               </div>
 
@@ -1825,7 +1831,7 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 {[
                   { img: "https://images.stockcake.com/public/1/c/4/1c49fbfa-af29-4652-b98e-f2a791d4cd35_large/pizza-dough-toss-stockcake.jpg", title: "Hand-Crafted Pizzas", desc: "Every pizza is hand-tossed, sauced and topped fresh to order. Our dough is made in-house daily." },
-                  { img: "https://images.stockcake.com/public/5/6/f/56f7479e-5d83-4d7f-9744-adb0a161f78b_large/spices-meet-heat-stockcake.jpg", title: "Slow-Cooked Desi Flavors", desc: "Our Nihari simmers for hours. Our Biryani is layered and dum-cooked to perfection. Authentic recipes, made fresh every day." },
+                  { img: "https://images.stockcake.com/public/5/6/f/56f7479e-5d83-4d7f-9744-adb0a161f78b_large/spices-meet-heat-stockcake.jpg", title: "Slow-Cooked Pakistani & Indian Flavors", desc: "Our Nihari simmers for hours. Our Biryani is layered and dum-cooked to perfection. Authentic recipes, made fresh every day." },
                   { img: "https://www.aspicyperspective.com/wp-content/uploads/2023/11/Buffalo-Wing-Sauce-11.jpg", title: "Fresh Wings Daily", desc: "Our bone-in and boneless wings are made fresh daily — never frozen. Tossed in your choice of signature flavors." },
                 ].map(item => (
                   <div key={item.title} className="bg-zinc-900 rounded-2xl overflow-hidden">
@@ -1845,7 +1851,7 @@ export default function Home() {
                   {[
                     { icon: "🍕", title: "American Menu", desc: "Hand-tossed pizzas, calzone wraps, crispy wings, pasta, mac & cheese and starters.", color: "text-red-400" },
                     { icon: "🌯", title: "Mediterranean Menu", desc: "Chicken and lamb gyros, over-rice platters, falafel, Philly cheesesteaks and more.", color: "text-yellow-400" },
-                    { icon: "🍛", title: "Desi Menu", desc: "Slow-cooked Nihari, aromatic Biryani, Chicken Karahi, Butter Chicken, Malai Boti and more.", color: "text-green-400" },
+                    { icon: "🍛", title: "Pakistani & Indian Cuisine", desc: "Slow-cooked Nihari, aromatic Biryani, Chicken Karahi, Butter Chicken, Malai Boti and more.", color: "text-green-400" },
                   ].map(item => (
                     <div key={item.title} className="py-3">
                       <div className="text-4xl mb-2">{item.icon}</div>
@@ -1933,7 +1939,7 @@ export default function Home() {
 
                           {cartLines.filter(l => l.category === cat).map(line => {
                             // Detect if this line supports simple qty changes (non-pizza/wings/calzone)
-                            const isQtyable = ["🌯 Mediterranean","🍛 Desi","🫓 Naan","🥗 Starters","🥙 Salads","🥤 Beverages","🍮 Desserts"].includes(line.category);
+                            const isQtyable = ["🌯 Mediterranean","🍛 Pakistani & Indian","🫓 Naan","🥗 Starters","🥙 Salads","🥤 Beverages","🍮 Desserts"].includes(line.category);
                             const qtyDec = () => line.onRemove(); // will remove at qty=0 via onRemove
                             // Simple qty adjusters for cart-managed items
                             const getQtyChanger = () => {
@@ -1942,7 +1948,7 @@ export default function Home() {
                                 inc: () => updateMedQty(line.id.replace("med-",""), 1),
                                 qty: medCart[line.id.replace("med-","")] || 0
                               };
-                              if (line.category === "🍛 Desi") return {
+                              if (line.category === "🍛 Pakistani & Indian") return {
                                 dec: () => updateDesiQty(line.id.replace("desi-",""), -1),
                                 inc: () => updateDesiQty(line.id.replace("desi-",""), 1),
                                 qty: desiCart[line.id.replace("desi-","")] || 0
@@ -1988,7 +1994,7 @@ export default function Home() {
                               "🍝 Pasta": "section-pasta",
                               "🧀 Mac & Cheese": "section-mac",
                               "🌯 Mediterranean": "section-med",
-                              "🍛 Desi": "section-desi",
+                              "🍛 Pakistani & Indian": "section-desi",
                               "🫓 Naan": "section-desi",
                               "🥗 Starters": "section-starters",
                               "🥙 Salads": "section-salads",
