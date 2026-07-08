@@ -828,7 +828,7 @@ export default function Home() {
 
           {/* HERO SLIDESHOW */}
           <div className="relative h-48 md:h-64 overflow-hidden flex-shrink-0">
-            {["biryani.jpg","signature pizza.jpg","calzone.jpg","gyro.jpg"].map((src, i) => (
+            {["biryani.jpg","signature p.png","calzone.jpg","butter c.png"].map((src, i) => (
               <div key={src} className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${i === slide ? "opacity-100" : "opacity-0"}`}
                 style={{ backgroundImage: `url('${src}')` }} />
             ))}
