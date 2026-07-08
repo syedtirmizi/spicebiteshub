@@ -275,7 +275,7 @@ export default function Home() {
     { img:"korma.jpg",       name:"Chicken Korma",    price:13.99, desc:"Creamy curry with aromatic spices." },
     { img:"karahi.jpg",      name:"Chicken Karahi",   price:14.99, desc:"Fresh tomato-based karahi with ginger & garlic.", hasChickenOption:true },
     { img:"chana daal.jpg",  name:"Daal Chana",       price:10.99, desc:"Slow-cooked chana daal with Pakistani spices." },
-    { img:"butter c.jpg",    name:"Butter Chicken",   price:14.99, desc:"Chicken in rich buttery tomato cream sauce." },
+    { img:"butter c.png",    name:"Butter Chicken",   price:14.99, desc:"Chicken in rich buttery tomato cream sauce." },
     { img:"nihari.jpg",      name:"Lamb Nihari",      price:16.99, desc:"Slow-cooked traditional desi curry." },
     { img:"biryani.jpg",     name:"Signature Biryani", price:15.99, desc:"Aromatic basmati layered with spices & tender meat." },
   ];
