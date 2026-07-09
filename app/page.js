@@ -367,14 +367,14 @@ export default function Home() {
     { img:"chicken ceaser.jpg", name:"Chicken Caesar Salad", desc:"Romaine, parmesan, asiago, croutons, tomatoes & marinated chicken.", baseIngredients:["Romaine Lettuce","Fresh Parmesan","Asiago Cheese","Croutons","Fresh Tomatoes","Marinated Chicken"] },
     { img:"g salad.jpg", name:"Garden Salad", desc:"Romaine, fresh tomatoes, bermuda onions, mushrooms, green peppers.", baseIngredients:["Romaine Lettuce","Fresh Tomatoes","Bermuda Onions","Fresh Mushrooms","Green Peppers"] },
     { img:"salad1.jpg", name:"Classic Caesar Salad", desc:"Romaine, fresh parmesan, asiago, croutons and fresh tomatoes.", baseIngredients:["Romaine Lettuce","Fresh Parmesan","Asiago Cheese","Croutons","Fresh Tomatoes"] },
-    { img:"chopped ch.jpg", name:"Chopped Chicken Salad", desc:"Romaine, mozzarella, bermuda onions, bacon, chicken.", baseIngredients:["Romaine Lettuce","Mozzarella Cheese","Bermuda Onions","Bacon","Chicken"] },
+    { img:"four seasons.jpg", name:"Four Seasons", desc:"Romaine lettuce, Bermuda onions, Canadian bacon, macaroni noodles & fresh tomatoes, topped with asiago cheese.", baseIngredients:["Romaine Lettuce","Bermuda Onions","Canadian Bacon","Macaroni Noodles","Fresh Tomatoes","Asiago Cheese"] },
     { img:"sig salad.jpg", name:"Signature House Salad", desc:"Romaine with artichoke hearts, green peppers, kalamata olives, tomatoes, onions & feta.", baseIngredients:["Romaine Lettuce","Artichoke Hearts","Green Peppers","Kalamata Olives","Fresh Tomatoes","Bermuda Onions","Feta Cheese"] },
   ];
   const saladSizes = [{ label:"Individual", price:9.99 }, { label:"Family", price:19.99 }, { label:"Party", price:32.99 }];
   const saladDressings = ["Ranch","Italian","Caesar","Blue Cheese","Balsamic Vinaigrette","Honey Mustard"];
   const freeDressings = { Individual:2, Family:4, Party:6 };
   const dressingExtraCharge = 1.25;
-  const allSaladIngredients = ["Romaine Lettuce","Fresh Parmesan","Asiago Cheese","Croutons","Fresh Tomatoes","Marinated Chicken","Bermuda Onions","Fresh Mushrooms","Green Peppers","Mozzarella Cheese","Bacon","Chicken","Artichoke Hearts","Kalamata Olives","Feta Cheese"];
+  const allSaladIngredients = ["Romaine Lettuce","Fresh Parmesan","Asiago Cheese","Croutons","Fresh Tomatoes","Marinated Chicken","Bermuda Onions","Fresh Mushrooms","Green Peppers","Mozzarella Cheese","Bacon","Chicken","Artichoke Hearts","Kalamata Olives","Feta Cheese","Canadian Bacon","Macaroni Noodles"];
   const saladExtraCharge = { Individual:0.75, Family:1.75, Party:2.75 };
   const [saladCart, setSaladCart] = useState({});
   const [saladNotes, setSaladNotes] = useState("");
