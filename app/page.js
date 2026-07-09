@@ -179,7 +179,7 @@ export default function Home() {
   ];
   const specialtyPizzas = [
     { name: "Pepperoni Pizza", img: "pep pizza.jpg", desc: "Signature pizza sauce with pepperoni, melted mozzarella." },
-    { name: "Signature Pizza", img: "signature p.png", desc: "Pepperoni, sausage, onion, mushrooms, green peppers & black olive." },
+    { name: "Signature Pizza", img: "signature pizza.jpg", desc: "Pepperoni, sausage, onion, mushrooms, green peppers & black olive." },
     { name: "Pepperoni & Sausage", img: "psp.jpg", desc: "Double sausage & double pepperoni, melted mozzarella." },
     { name: "Buffalo Chicken Pizza", img: "buffalo chicken pizza.jpg", desc: "Hot sauce, Bermuda onions & fresh chicken, melted mozzarella." },
     { name: "Italian Sausage Pizza", img: "https://www.thursdaynightpizza.com/wp-content/uploads/2020/11/cut-overhead_STAMP.png", desc: "Sausage, fresh mushroom & green pepper, melted mozzarella." },
@@ -275,7 +275,7 @@ export default function Home() {
     { img:"korma.jpg",       name:"Chicken Korma",    price:13.99, desc:"Creamy curry with aromatic spices." },
     { img:"karahi.jpg",      name:"Chicken Karahi",   price:14.99, desc:"Fresh tomato-based karahi with ginger & garlic.", hasChickenOption:true },
     { img:"chana daal.jpg",  name:"Daal Chana",       price:10.99, desc:"Slow-cooked chana daal with Pakistani spices." },
-    { img:"butter c.png", name:"Butter Chicken", price:14.99, desc:"Chicken in rich buttery tomato cream sauce." },
+    { img:"butter chicken.jpg", name:"Butter Chicken", price:14.99, desc:"Chicken in rich buttery tomato cream sauce." },
     { img:"nihari.jpg",      name:"Lamb Nihari",      price:16.99, desc:"Slow-cooked traditional desi curry." },
     { img:"biryani.jpg",     name:"Signature Biryani", price:15.99, desc:"Aromatic basmati layered with spices & tender meat." },
     { img:"karahi.jpg",      name:"Special Signature Karahi", price:17.99, desc:"Our chef's signature karahi — rich tomato-ginger blend of spices with tender meat.", hasChickenOption:true },
@@ -314,9 +314,9 @@ export default function Home() {
 
   // ── Starters ─────────────────────────────────────────────────────────────────
   const starterItems = [
-    { img:"https://images.unsplash.com/photo-1548340748-6d2b7d7da280?q=80&w=800", name:"Mozzarella Sticks", price:7.99, desc:"Crispy breaded mozzarella sticks with marinara." },
-    { img:"toasted.jpg",  name:"Toasted Ravioli",    price:8.99, desc:"Breaded ravioli fried crispy, served with marinara." },
-    { img:"poppers.jpg",  name:"Jalapeno Poppers",   price:7.99, desc:"Jalapenos stuffed with cream cheese, breaded & fried." },
+    { img:"https://images.unsplash.com/photo-1548340748-6d2b7d7da280?q=80&w=800", name:"Mozzarella Sticks", price:7.99, desc:"Crispy breaded mozzarella sticks with marinara.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"12 pcs", price:10.99 }] },
+    { img:"toasted.jpg",  name:"Toasted Ravioli",    price:7.99, desc:"Breaded ravioli fried crispy, served with marinara.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"12 pcs", price:10.99 }] },
+    { img:"poppers.jpg",  name:"Jalapeno Poppers",   price:7.99, desc:"Jalapenos stuffed with cream cheese, breaded & fried.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"12 pcs", price:10.99 }] },
     { img:"g knots.jpg",  name:"Garlic Knots",       price:5.99, desc:"Oven-baked dough knots with garlic butter. Marinara." },
     { img:"bosco.jpg",    name:"Bosco Sticks",       price:7.99, desc:"Breadsticks stuffed with mozzarella & garlic butter." },
     { img:"fries1.jpg",   name:"Fries",              price:3.99, desc:"Crispy golden fries, lightly salted." },
@@ -326,20 +326,34 @@ export default function Home() {
   ];
   const [starterCart, setStarterCart] = useState({});
   const [starterNotes, setStarterNotes] = useState("");
+  const [starterSize, setStarterSize] = useState({});
+  const getStarterBasePrice = (item) => {
+    if (!item.sizes) return item.price;
+    const label = starterSize[item.name] || item.sizes[0].label;
+    return item.sizes.find(s => s.label === label)?.price ?? item.sizes[0].price;
+  };
   const updateStarterQty = (name, delta) => setStarterCart(prev => { const n = Math.max(0, (prev[name] || 0) + delta); if (!n) { const r = { ...prev }; delete r[name]; return r; } return { ...prev, [name]: n }; });
   const starterDipOptions = ["Marinara","Ketchup","Ranch"];
   const freeStarterDips = 1;
+  const starterFreeDipsBySize = { "6 pcs": 1, "12 pcs": 2 };
+  const getFreeStarterDips = (item) => item?.sizes ? (starterFreeDipsBySize[starterSize[item.name] || item.sizes[0].label] ?? freeStarterDips) : freeStarterDips;
   const starterDipExtraCharge = 0.50;
   const [starterDips, setStarterDips] = useState({});
   const updateStarterDip = (name, dip, delta) => setStarterDips(prev => { const cur = prev[name] || {}; const qty = Math.max(0, (cur[dip] || 0) + delta); if (!qty) { const n = { ...cur }; delete n[dip]; return { ...prev, [name]: n }; } return { ...prev, [name]: { ...cur, [dip]: qty } }; });
   const starterDipTotalQty = (name) => Object.values(starterDips[name] || {}).reduce((s, q) => s + q, 0);
-  const starterDipCharge = (name) => Math.max(0, starterDipTotalQty(name) - freeStarterDips) * starterDipExtraCharge;
+  const starterDipCharge = (name) => {
+    const item = starterItems.find(i => i.name === name);
+    return Math.max(0, starterDipTotalQty(name) - getFreeStarterDips(item)) * starterDipExtraCharge;
+  };
   const [starterItemNotes, setStarterItemNotes] = useState({});
   const starterTotal = Object.entries(starterCart).map(([name, qty]) => {
-    const base = starterItems.find(i => i.name === name)?.price || 0;
+    const item = starterItems.find(i => i.name === name);
+    const base = getStarterBasePrice(item || {});
+    const sizeLabel = item?.sizes ? (starterSize[name] || item.sizes[0].label) : null;
     const dipMap = starterDips[name] || {};
     const dipStr = Object.entries(dipMap).map(([d, q]) => q > 1 ? `${d} x${q}` : d).join(", ");
-    return { name: dipStr ? `${name} (${dipStr})` : name, qty, price: base + starterDipCharge(name) };
+    const labelParts = [sizeLabel, dipStr].filter(Boolean).join(", ");
+    return { name: labelParts ? `${name} (${labelParts})` : name, qty, price: base + starterDipCharge(name) };
   });
 
   // ── Salads ────────────────────────────────────────────────────────────────────
@@ -646,13 +660,14 @@ export default function Home() {
     Object.entries(starterCart).forEach(([name, qty]) => {
       const item = starterItems.find(i=>i.name===name);
       if (!item) return;
+      const sizeLabel = item.sizes ? (starterSize[name] || item.sizes[0].label) : null;
       const dipMap = starterDips[name] || {};
       const dipStr = Object.entries(dipMap).map(([d,q]) => q>1?`${d} x${q}`:d).join(", ");
       lines.push({
-        id:`starter-${name}`, category:"🥗 Starters", name,
+        id:`starter-${name}`, category:"🥗 Starters", name: sizeLabel ? `${name} (${sizeLabel})` : name,
         details: dipStr ? `🥫 Dip: ${dipStr}` : "",
-        notes: starterItemNotes[name] || "", qty, price: item.price + starterDipCharge(name),
-        onRemove: () => { setStarterCart(p => { const r={...p}; delete r[name]; return r; }); setStarterDips(p => { const r={...p}; delete r[name]; return r; }); setStarterItemNotes(p => { const r={...p}; delete r[name]; return r; }); }
+        notes: starterItemNotes[name] || "", qty, price: getStarterBasePrice(item) + starterDipCharge(name),
+        onRemove: () => { setStarterCart(p => { const r={...p}; delete r[name]; return r; }); setStarterDips(p => { const r={...p}; delete r[name]; return r; }); setStarterItemNotes(p => { const r={...p}; delete r[name]; return r; }); setStarterSize(p => { const r={...p}; delete r[name]; return r; }); }
       });
     });
 
@@ -718,7 +733,7 @@ export default function Home() {
     setMacToppings({}); setMacNotes({});
     setMedCart({}); setMedNotes("");
     setDesiCart({}); setNaanCart({}); setDesiSpiceLevel({}); setDesiChickenType({}); setDesiItemNotes({}); setDesiNotes("");
-    setStarterCart({}); setStarterDips({}); setStarterItemNotes({}); setStarterNotes("");
+    setStarterCart({}); setStarterDips({}); setStarterItemNotes({}); setStarterNotes(""); setStarterSize({});
     setSaladCart({}); setSaladDressing({}); setSaladSize({}); setSaladIngredients({}); setSaladNotes("");
     setBeverageCart({}); setBeverageNotes("");
     setDessertCart({}); setDessertNotes("");
@@ -1087,19 +1102,34 @@ export default function Home() {
                   const qty = starterCart[item.name] || 0;
                   const dipMap = starterDips[item.name] || {};
                   const totalDipQty = Object.values(dipMap).reduce((s, q) => s + q, 0);
-                  const dipCharge = Math.max(0, totalDipQty - freeStarterDips) * starterDipExtraCharge;
-                  const price = item.price + dipCharge;
+                  const freeDipsForItem = getFreeStarterDips(item);
+                  const dipCharge = Math.max(0, totalDipQty - freeDipsForItem) * starterDipExtraCharge;
+                  const selectedSize = item.sizes ? (starterSize[item.name] || item.sizes[0].label) : null;
+                  const price = getStarterBasePrice(item) + dipCharge;
                   return (
                     <div key={item.name} className={`bg-zinc-900 rounded-2xl overflow-hidden border-2 transition ${qty>0?"border-red-500":"border-zinc-800"}`}>
                       <img src={item.img} alt={item.name} className="h-40 w-full object-cover" />
                       <div className="p-4">
                         <div className="flex justify-between items-center mb-1"><h3 className="text-lg font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">${price.toFixed(2)}</span></div>
                         <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
-                        <Label>🥫 Dipping Sauce <span className="text-gray-400 normal-case font-normal text-[10px] ml-1">({freeStarterDips} free, +$0.50 extra)</span></Label>
+                        {item.sizes && (
+                          <>
+                            <Label>🔢 Quantity</Label>
+                            <div className="flex gap-2 mb-3">
+                              {item.sizes.map(s => (
+                                <button key={s.label} onClick={() => setStarterSize(p => ({...p,[item.name]:s.label}))}
+                                  className={`flex-1 py-2 rounded-lg text-xs font-bold border-2 transition ${selectedSize===s.label?"bg-red-600 border-red-600 text-white":"bg-zinc-800 border-zinc-700 text-gray-300 hover:border-red-500"}`}>
+                                  {s.label}<span className={`block text-[10px] ${selectedSize===s.label?"text-white":"text-yellow-400"}`}>${s.price.toFixed(2)}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </>
+                        )}
+                        <Label>🥫 Dipping Sauce <span className="text-gray-400 normal-case font-normal text-[10px] ml-1">({freeDipsForItem} free, +$0.50 extra)</span></Label>
                         <div className="grid grid-cols-3 gap-1 mb-3">
                           {starterDipOptions.map(d => {
                             const dQty = dipMap[d] || 0;
-                            const atFree = totalDipQty < freeStarterDips;
+                            const atFree = totalDipQty < freeDipsForItem;
                             return (
                               <div key={d} className={`rounded-lg border-2 transition ${dQty>0?"border-red-500 bg-zinc-700":"border-zinc-700 bg-zinc-800"}`}>
                                 <div className="flex items-center justify-between px-2 py-1 gap-1">
@@ -1122,7 +1152,7 @@ export default function Home() {
                 })}
               </div>
               {starterTotal.length > 0 && (
-                <OrderSummary title="🧾 Starters Order" items={starterTotal} notes={starterNotes} onNotesChange={setStarterNotes} onReset={() => { setStarterCart({}); setStarterDips({}); setStarterItemNotes({}); setStarterNotes(""); }} borderColor="border-red-500" totalColor="text-red-400" />
+                <OrderSummary title="🧾 Starters Order" items={starterTotal} notes={starterNotes} onNotesChange={setStarterNotes} onReset={() => { setStarterCart({}); setStarterDips({}); setStarterItemNotes({}); setStarterNotes(""); setStarterSize({}); }} borderColor="border-red-500" totalColor="text-red-400" />
               )}
             </section>
 
