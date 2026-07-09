@@ -748,7 +748,7 @@ export default function Home() {
     setStarterCart({}); setStarterDips({}); setStarterItemNotes({}); setStarterNotes(""); setStarterSize({});
     setSaladCart({}); setSaladDressing({}); setSaladSize({}); setSaladIngredients({}); setSaladNotes("");
     setBeverageCart({}); setBeverageNotes("");
-    setDessertCart({}); setDessertNotes("");
+    setDessertCart({}); setDessertNotes(""); setDessertSize({});
     setBoneInOrder({ ...emptyWingOrder });
     setBonelessOrder({ ...emptyWingOrder });
     setCustomerInfo({ name:"", phone:"", address:"", city:"", zip:"", notes:"" });
@@ -1799,20 +1799,35 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                 {dessertItems.map(item => {
                   const qty = dessertCart[item.name] || 0;
+                  const selectedSize = item.sizes ? (dessertSize[item.name] || item.sizes[0].label) : null;
+                  const price = getDessertBasePrice(item);
                   return (
                     <div key={item.name} className={`bg-zinc-900 rounded-2xl overflow-hidden border-2 transition ${qty>0?"border-yellow-500":"border-zinc-800"}`}>
                       <img src={item.img} alt={item.name} className="h-40 w-full object-cover" />
                       <div className="p-4">
-                        <div className="flex justify-between items-center mb-1"><h3 className="text-lg font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">${item.price.toFixed(2)}</span></div>
+                        <div className="flex justify-between items-center mb-1"><h3 className="text-lg font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">${price.toFixed(2)}</span></div>
                         <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
-                        <QtyControl qty={qty} onDec={() => updateDessertQty(item.name,-1)} onInc={() => updateDessertQty(item.name,1)} price={item.price} accentClass="bg-yellow-500 hover:bg-yellow-400 text-black" />
+                        {item.sizes && (
+                          <>
+                            <Label>🔢 Quantity</Label>
+                            <div className="flex gap-2 mb-3">
+                              {item.sizes.map(s => (
+                                <button key={s.label} onClick={() => setDessertSize(p => ({...p,[item.name]:s.label}))}
+                                  className={`flex-1 py-2 rounded-lg text-xs font-bold border-2 transition ${selectedSize===s.label?"bg-yellow-500 border-yellow-500 text-black":"bg-zinc-800 border-zinc-700 text-gray-300 hover:border-yellow-500"}`}>
+                                  {s.label}<span className={`block text-[10px] ${selectedSize===s.label?"text-black":"text-yellow-400"}`}>${s.price.toFixed(2)}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </>
+                        )}
+                        <QtyControl qty={qty} onDec={() => updateDessertQty(item.name,-1)} onInc={() => updateDessertQty(item.name,1)} price={price} accentClass="bg-yellow-500 hover:bg-yellow-400 text-black" />
                       </div>
                     </div>
                   );
                 })}
               </div>
               {dessertTotal.length > 0 && (
-                <OrderSummary title="🍮 Dessert Order" items={dessertTotal} notes={dessertNotes} onNotesChange={setDessertNotes} onReset={() => { setDessertCart({}); setDessertNotes(""); }} borderColor="border-yellow-500" totalColor="text-yellow-400" />
+                <OrderSummary title="🍮 Dessert Order" items={dessertTotal} notes={dessertNotes} onNotesChange={setDessertNotes} onReset={() => { setDessertCart({}); setDessertNotes(""); setDessertSize({}); }} borderColor="border-yellow-500" totalColor="text-yellow-400" />
               )}
             </section>
 
