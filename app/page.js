@@ -77,7 +77,7 @@ const bakeOptions = ["Lite Bake", "Well Done"];
 const cutOptions = ["Pie Cut", "Square Cut", "Do Not Cut", "Double Cut"];
 
 export default function Home() {
-  const heroSlides = ["biryani.jpg", "signature pizza.jpg", "calzone.jpg", "gyro.jpg"];
+  const heroSlides = ["biryani.jpg", "signature-pizza.png", "calzone.jpg", "gyro.jpg"];
   const [slide, setSlide] = useState(0);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("section-pizza");
@@ -179,7 +179,7 @@ export default function Home() {
   ];
   const specialtyPizzas = [
     { name: "Pepperoni Pizza", img: "pep pizza.jpg", desc: "Signature pizza sauce with pepperoni, melted mozzarella." },
-    { name: "Signature Pizza", img: "signature pizza.jpg", desc: "Pepperoni, sausage, onion, mushrooms, green peppers & black olive." },
+    { name: "Signature Pizza", img: "signature-pizza.png", desc: "Pepperoni, sausage, onion, mushrooms, green peppers & black olive." },
     { name: "Pepperoni & Sausage", img: "psp.jpg", desc: "Double sausage & double pepperoni, melted mozzarella." },
     { name: "Buffalo Chicken Pizza", img: "buffalo chicken pizza.jpg", desc: "Hot sauce, Bermuda onions & fresh chicken, melted mozzarella." },
     { name: "Italian Sausage Pizza", img: "https://www.thursdaynightpizza.com/wp-content/uploads/2020/11/cut-overhead_STAMP.png", desc: "Sausage, fresh mushroom & green pepper, melted mozzarella." },
@@ -187,6 +187,11 @@ export default function Home() {
     { name: "Vegetarian Pizza", img: "veg p.jpg", desc: "Onion, mushrooms, green peppers & spinach, melted mozzarella." },
     { name: "Chicken Tikka Pizza", img: "https://flavorry.com/wp-content/uploads/2025/09/teamgreen1001_httpss.mj_.run9zT8Sikxhn8_An_ultra-close-up_AND__ecff3b71-758f-4b56-a1ea-7797418d9935_1.png", desc: "Garlic sauce, marinated chicken, melted mozzarella." },
     { name: "Lamb Pizza", img: "lamb pizza.jpg", desc: "Garlic sauce, lamb, melted mozzarella." },
+    { name: "Tropical Hawaiian Pizza", img: "tropical hawaiian.jpg", desc: "Signature pizza sauce, Canadian ham, sweet pineapple, melted mozzarella." },
+    { name: "Guest's Choice Pizza", img: "guests choice.jpg", desc: "Choose any four toppings your way, melted mozzarella." },
+    { name: "Tuscan Delight Pizza", img: "tuscan delight.jpg", desc: "Spinach, sun-dried tomatoes, fresh garlic & feta cheese, melted mozzarella." },
+    { name: "Chicken Club Pizza", img: "chicken club pizza.jpg", desc: "Chicken, smoked bacon, fresh tomatoes & Bermuda onions, melted mozzarella." },
+    { name: "BBQ Chicken Pizza", img: "bbq chicken pizza.jpg", desc: "BBQ sauce, chicken, Bermuda onions, melted mozzarella." },
   ];
   const emptyBuild = { size: "", crust: "", isHalf: false, toppings: [], half1Toppings: [], half2Toppings: [], sauceType: "", sauceAmount: "", bake: "", cut: "", notes: "" };
   const [buildOrders, setBuildOrders] = useState([{ ...emptyBuild }]);
@@ -275,7 +280,7 @@ export default function Home() {
     { img:"korma.jpg",       name:"Chicken Korma",    price:13.99, desc:"Creamy curry with aromatic spices." },
     { img:"karahi.jpg",      name:"Chicken Karahi",   price:14.99, desc:"Fresh tomato-based karahi with ginger & garlic.", hasChickenOption:true },
     { img:"chana daal.jpg",  name:"Daal Chana",       price:10.99, desc:"Slow-cooked chana daal with Pakistani spices." },
-    { img:"butter chicken.jpg", name:"Butter Chicken", price:14.99, desc:"Chicken in rich buttery tomato cream sauce." },
+    { img:"butter-chicken.png", name:"Butter Chicken", price:14.99, desc:"Chicken in rich buttery tomato cream sauce." },
     { img:"nihari.jpg",      name:"Lamb Nihari",      price:16.99, desc:"Slow-cooked traditional desi curry." },
     { img:"biryani.jpg",     name:"Signature Biryani", price:15.99, desc:"Aromatic basmati layered with spices & tender meat." },
     { img:"karahi.jpg",      name:"Special Signature Karahi", price:17.99, desc:"Our chef's signature karahi — rich tomato-ginger blend of spices with tender meat.", hasChickenOption:true },
@@ -861,7 +866,7 @@ export default function Home() {
 
           {/* HERO SLIDESHOW */}
           <div className="relative h-48 md:h-64 overflow-hidden flex-shrink-0">
-            {["biryani.jpg","signature pizza.jpg","calzone.jpg","gyro.jpg"].map((src, i) => (
+            {["biryani.jpg","signature-pizza.png","calzone.jpg","gyro.jpg"].map((src, i) => (
               <div key={src} className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${i === slide ? "opacity-100" : "opacity-0"}`}
                 style={{ backgroundImage: `url('${src}')` }} />
             ))}
