@@ -404,17 +404,27 @@ export default function Home() {
 
   // ── Desserts ──────────────────────────────────────────────────────────────────
   const dessertItems = [
-    { img:"g j.jpg",     name:"Gulab Jamun",    price:4.99, desc:"Soft milk-solid dumplings in rose-scented sugar syrup." },
+    { img:"g j.jpg",     name:"Gulab Jamun",    price:5.99, desc:"3 pcs — soft milk-solid dumplings in rose-scented sugar syrup." },
     { img:"k.jpg",       name:"Kulfi",          price:5.99, desc:"Rich South Asian frozen dessert with saffron & pistachios." },
-    { img:"cannoli.jpg", name:"Cannoli",        price:4.99, desc:"Fried pastry tube with sweet cream ricotta filling." },
-    { img:"bk.jpg",      name:"Baklava",        price:4.99, desc:"Crispy phyllo with pistachios & walnuts, honey syrup." },
-    { img:"c cake.jpg",  name:"Cheesecake",     price:5.99, desc:"New York Style with Graham Cracker Crust." },
+    { img:"cannoli.jpg", name:"Cannoli",        desc:"Fried pastry tube with sweet cream ricotta filling.", sizes:[{ label:"1 pc", price:4.99 }, { label:"2 pcs", price:5.99 }] },
+    { img:"bk.jpg",      name:"Baklava",        price:5.99, desc:"3 pcs — crispy phyllo with pistachios & walnuts, honey syrup." },
+    { img:"c cake.jpg",  name:"Cheesecake",     price:4.99, desc:"New York Style with Graham Cracker Crust." },
     { img:"ch cake.jpg", name:"Chocolate Cake", price:5.99, desc:"Layers of chocolate cake filled & topped with fudge." },
   ];
   const [dessertCart, setDessertCart] = useState({});
   const [dessertNotes, setDessertNotes] = useState("");
+  const [dessertSize, setDessertSize] = useState({});
+  const getDessertBasePrice = (item) => {
+    if (!item.sizes) return item.price;
+    const label = dessertSize[item.name] || item.sizes[0].label;
+    return item.sizes.find(s => s.label === label)?.price ?? item.sizes[0].price;
+  };
   const updateDessertQty = (name, delta) => setDessertCart(prev => { const n = Math.max(0, (prev[name] || 0) + delta); if (!n) { const r = { ...prev }; delete r[name]; return r; } return { ...prev, [name]: n }; });
-  const dessertTotal = Object.entries(dessertCart).map(([name, qty]) => ({ name, qty, price: dessertItems.find(i => i.name === name)?.price || 0 }));
+  const dessertTotal = Object.entries(dessertCart).map(([name, qty]) => {
+    const item = dessertItems.find(i => i.name === name);
+    const sizeLabel = item?.sizes ? (dessertSize[name] || item.sizes[0].label) : null;
+    return { name: sizeLabel ? `${name} (${sizeLabel})` : name, qty, price: getDessertBasePrice(item || {}) };
+  });
 
   // ── Cart / Checkout state ─────────────────────────────────────────────────────
   const [cartOpen, setCartOpen] = useState(false);
@@ -702,7 +712,8 @@ export default function Home() {
     Object.entries(dessertCart).forEach(([name, qty]) => {
       const item = dessertItems.find(i=>i.name===name);
       if (!item) return;
-      lines.push({ id:`des-${name}`, category:"🍮 Desserts", name, details:"", notes:"", qty, price:item.price, onRemove: () => setDessertCart(p => { const r={...p}; delete r[name]; return r; }) });
+      const sizeLabel = item.sizes ? (dessertSize[name] || item.sizes[0].label) : null;
+      lines.push({ id:`des-${name}`, category:"🍮 Desserts", name: sizeLabel ? `${name} (${sizeLabel})` : name, details:"", notes:"", qty, price:getDessertBasePrice(item), onRemove: () => { setDessertCart(p => { const r={...p}; delete r[name]; return r; }); setDessertSize(p => { const r={...p}; delete r[name]; return r; }); } });
     });
     if (dessertNotes) lines.filter(l=>l.category==="🍮 Desserts").forEach(l=>l.notes=dessertNotes);
 
