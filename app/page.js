@@ -182,7 +182,7 @@ export default function Home() {
     { name: "Signature Pizza", img: "signature p.png", desc: "Pepperoni, sausage, onion, mushrooms, green peppers & black olive." },
     { name: "Double Sausage & Double Pepperoni", img: "psp.jpg", desc: "Double sausage & double pepperoni, melted mozzarella." },
     { name: "Buffalo Chicken Pizza", img: "buffalo chicken pizza.jpg", desc: "Hot sauce, Bermuda onions & fresh chicken, melted mozzarella." },
-    { name: "Italian Sausage Pizza", img: "italian s.png", desc: "Sausage, fresh mushroom & green pepper, melted mozzarella." },
+    { name: "Special Sausage Pizza", img: "spec s p.png", desc: "Sausage, fresh mushroom & green pepper, melted mozzarella." },
     { name: "Meat Lovers Pizza", img: "meat lovers.jpg", desc: "Sausage, pepperoni, Canadian bacon, melted mozzarella." },
     { name: "Vegetarian Pizza", img: "veg p.jpg", desc: "Onion, mushrooms, green peppers & spinach, melted mozzarella." },
     { name: "Chicken Tikka Pizza", img: "https://flavorry.com/wp-content/uploads/2025/09/teamgreen1001_httpss.mj_.run9zT8Sikxhn8_An_ultra-close-up_AND__ecff3b71-758f-4b56-a1ea-7797418d9935_1.png", desc: "Garlic sauce, marinated chicken, melted mozzarella." },
@@ -1502,7 +1502,7 @@ export default function Home() {
               <SectionHeader emoji="🧀" title="Mac & Cheese" color="text-red-500" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {[
-                  { img:"COMING_SOON", name:"Buffalo Chicken Mac", desc:"Chopped chicken, Bermuda onions, spicy sauce, mozzarella & cheddar." },
+                  { img:"buffalo c m.png", name:"Buffalo Chicken Mac", desc:"Chopped chicken, Bermuda onions, spicy sauce, mozzarella & cheddar." },
                   { img:"COMING_SOON", name:"Double BFT", desc:"Bacon, feta, tomato smothered in mozzarella & cheddar." },
                   { img:"COMING_SOON", name:"Customer's Choice", desc:"Four toppings of your choice, mozzarella & cheddar." },
                   { img:"COMING_SOON", name:"BBQ Mac", desc:"BBQ bacon, Bermuda onions, cilantro, mozzarella & cheddar." },
