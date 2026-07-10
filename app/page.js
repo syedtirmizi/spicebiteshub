@@ -135,7 +135,7 @@ export default function Home() {
     { pcs: "25 pcs", desc: "2 Flavors & 2 Dips", price: 25.99, maxFlavors: 2, maxDips: 2 },
     { pcs: "35 pcs", desc: "3 Flavors & 3 Dips", price: 35.99, maxFlavors: 3, maxDips: 3 },
     { pcs: "50 pcs", desc: "5 Flavors & 5 Dips", price: 50.99, maxFlavors: 5, maxDips: 5 },
-    { pcs: "75 pcs", desc: "6 Flavors & 7 Dips", price: 75.99, maxFlavors: 6, maxDips: 7 },
+    { pcs: "75 pcs", desc: "7 Flavors & 7 Dips", price: 75.99, maxFlavors: 7, maxDips: 7 },
   ];
   const emptyWingOrder = { size: null, flavors: [], dips: {}, notes: "" };
   const [boneInOrder, setBoneInOrder] = useState({ ...emptyWingOrder });
@@ -162,14 +162,14 @@ export default function Home() {
 
   // ── Pizza state ─────────────────────────────────────────────────────────────
   const buildSizes = [
-    { size: '10"', price: "$8.99" }, { size: '12"', price: "$10.99" },
-    { size: '14"', price: "$12.99" }, { size: '16"', price: "$14.99" }, { size: '24"', price: "$24.99" },
+    { size: '10"', price: "$9.99" }, { size: '12"', price: "$11.99" },
+    { size: '14"', price: "$13.99" }, { size: '16"', price: "$15.99" }, { size: '24"', price: "$25.99" },
   ];
   const specSizes = [
-    { size: '10"', price: "$12.99" }, { size: '12"', price: "$14.99" },
-    { size: '14"', price: "$16.99" }, { size: '16"', price: "$18.99" },
+    { size: '10"', price: "$11.99" }, { size: '12"', price: "$12.99" },
+    { size: '14"', price: "$15.99" }, { size: '16"', price: "$17.99" },
   ];
-  const toppingPrices = { '10"': "$1.75", '12"': "$2.25", '14"': "$2.75", '16"': "$3.25", '24"': "$4.00" };
+  const toppingPrices = { '10"': "$1.25", '12"': "$1.75", '14"': "$2.25", '16"': "$2.75", '24"': "$3.75" };
   const crustTypes = ["Thin Crust", "Traditional"];
   const toppings = [
     "Artichoke Hearts","Asiago Cheese","Banana Peppers","BBQ Sauce","Bermuda Onions","Black Olives",
@@ -319,9 +319,9 @@ export default function Home() {
 
   // ── Starters ─────────────────────────────────────────────────────────────────
   const starterItems = [
-    { img:"https://images.unsplash.com/photo-1548340748-6d2b7d7da280?q=80&w=800", name:"Mozzarella Sticks", price:7.99, desc:"Crispy breaded mozzarella sticks with marinara.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"12 pcs", price:10.99 }] },
-    { img:"toasted.jpg",  name:"Toasted Ravioli",    price:7.99, desc:"Breaded ravioli fried crispy, served with marinara.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"12 pcs", price:10.99 }] },
-    { img:"poppers.jpg",  name:"Jalapeno Poppers",   price:7.99, desc:"Jalapenos stuffed with cream cheese, breaded & fried.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"12 pcs", price:10.99 }] },
+    { img:"https://images.unsplash.com/photo-1548340748-6d2b7d7da280?q=80&w=800", name:"Mozzarella Sticks", price:7.49, desc:"Crispy breaded mozzarella sticks with marinara.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"12 pcs", price:10.99 }] },
+    { img:"toasted.jpg",  name:"Toasted Ravioli",    price:7.49, desc:"Breaded ravioli fried crispy, served with marinara.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"12 pcs", price:10.99 }] },
+    { img:"poppers.jpg",  name:"Jalapeno Poppers",   price:7.49, desc:"Jalapenos stuffed with cream cheese, breaded & fried.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"12 pcs", price:10.99 }] },
     { img:"https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800", name:"Chicken Nuggets", price:6.99, desc:"Crispy golden breaded chicken nuggets.", sizes:[{ label:"6 pcs", price:6.99 }, { label:"12 pcs", price:10.99 }] },
     { img:"g knots.jpg",  name:"Garlic Knots",       price:5.99, desc:"Oven-baked dough knots with garlic butter. Marinara." },
     { img:"bosco.jpg",    name:"Bosco Sticks",       price:7.99, desc:"Breadsticks stuffed with mozzarella & garlic butter." },
@@ -388,19 +388,19 @@ export default function Home() {
 
   // ── Beverages ─────────────────────────────────────────────────────────────────
   const beverageItems = [
-    { name:"Coke (Can)", price:1.99, category:"🥤 Single Cans" }, { name:"Diet Coke (Can)", price:1.99, category:"🥤 Single Cans" },
-    { name:"Coke Zero (Can)", price:1.99, category:"🥤 Single Cans" }, { name:"Sprite (Can)", price:1.99, category:"🥤 Single Cans" },
-    { name:"Sprite Zero (Can)", price:1.99, category:"🥤 Single Cans" }, { name:"Pepsi (Can)", price:1.99, category:"🥤 Single Cans" },
-    { name:"Pepsi Zero (Can)", price:1.99, category:"🥤 Single Cans" }, { name:"Dr Pepper (Can)", price:1.99, category:"🥤 Single Cans" },
-    { name:"Mountain Dew (Can)", price:1.99, category:"🥤 Single Cans" }, { name:"Fanta (Can)", price:1.99, category:"🥤 Single Cans" },
-    { name:"Root Beer (Can)", price:1.99, category:"🥤 Single Cans" },
+    { name:"Coke (Can)", price:1.79, category:"🥤 Single Cans" }, { name:"Diet Coke (Can)", price:1.79, category:"🥤 Single Cans" },
+    { name:"Coke Zero (Can)", price:1.79, category:"🥤 Single Cans" }, { name:"Sprite (Can)", price:1.79, category:"🥤 Single Cans" },
+    { name:"Sprite Zero (Can)", price:1.79, category:"🥤 Single Cans" }, { name:"Pepsi (Can)", price:1.79, category:"🥤 Single Cans" },
+    { name:"Pepsi Zero (Can)", price:1.79, category:"🥤 Single Cans" }, { name:"Dr Pepper (Can)", price:1.79, category:"🥤 Single Cans" },
+    { name:"Mountain Dew (Can)", price:1.79, category:"🥤 Single Cans" }, { name:"Fanta (Can)", price:1.79, category:"🥤 Single Cans" },
+    { name:"Root Beer (Can)", price:1.79, category:"🥤 Single Cans" },
     { name:"Apple Juice (Bottle)", price:2.49, category:"🧃 Juices" }, { name:"Orange Juice (Bottle)", price:2.49, category:"🧃 Juices" },
     { name:"Pineapple Juice (Bottle)", price:2.49, category:"🧃 Juices" },
-    { name:"Coke 2 Liter", price:4.99, category:"🍾 2 Liter Bottles" }, { name:"Sprite 2 Liter", price:4.99, category:"🍾 2 Liter Bottles" },
-    { name:"Diet Coke 2 Liter", price:4.99, category:"🍾 2 Liter Bottles" }, { name:"Sprite Zero 2 Liter", price:4.99, category:"🍾 2 Liter Bottles" },
-    { name:"Pepsi 2 Liter", price:4.99, category:"🍾 2 Liter Bottles" }, { name:"Diet Pepsi 2 Liter", price:4.99, category:"🍾 2 Liter Bottles" },
-    { name:"Dr Pepper 2 Liter", price:4.99, category:"🍾 2 Liter Bottles" }, { name:"Mountain Dew 2 Liter", price:4.99, category:"🍾 2 Liter Bottles" },
-    { name:"Any 6-Pack Cans", price:6.99, category:"📦 6-Pack" },
+    { name:"Coke 2 Liter", price:5.49, category:"🍾 2 Liter Bottles" }, { name:"Sprite 2 Liter", price:5.49, category:"🍾 2 Liter Bottles" },
+    { name:"Diet Coke 2 Liter", price:5.49, category:"🍾 2 Liter Bottles" }, { name:"Sprite Zero 2 Liter", price:5.49, category:"🍾 2 Liter Bottles" },
+    { name:"Pepsi 2 Liter", price:5.49, category:"🍾 2 Liter Bottles" }, { name:"Diet Pepsi 2 Liter", price:5.49, category:"🍾 2 Liter Bottles" },
+    { name:"Dr Pepper 2 Liter", price:5.49, category:"🍾 2 Liter Bottles" }, { name:"Mountain Dew 2 Liter", price:5.49, category:"🍾 2 Liter Bottles" },
+    { name:"Any 6-Pack Cans", price:8.99, category:"📦 6-Pack" },
   ];
   const [beverageCart, setBeverageCart] = useState({});
   const [beverageNotes, setBeverageNotes] = useState("");
@@ -563,7 +563,7 @@ export default function Home() {
     // Calzones
     Object.entries(calzoneToppings).forEach(([name, tops]) => {
       if (!tops || tops.length === 0) return;
-      const price = 11.99 + tops.length * 0.75;
+      const price = 10.99 + tops.length * 0.99;
       lines.push({
         id: `cal-${name}`, category:"🫓 Calzone",
         name, details: tops.length > 0 ? `Extra: ${tops.join(", ")}` : "",
@@ -577,7 +577,7 @@ export default function Home() {
       if (lines.find(l => l.id === `cal-${name}`)) return;
       lines.push({
         id: `cal-${name}`, category:"🫓 Calzone",
-        name, details: "", notes: note, qty: 1, price: 11.99,
+        name, details: "", notes: note, qty: 1, price: 10.99,
         onRemove: () => setCalzoneNotes(p => ({ ...p, [name]: "" }))
       });
     });
@@ -620,7 +620,7 @@ export default function Home() {
 
     // Pasta
     Object.entries(pastaToppings).forEach(([name, tops]) => {
-      const price = 9.99 + tops.length;
+      const price = 12.99 + tops.length;
       lines.push({
         id: `pasta-${name}`, category:"🍝 Pasta",
         name, details: tops.length > 0 ? `Extra: ${tops.join(", ")}` : "",
@@ -631,12 +631,12 @@ export default function Home() {
     Object.entries(pastaNotes).forEach(([name, note]) => {
       if (!note) return;
       if (lines.find(l => l.id === `pasta-${name}`)) return;
-      lines.push({ id:`pasta-${name}`, category:"🍝 Pasta", name, details:"", notes:note, qty:1, price:9.99, onRemove: () => setPastaNotes(p=>({...p,[name]:""})) });
+      lines.push({ id:`pasta-${name}`, category:"🍝 Pasta", name, details:"", notes:note, qty:1, price:12.99, onRemove: () => setPastaNotes(p=>({...p,[name]:""})) });
     });
 
     // Mac & Cheese
     Object.entries(macToppings).forEach(([name, tops]) => {
-      const price = 9.99 + tops.length;
+      const price = 10.99 + tops.length;
       lines.push({
         id: `mac-${name}`, category:"🧀 Mac & Cheese",
         name, details: tops.length > 0 ? `Extra: ${tops.join(", ")}` : "",
@@ -647,7 +647,7 @@ export default function Home() {
     Object.entries(macNotes).forEach(([name, note]) => {
       if (!note) return;
       if (lines.find(l => l.id === `mac-${name}`)) return;
-      lines.push({ id:`mac-${name}`, category:"🧀 Mac & Cheese", name, details:"", notes:note, qty:1, price:9.99, onRemove: () => setMacNotes(p=>({...p,[name]:""})) });
+      lines.push({ id:`mac-${name}`, category:"🧀 Mac & Cheese", name, details:"", notes:note, qty:1, price:10.99, onRemove: () => setMacNotes(p=>({...p,[name]:""})) });
     });
 
     // Wings
@@ -1405,10 +1405,10 @@ export default function Home() {
                 {[
                   { img:"calzone.jpg",  name:"Chicken Club",      desc:"Pizza sauce, chicken, bacon, tomatoes & Bermuda onions." },
                   { img:"calzon1.jpg",  name:"Vegetarian",        desc:"Pizza sauce, onions, mushrooms, green peppers & spinach." },
-                  { img:"calzon1.jpg",  name:"Signature\u2019s Choice", desc:"Choose any four ingredients your way." },
-                  { img:"calzon1.jpg",  name:"Signature Wrap",    desc:"Pepperoni, sausage, onion, mushrooms, peppers & black olive." },
-                  { img:"calzone.jpg",  name:"Cheese Wrap",       desc:"Signature pizza sauce & melted mozzarella." },
-                  { img:"calzone.jpg",  name:"Italian Sausage Wrap", desc:"Sausage, fresh mushroom & green pepper, mozzarella." },
+                  { img:"calzon1.jpg",  name:"Customer's Choice", desc:"Choose any four ingredients your way." },
+                  { img:"calzon1.jpg",  name:"Signature",    desc:"Pepperoni, sausage, onion, mushrooms, peppers & black olive." },
+                  { img:"calzone.jpg",  name:"Cheese",       desc:"Signature pizza sauce & melted mozzarella." },
+                  { img:"calzone.jpg",  name:"Italian Sausage", desc:"Sausage, fresh mushroom & green pepper, mozzarella." },
                 ].map(item => {
                   const itemToppings = calzoneToppings[item.name] || [];
                   const extra = itemToppings.length * 0.75;
@@ -1504,7 +1504,7 @@ export default function Home() {
                 {[
                   { img:"COMING_SOON", name:"Buffalo Chicken Mac", desc:"Chopped chicken, Bermuda onions, spicy sauce, mozzarella & cheddar." },
                   { img:"COMING_SOON", name:"Double BFT", desc:"Bacon, feta, tomato smothered in mozzarella & cheddar." },
-                  { img:"COMING_SOON", name:"Signature\u2019s Choice", desc:"Four toppings of your choice, mozzarella & cheddar." },
+                  { img:"COMING_SOON", name:"Customer's Choice", desc:"Four toppings of your choice, mozzarella & cheddar." },
                   { img:"COMING_SOON", name:"BBQ Mac", desc:"BBQ bacon, Bermuda onions, cilantro, mozzarella & cheddar." },
                   { img:"mcnc.jpg", name:"Mac n Cheese", desc:"Classic mac smothered in mozzarella & cheddar." },
                   { img:"COMING_SOON", name:"Alfredo Mac", desc:"Creamy alfredo with fresh mushrooms & spinach." },
