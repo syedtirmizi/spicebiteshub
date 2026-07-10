@@ -188,7 +188,7 @@ export default function Home() {
     { name: "Chicken Tikka Pizza", img: "https://flavorry.com/wp-content/uploads/2025/09/teamgreen1001_httpss.mj_.run9zT8Sikxhn8_An_ultra-close-up_AND__ecff3b71-758f-4b56-a1ea-7797418d9935_1.png", desc: "Garlic sauce, marinated chicken, melted mozzarella." },
     { name: "Lamb Pizza", img: "lamb pizza.jpg", desc: "Garlic sauce, lamb, melted mozzarella." },
     { name: "Tropical Hawaiian Pizza", img: "tropical h.png", desc: "Signature pizza sauce, Canadian ham, sweet pineapple, melted mozzarella." },
-    { name: "Guest's Choice Pizza", img: "guests choice.jpg", desc: "Choose any four toppings your way, melted mozzarella." },
+    { name: "Customer's Choice Pizza", img: "cheese pizza.jpg", desc: "Choose any four toppings your way, melted mozzarella." },
     { name: "Tuscan Delight Pizza", img: "tuscan d.png", desc: "Spinach, sun-dried tomatoes, fresh garlic & feta cheese, melted mozzarella." },
     { name: "Chicken Club Pizza", img: "chicken c.png", desc: "Chicken, smoked bacon, fresh tomatoes & Bermuda onions, melted mozzarella." },
     { name: "BBQ Chicken Pizza", img: "bbq c.png", desc: "BBQ sauce, chicken, Bermuda onions, melted mozzarella." },
@@ -1504,7 +1504,7 @@ export default function Home() {
                 {[
                   { img:"buffalo c m.png", name:"Buffalo Chicken Mac", desc:"Chopped chicken, Bermuda onions, spicy sauce, mozzarella & cheddar." },
                   { img:"COMING_SOON", name:"Double BFT", desc:"Bacon, feta, tomato smothered in mozzarella & cheddar." },
-                  { img:"COMING_SOON", name:"Customer's Choice", desc:"Four toppings of your choice, mozzarella & cheddar." },
+                  { img:"mcnc.jpg", name:"Customer's Choice", desc:"Four toppings of your choice, mozzarella & cheddar." },
                   { img:"COMING_SOON", name:"BBQ Mac", desc:"BBQ bacon, Bermuda onions, cilantro, mozzarella & cheddar." },
                   { img:"mcnc.jpg", name:"Mac n Cheese", desc:"Classic mac smothered in mozzarella & cheddar." },
                   { img:"alfrado m.png", name:"Alfredo Mac", desc:"Creamy alfredo with fresh mushrooms & spinach." },
