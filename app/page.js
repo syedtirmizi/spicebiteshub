@@ -319,9 +319,9 @@ export default function Home() {
 
   // ── Starters ─────────────────────────────────────────────────────────────────
   const starterItems = [
-    { img:"https://images.unsplash.com/photo-1548340748-6d2b7d7da280?q=80&w=800", name:"Mozzarella Sticks", price:7.49, desc:"Crispy breaded mozzarella sticks with marinara.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"12 pcs", price:10.99 }] },
-    { img:"toasted.jpg",  name:"Toasted Ravioli",    price:7.49, desc:"Breaded ravioli fried crispy, served with marinara.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"12 pcs", price:10.99 }] },
-    { img:"poppers.jpg",  name:"Jalapeno Poppers",   price:7.49, desc:"Jalapenos stuffed with cream cheese, breaded & fried.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"12 pcs", price:10.99 }] },
+    { img:"https://images.unsplash.com/photo-1548340748-6d2b7d7da280?q=80&w=800", name:"Mozzarella Sticks", price:7.49, desc:"Crispy breaded mozzarella sticks with marinara.", sizes:[{ label:"6 pcs", price:7.49 }, { label:"12 pcs", price:10.99 }] },
+    { img:"toasted.jpg",  name:"Toasted Ravioli",    price:7.49, desc:"Breaded ravioli fried crispy, served with marinara.", sizes:[{ label:"6 pcs", price:7.49 }, { label:"12 pcs", price:10.99 }] },
+    { img:"poppers.jpg",  name:"Jalapeno Poppers",   price:7.49, desc:"Jalapenos stuffed with cream cheese, breaded & fried.", sizes:[{ label:"6 pcs", price:7.49 }, { label:"12 pcs", price:10.99 }] },
     { img:"https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800", name:"Chicken Nuggets", price:6.99, desc:"Crispy golden breaded chicken nuggets.", sizes:[{ label:"6 pcs", price:6.99 }, { label:"12 pcs", price:10.99 }] },
     { img:"g knots.jpg",  name:"Garlic Knots",       price:5.99, desc:"Oven-baked dough knots with garlic butter. Marinara." },
     { img:"bosco.jpg",    name:"Bosco Sticks",       price:7.99, desc:"Breadsticks stuffed with mozzarella & garlic butter." },
@@ -563,7 +563,7 @@ export default function Home() {
     // Calzones
     Object.entries(calzoneToppings).forEach(([name, tops]) => {
       if (!tops || tops.length === 0) return;
-      const price = 10.99 + tops.length * 0.99;
+      const price = 10.99 + tops.length * 0.75;
       lines.push({
         id: `cal-${name}`, category:"🫓 Calzone",
         name, details: tops.length > 0 ? `Extra: ${tops.join(", ")}` : "",
