@@ -182,7 +182,7 @@ export default function Home() {
     { name: "Signature Pizza", img: "signature p.png", desc: "Pepperoni, sausage, onion, mushrooms, green peppers & black olive." },
     { name: "Double Sausage & Double Pepperoni", img: "psp.jpg", desc: "Double sausage & double pepperoni, melted mozzarella." },
     { name: "Buffalo Chicken Pizza", img: "buffalo chicken pizza.jpg", desc: "Hot sauce, Bermuda onions & fresh chicken, melted mozzarella." },
-    { name: "Italian Sausage Pizza", img: "https://www.thursdaynightpizza.com/wp-content/uploads/2020/11/cut-overhead_STAMP.png", desc: "Sausage, fresh mushroom & green pepper, melted mozzarella." },
+    { name: "Italian Sausage Pizza", img: "italian s.png", desc: "Sausage, fresh mushroom & green pepper, melted mozzarella." },
     { name: "Meat Lovers Pizza", img: "meat lovers.jpg", desc: "Sausage, pepperoni, Canadian bacon, melted mozzarella." },
     { name: "Vegetarian Pizza", img: "veg p.jpg", desc: "Onion, mushrooms, green peppers & spinach, melted mozzarella." },
     { name: "Chicken Tikka Pizza", img: "https://flavorry.com/wp-content/uploads/2025/09/teamgreen1001_httpss.mj_.run9zT8Sikxhn8_An_ultra-close-up_AND__ecff3b71-758f-4b56-a1ea-7797418d9935_1.png", desc: "Garlic sauce, marinated chicken, melted mozzarella." },
@@ -367,7 +367,7 @@ export default function Home() {
     { img:"chicken ceaser.jpg", name:"Chicken Caesar Salad", desc:"Romaine, parmesan, asiago, croutons, tomatoes & marinated chicken.", baseIngredients:["Romaine Lettuce","Fresh Parmesan","Asiago Cheese","Croutons","Fresh Tomatoes","Marinated Chicken"] },
     { img:"g salad.jpg", name:"Garden Salad", desc:"Romaine, fresh tomatoes, bermuda onions, mushrooms, green peppers.", baseIngredients:["Romaine Lettuce","Fresh Tomatoes","Bermuda Onions","Fresh Mushrooms","Green Peppers"] },
     { img:"salad1.jpg", name:"Classic Caesar Salad", desc:"Romaine, fresh parmesan, asiago, croutons and fresh tomatoes.", baseIngredients:["Romaine Lettuce","Fresh Parmesan","Asiago Cheese","Croutons","Fresh Tomatoes"] },
-    { img:"four seasons.jpg", name:"Four Seasons", desc:"Romaine lettuce, Bermuda onions, Canadian bacon, macaroni noodles & fresh tomatoes, topped with asiago cheese.", baseIngredients:["Romaine Lettuce","Bermuda Onions","Canadian Bacon","Macaroni Noodles","Fresh Tomatoes","Asiago Cheese"] },
+    { img:"four s.png", name:"Four Seasons", desc:"Romaine lettuce, Bermuda onions, Canadian bacon, macaroni noodles & fresh tomatoes, topped with asiago cheese.", baseIngredients:["Romaine Lettuce","Bermuda Onions","Canadian Bacon","Macaroni Noodles","Fresh Tomatoes","Asiago Cheese"] },
     { img:"sig salad.jpg", name:"Signature House Salad", desc:"Romaine with artichoke hearts, green peppers, kalamata olives, tomatoes, onions & feta.", baseIngredients:["Romaine Lettuce","Artichoke Hearts","Green Peppers","Kalamata Olives","Fresh Tomatoes","Bermuda Onions","Feta Cheese"] },
   ];
   const saladSizes = [{ label:"Individual", price:9.99 }, { label:"Family", price:19.99 }, { label:"Party", price:32.99 }];
@@ -1458,7 +1458,7 @@ export default function Home() {
               <SectionHeader emoji="🍝" title="Pasta" color="text-red-500" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {[
-                  { img:"https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?q=80&w=800", name:"Chicken Cavatappi", desc:"Olive oil, chicken, spinach, mushrooms, red onions, parmesan & parsley." },
+                  { img:"chicken c p.png", name:"Chicken Cavatappi", desc:"Olive oil, chicken, spinach, mushrooms, red onions, parmesan & parsley." },
                   { img:"m.jpg", name:"Mostaccioli w/ Marinara", desc:"Traditional mostaccioli with marinara, parmesan & parsley." },
                   { img:"bm.jpg", name:"Baked Mostaccioli w/ Mozzarella", desc:"Mostaccioli, marinara, mozzarella baked to perfection." },
                   { img:"cava p.jpg", name:"Alfredo Cavatappi w/ Chicken", desc:"Cavatappi, chicken, mushrooms & spinach, parmesan." },
