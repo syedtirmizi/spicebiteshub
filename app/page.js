@@ -1504,7 +1504,7 @@ export default function Home() {
                 {[
                   { img:"buffalo c m.png", name:"Buffalo Chicken Mac", desc:"Chopped chicken, Bermuda onions, spicy sauce, mozzarella & cheddar." },
                   { img:"COMING_SOON", name:"Double BFT", desc:"Bacon, feta, tomato smothered in mozzarella & cheddar." },
-                  { img:"mcnc.jpg", name:"Customer's Choice", desc:"Four toppings of your choice, mozzarella & cheddar." },
+                  { img:"mnc.jpg", name:"Customer's Choice", desc:"Four toppings of your choice, mozzarella & cheddar." },
                   { img:"COMING_SOON", name:"BBQ Mac", desc:"BBQ bacon, Bermuda onions, cilantro, mozzarella & cheddar." },
                   { img:"mcnc.jpg", name:"Mac n Cheese", desc:"Classic mac smothered in mozzarella & cheddar." },
                   { img:"alfrado m.png", name:"Alfredo Mac", desc:"Creamy alfredo with fresh mushrooms & spinach." },
