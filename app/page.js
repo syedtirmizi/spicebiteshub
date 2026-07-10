@@ -1507,8 +1507,8 @@ export default function Home() {
                   { img:"COMING_SOON", name:"Customer's Choice", desc:"Four toppings of your choice, mozzarella & cheddar." },
                   { img:"COMING_SOON", name:"BBQ Mac", desc:"BBQ bacon, Bermuda onions, cilantro, mozzarella & cheddar." },
                   { img:"mcnc.jpg", name:"Mac n Cheese", desc:"Classic mac smothered in mozzarella & cheddar." },
-                  { img:"COMING_SOON", name:"Alfredo Mac", desc:"Creamy alfredo with fresh mushrooms & spinach." },
-                  { img:"COMING_SOON", name:"Burger Mac", desc:"Ground beef, onions, tomato, mushrooms, mozzarella & cheddar." },
+                  { img:"alfredo m.png", name:"Alfredo Mac", desc:"Creamy alfredo with fresh mushrooms & spinach." },
+                  { img:"burger m.png", name:"Burger Mac", desc:"Ground beef, onions, tomato, mushrooms, mozzarella & cheddar." },
                 ].map(item => {
                   const its = macToppings[item.name] || [];
                   const extra = its.length;
