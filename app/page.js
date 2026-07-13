@@ -1484,9 +1484,9 @@ export default function Home() {
                         <SpecialRequests value={pastaNotes[item.name]||""} onChange={v => setPastaNotes(p => ({...p,[item.name]:v}))} />
                         {its.length > 0 && (
                           <SummaryBox>
-                            <SummaryRow label="Base" value="$9.99" />
-                            <SummaryRow label={`🧄 ${its.length} topping${its.length>1?"s":""} x $1.00`} value={`+$${extra.toFixed(2)}`} valueClass="text-green-400" />
-                            <SummaryTotal value={`$${(9.99+extra).toFixed(2)}`} />
+                            <SummaryRow label="Base" value="$12.99" />
+                            <SummaryRow label={`🧄 ${its.length} topping${its.length>1?"s":""} x $1.75`} value={`+$${extra.toFixed(2)}`} valueClass="text-green-400" />
+                            <SummaryTotal value={`$${(12.99+extra).toFixed(2)}`} />
                             <button onClick={() => setPastaToppings(p => ({...p,[item.name]:[]}))} className="text-xs text-red-400 hover:text-red-300 font-bold mt-1">🔄 Reset</button>
                           </SummaryBox>
                         )}
@@ -1529,9 +1529,9 @@ export default function Home() {
                         <SpecialRequests value={macNotes[item.name]||""} onChange={v => setMacNotes(p => ({...p,[item.name]:v}))} />
                         {its.length > 0 && (
                           <SummaryBox>
-                            <SummaryRow label="Base" value="$9.99" />
-                            <SummaryRow label={`🧄 ${its.length} topping${its.length>1?"s":""} x $1.00`} value={`+$${extra.toFixed(2)}`} valueClass="text-green-400" />
-                            <SummaryTotal value={`$${(9.99+extra).toFixed(2)}`} />
+                            <SummaryRow label="Base" value="$10.99" />
+                            <SummaryRow label={`🧄 ${its.length} topping${its.length>1?"s":""} x $1.75`} value={`+$${extra.toFixed(2)}`} valueClass="text-green-400" />
+                            <SummaryTotal value={`$${(10.99+extra).toFixed(2)}`} />
                             <button onClick={() => setMacToppings(p => ({...p,[item.name]:[]}))} className="text-xs text-red-400 hover:text-red-300 font-bold mt-1">🔄 Reset</button>
                           </SummaryBox>
                         )}
