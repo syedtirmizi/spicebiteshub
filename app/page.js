@@ -1477,9 +1477,9 @@ export default function Home() {
                         <img src={item.img} alt={item.name} className="h-36 w-full object-cover" />
                       )}
                       <div className="p-4">
-                        <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">$9.99</span></div>
+                        <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">$12.99</span></div>
                         <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
-                        <p className="text-white font-black text-xs uppercase tracking-widest mb-1">🧄 Add Toppings <span className="text-yellow-400 normal-case font-normal">$1.00 each</span></p>
+                        <p className="text-white font-black text-xs uppercase tracking-widest mb-1">🧄 Add Toppings <span className="text-yellow-400 normal-case font-normal">$1.75 each</span></p>
                         <ToppingGrid selectedToppings={its} onToggle={t => setPastaToppings(prev => { const c=prev[item.name]||[]; return {...prev,[item.name]:c.includes(t)?c.filter(x=>x!==t):[...c,t]}; })} toppingList={toppings} />
                         <SpecialRequests value={pastaNotes[item.name]||""} onChange={v => setPastaNotes(p => ({...p,[item.name]:v}))} />
                         {its.length > 0 && (
@@ -1522,9 +1522,9 @@ export default function Home() {
                         <img src={item.img} alt={item.name} className="h-36 w-full object-cover" />
                       )}
                       <div className="p-4">
-                        <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">$9.99</span></div>
+                        <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">$10.99</span></div>
                         <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
-                        <p className="text-white font-black text-xs uppercase tracking-widest mb-1">🧄 Add Toppings <span className="text-yellow-400 normal-case font-normal">$1.00 each</span></p>
+                        <p className="text-white font-black text-xs uppercase tracking-widest mb-1">🧄 Add Toppings <span className="text-yellow-400 normal-case font-normal">$1.75 each</span></p>
                         <ToppingGrid selectedToppings={its} onToggle={t => setMacToppings(prev => { const c=prev[item.name]||[]; return {...prev,[item.name]:c.includes(t)?c.filter(x=>x!==t):[...c,t]}; })} toppingList={toppings} />
                         <SpecialRequests value={macNotes[item.name]||""} onChange={v => setMacNotes(p => ({...p,[item.name]:v}))} />
                         {its.length > 0 && (
