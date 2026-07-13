@@ -277,13 +277,13 @@ export default function Home() {
 
   // ── Desi ─────────────────────────────────────────────────────────────────────
   const desiItems = [
-    { img:"korma.jpg",       name:"Chicken Korma",    price:13.99, desc:"Creamy curry with aromatic spices." },
-    { img:"karahi.jpg",      name:"Chicken Karahi",   price:14.99, desc:"Fresh tomato-based karahi with ginger & garlic.", hasChickenOption:true },
-    { img:"daal chana.png",  name:"Daal Chana",       price:10.99, desc:"Slow-cooked chana daal with Pakistani spices." },
-    { img:"butter c.png", name:"Butter Chicken", price:14.99, desc:"Chicken in rich buttery tomato cream sauce." },
-    { img:"nihari.png",      name:"Lamb Nihari",      price:16.99, desc:"Slow-cooked traditional desi curry." },
-    { img:"signature b.png",     name:"Signature Biryani", price:15.99, desc:"Aromatic basmati layered with spices & tender meat." },
-    { img:"karahi.jpg",      name:"Special Signature Karahi", price:17.99, desc:"Our chef's signature karahi — rich tomato-ginger blend of spices with tender meat.", hasChickenOption:true },
+    { img:"korma.jpg",       name:"Chicken Korma",    price:15.00, desc:"Creamy curry with aromatic spices." },
+    { img:"karahi.jpg",      name:"Chicken Karahi",   price:15.00, desc:"Fresh tomato-based karahi with ginger & garlic.", hasChickenOption:true },
+    { img:"daal chana.png",  name:"Daal Chana",       price:11.00, desc:"Slow-cooked chana daal with Pakistani spices." },
+    { img:"butter c.png", name:"Butter Chicken", price:15.00, desc:"Chicken in rich buttery tomato cream sauce." },
+    { img:"nihari.png",      name:"Lamb Nihari",      price:18.00, desc:"Slow-cooked traditional desi curry." },
+    { img:"signature b.png",     name:"Signature Biryani", price:16.00, desc:"Aromatic basmati layered with spices & tender meat." },
+    { img:"karahi.jpg",      name:"Special Signature Karahi", price:15.00, desc:"Our chef's signature karahi — rich tomato-ginger blend of spices with tender meat.", hasChickenOption:true },
   ];
   const naanItems = [
     { img:"pn.png", name:"Plain Naan",  price:1.99, desc:"Soft, fluffy tandoor-baked flatbread." },
