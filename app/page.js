@@ -1503,9 +1503,9 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {[
                   { img:"buffalo c m.png", name:"Buffalo Chicken Mac", desc:"Chopped chicken, Bermuda onions, spicy sauce, mozzarella & cheddar." },
-                  { img:"COMING_SOON", name:"Double BFT", desc:"Bacon, feta, tomato smothered in mozzarella & cheddar." },
+                  { img:"bft m.png", name:"Double BFT", desc:"Bacon, feta, tomato smothered in mozzarella & cheddar." },
                   { img:"mnc.jpg", name:"Customer's Choice", desc:"Four toppings of your choice, mozzarella & cheddar." },
-                  { img:"COMING_SOON", name:"BBQ Mac", desc:"BBQ bacon, Bermuda onions, cilantro, mozzarella & cheddar." },
+                  { img:"bbq m.png", name:"BBQ Mac", desc:"BBQ bacon, Bermuda onions, cilantro, mozzarella & cheddar." },
                   { img:"mcnc.jpg", name:"Mac n Cheese", desc:"Classic mac smothered in mozzarella & cheddar." },
                   { img:"alfrado m.png", name:"Alfredo Mac", desc:"Creamy alfredo with fresh mushrooms & spinach." },
                   { img:"burger m.png", name:"Burger Mac", desc:"Ground beef, onions, tomato, mushrooms, mozzarella & cheddar." },
