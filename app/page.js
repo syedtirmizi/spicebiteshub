@@ -37,10 +37,10 @@ const NAV_SECTIONS = [
   { id: "section-pasta",      label: "🍝 Pasta",            group: "american" },
   { id: "section-mac",        label: "🧀 Mac & Cheese",     group: "american" },
   { id: "section-desi",       label: "🍛 Pakistani & Indian Cuisine", group: "desi"     },
-  { id: "section-med",        label: "🌯 Mediterranean",    group: "med"      },
   { id: "section-salads",     label: "🥙 Salads",           group: "extra"    },
   { id: "section-beverages",  label: "🥤 Beverages",        group: "extra"    },
   { id: "section-desserts",   label: "🍮 Desserts",         group: "extra"    },
+  { id: "section-med",        label: "🌯 Mediterranean",    group: "med"      },
   { id: "section-location",   label: "📍 Location & Hours", group: "story"    },
   { id: "section-story",      label: "📖 Our Story",        group: "story"    },
 ];
@@ -781,7 +781,7 @@ const [slide, setSlide] = useState(0);
 
   // ── Sidebar component ─────────────────────────────────────────────────────────
   const SidebarNav = () => {
-    const groups = ["deals", "starters", "american", "desi", "med", "extra", "story"];
+    const groups = ["deals", "starters", "american", "desi", "extra", "med", "story"];
     return (
       <nav className="h-full flex flex-col gap-1 py-4 px-2 overflow-y-auto">
         <div className="px-2 mb-3">
