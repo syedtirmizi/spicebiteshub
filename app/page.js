@@ -333,7 +333,7 @@ const [slide, setSlide] = useState(0);
   { img:"chicken f.png", name:"Chicken Fingers", price:8.49, desc:"Tender chicken fingers served with your choice of dipping sauce.", sizes:[{ label:"5 pcs", price:8.49 }, { label:"10 pcs", price:10.99 }] },
   { img:"fries1.jpg", name:"Fries", price:3.99, desc:"Crispy golden fries, lightly salted.", sizes:[{ label:"Small", price:3.99 }, { label:"Large", price:5.49 }] },
   { img:"cheese f.jpg", name:"Cheesy Fries", price:4.79, desc:"Hot crispy fries topped with rich melted cheese.", sizes:[{ label:"Small", price:4.79 }, { label:"Large", price:6.49 }] },
-  { img:"bcf.jpg", name:"Bacon Cheese Fries", price:5.79, desc:"Crispy fries loaded with bacon and melted cheese.", sizes:[{ label:"Small", price:5.79 }, { label:"Large", price:7.49 }] },
+  { img:"bcf.png", name:"Bacon Cheese Fries", price:5.79, desc:"Crispy fries loaded with bacon and melted cheese.", sizes:[{ label:"Small", price:5.79 }, { label:"Large", price:7.49 }] },
   { img:"season f.jpg", name:"Seasoned Fries", price:4.49, desc:"Fries tossed in our special house seasoning blend.", sizes:[{ label:"Small", price:4.49 }, { label:"Large", price:5.49 }] },
 ];
   const [starterCart, setStarterCart] = useState({});
