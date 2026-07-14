@@ -835,7 +835,7 @@ export default function Home() {
           <img src="/logo.png" alt="Spice & Bites Hub" className="h-10 w-auto" />
           <div>
             <p className="text-white font-black text-sm leading-tight">Spice &amp; Bites Hub</p>
-            <p className="text-gray-400 text-[10px]">American • Mediterranean • Pakistani &amp; Indian</p>
+            <p className="text-gray-400 text-[10px]">American • Pakistani &amp; Indian</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -876,7 +876,7 @@ export default function Home() {
             <div className="relative z-10 h-full flex flex-col justify-end px-6 pb-5">
               <h1 className="text-2xl md:text-4xl font-black text-red-500 uppercase leading-tight">Spice &amp; Bites Hub</h1>
               <p className="text-white text-sm md:text-lg italic" style={{ fontFamily:"'Brush Script MT', cursive" }}>Where Every Bite Tells A Story</p>
-              <p className="text-gray-300 text-xs md:text-sm mt-1">Pizza • Gyro • Wings • Biryani • Nihari</p>
+              <p className="text-gray-300 text-xs md:text-sm mt-1">Pizza • Wings • Biryani • Nihari</p>
             </div>
             <div className="absolute bottom-3 right-4 flex gap-2">
               {heroSlides.map((_, i) => (
