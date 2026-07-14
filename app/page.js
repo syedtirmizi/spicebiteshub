@@ -77,14 +77,18 @@ const bakeOptions = ["Lite Bake", "Well Done"];
 const cutOptions = ["Pie Cut", "Square Cut", "Do Not Cut", "Double Cut"];
 
 export default function Home() {
-  const heroSlides = ["biryani.jpg", "signature-pizza.png", "calzone.jpg", "gyro.jpg"];
-  const [slide, setSlide] = useState(0);
+ const heroDeals = [
+  { id: "family", emoji: "🍕", title: "Family Deal", price: "$34.99", desc: "16\" 1-topping pizza, cheesy garlic bread, 6pc wings & a 2 liter", img: "signature b.png" },
+  { id: "twolarge", emoji: "🍕🍕", title: "2 Large 2-Topping Pizzas", price: "$31.99", desc: "Two 14\" pizzas, your choice of 2 toppings each", img: "signature p.png" },
+  { id: "twomedium", emoji: "🍕🍕", title: "2 Medium 2-Topping Pizzas", price: "$22.99", desc: "Two 12\" pizzas, your choice of 2 toppings each", img: "calzone.jpg" },
+];
+const [slide, setSlide] = useState(0);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("section-pizza");
   const contentRef = useRef(null);
 
   useEffect(() => {
-    const interval = setInterval(() => setSlide(s => (s + 1) % heroSlides.length), 4000);
+    const interval = setInterval(() => setSlide(s => (s + 1) % heroDeals.length), 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -866,25 +870,37 @@ export default function Home() {
         {/* SCROLLABLE CONTENT AREA */}
         <main ref={contentRef} className="flex-1 overflow-y-auto bg-zinc-950">
 
-          {/* HERO SLIDESHOW */}
-          <div className="relative h-48 md:h-64 overflow-hidden flex-shrink-0">
-            {["signature b.png","signature p.png","calzone.jpg","butter c.png"].map((src, i) => (
-              <div key={src} className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${i === slide ? "opacity-100" : "opacity-0"}`}
-                style={{ backgroundImage: `url('${src}')` }} />
-            ))}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/30" />
-            <div className="relative z-10 h-full flex flex-col justify-end px-6 pb-5">
-              <h1 className="text-2xl md:text-4xl font-black text-red-500 uppercase leading-tight">Spice &amp; Bites Hub</h1>
-              <p className="text-white text-sm md:text-lg italic" style={{ fontFamily:"'Brush Script MT', cursive" }}>Where Every Bite Tells A Story</p>
-              <p className="text-gray-300 text-xs md:text-sm mt-1">Pizza • Wings • Biryani • Nihari</p>
-            </div>
-            <div className="absolute bottom-3 right-4 flex gap-2">
-              {heroSlides.map((_, i) => (
-                <button key={i} onClick={() => setSlide(i)}
-                  className={`w-2 h-2 rounded-full transition-all ${i === slide ? "bg-red-500 scale-125" : "bg-white/40 hover:bg-white"}`} />
-              ))}
-            </div>
-          </div>
+          {/* HERO DEALS SLIDESHOW */}
+<div className="relative h-52 md:h-72 overflow-hidden flex-shrink-0">
+  {heroDeals.map((deal, i) => (
+    <div key={deal.id} className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${i === slide ? "opacity-100" : "opacity-0"}`}
+      style={{ backgroundImage: `url('${deal.img}')` }} />
+  ))}
+  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
+
+  <div className="relative z-10 h-full flex flex-col justify-end px-6 pb-6">
+    <p className="text-yellow-400 font-black text-xs uppercase tracking-widest mb-1">🔥 Today's Deal</p>
+    {heroDeals.map((deal, i) => (
+      <div key={deal.id} className={`transition-opacity duration-700 ${i === slide ? "opacity-100" : "opacity-0 absolute"}`}>
+        <h1 className="text-xl md:text-3xl font-black text-white uppercase leading-tight">{deal.emoji} {deal.title}</h1>
+        <p className="text-red-400 font-black text-lg md:text-2xl mt-1">{deal.price}</p>
+        <p className="text-gray-300 text-xs md:text-sm mt-1 max-w-md">{deal.desc}</p>
+        <button
+          onClick={() => { setSelectedDeal(deal.id); scrollToSection("section-deals"); }}
+          className="mt-3 bg-red-600 hover:bg-red-700 text-white font-black text-xs md:text-sm px-5 py-2.5 rounded-xl transition w-fit">
+          Order Now →
+        </button>
+      </div>
+    ))}
+  </div>
+
+  <div className="absolute bottom-3 right-4 flex gap-2 z-10">
+    {heroDeals.map((_, i) => (
+      <button key={i} onClick={() => setSlide(i)}
+        className={`w-2 h-2 rounded-full transition-all ${i === slide ? "bg-red-500 scale-125" : "bg-white/40 hover:bg-white"}`} />
+    ))}
+  </div>
+</div>
 
           {/* ── CONTENT SECTIONS ── */}
           <div className="px-4 md:px-6 py-6 space-y-12 max-w-5xl mx-auto pb-24">
