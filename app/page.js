@@ -141,7 +141,8 @@ const [slide, setSlide] = useState(0);
     { pcs: "50 pcs", desc: "5 Flavors & 5 Dips", price: 50.99, maxFlavors: 5, maxDips: 5 },
     { pcs: "75 pcs", desc: "7 Flavors & 7 Dips", price: 75.99, maxFlavors: 7, maxDips: 7 },
   ];
-  const emptyWingOrder = { size: null, flavors: [], dips: {}, notes: "" };
+  const emptyWingOrder = { size: null, flavors: [], dips: {}, bake: "", notes: "" };
+const wingBakeOptions = ["Lite", "Well Done"];
   const [boneInOrder, setBoneInOrder] = useState({ ...emptyWingOrder });
   const [bonelessOrder, setBonelessOrder] = useState({ ...emptyWingOrder });
   const extraDipCharge = 0.75;
@@ -670,7 +671,7 @@ Object.entries(calzoneToppings).forEach(([name, tops]) => {
       lines.push({
         id:"bonein", category:"🍗 Wings",
         name: `Bone-in Wings (${boneInOrder.size.pcs})`,
-        details: [boneInOrder.flavors.length>0?`Flavors: ${boneInOrder.flavors.join(", ")}`:null, Object.keys(boneInOrder.dips||{}).length>0?`Dips: ${Object.entries(boneInOrder.dips).map(([d,q])=>q>1?`${d}x${q}`:d).join(", ")}`:null].filter(Boolean).join(" | "),
+        details: [boneInOrder.bake?`🔥 ${boneInOrder.bake}`:null, boneInOrder.flavors.length>0?`Flavors: ${boneInOrder.flavors.join(", ")}`:null, Object.keys(boneInOrder.dips||{}).length>0?`Dips: ${Object.entries(boneInOrder.dips).map(([d,q])=>q>1?`${d}x${q}`:d).join(", ")}`:null].filter(Boolean).join(" | "),
         notes: boneInOrder.notes, qty:1, price,
         onRemove: () => setBoneInOrder({ ...emptyWingOrder })
       });
@@ -680,12 +681,11 @@ Object.entries(calzoneToppings).forEach(([name, tops]) => {
       lines.push({
         id:"boneless", category:"🍗 Wings",
         name: `Boneless Wings (${bonelessOrder.size.pcs})`,
-        details: [bonelessOrder.flavors.length>0?`Flavors: ${bonelessOrder.flavors.join(", ")}`:null, Object.keys(bonelessOrder.dips||{}).length>0?`Dips: ${Object.entries(bonelessOrder.dips).map(([d,q])=>q>1?`${d}x${q}`:d).join(", ")}`:null].filter(Boolean).join(" | "),
+        details: [bonelessOrder.bake?`🔥 ${bonelessOrder.bake}`:null, bonelessOrder.flavors.length>0?`Flavors: ${bonelessOrder.flavors.join(", ")}`:null, Object.keys(bonelessOrder.dips||{}).length>0?`Dips: ${Object.entries(bonelessOrder.dips).map(([d,q])=>q>1?`${d}x${q}`:d).join(", ")}`:null].filter(Boolean).join(" | "),
         notes: bonelessOrder.notes, qty:1, price,
         onRemove: () => setBonelessOrder({ ...emptyWingOrder })
       });
     }
-
     // Starters
     Object.entries(starterCart).forEach(([name, qty]) => {
       const item = starterItems.find(i=>i.name===name);
@@ -1480,7 +1480,7 @@ return (
               <p className="text-gray-400 text-sm italic mb-4">Made fresh daily — never frozen</p>
               <img src="buffalo wings.jpg" alt="Bone-in Wings" className="h-48 w-full object-cover rounded-2xl mb-5" />
               <WingOrderUI order={boneInOrder} setOrder={setBoneInOrder} sizes={boneInSizes} flavors={wingFlavors} dips={wingDips} extraDipCharge={extraDipCharge}
-                toggleFlavor={toggleWingFlavor} updateDipQty={updateWingDipQty} dipTotalQty={wingDipTotalQty} dipExtraCharge={wingDipExtraCharge} emptyOrder={emptyWingOrder} />
+                toggleFlavor={toggleWingFlavor} updateDipQty={updateWingDipQty} dipTotalQty={wingDipTotalQty} dipExtraCharge={wingDipExtraCharge} emptyOrder={emptyWingOrder} bakeOptions={wingBakeOptions} />
             </section>
 
             {/* ═══════════════ BONELESS WINGS ════════════════ */}
@@ -1489,7 +1489,7 @@ return (
               <p className="text-gray-400 text-sm italic mb-4">Made fresh daily — never frozen</p>
               <img src="bw.jpg" alt="Boneless Wings" className="h-48 w-full object-cover rounded-2xl mb-5" />
               <WingOrderUI order={bonelessOrder} setOrder={setBonelessOrder} sizes={bonelessSizes} flavors={wingFlavors} dips={wingDips} extraDipCharge={extraDipCharge}
-                toggleFlavor={toggleWingFlavor} updateDipQty={updateWingDipQty} dipTotalQty={wingDipTotalQty} dipExtraCharge={wingDipExtraCharge} emptyOrder={emptyWingOrder} />
+                toggleFlavor={toggleWingFlavor} updateDipQty={updateWingDipQty} dipTotalQty={wingDipTotalQty} dipExtraCharge={wingDipExtraCharge} emptyOrder={emptyWingOrder} bakeOptions={wingBakeOptions} />
             </section>
 
             {/* ═══════════════ PASTA ════════════════ */}
@@ -2537,17 +2537,26 @@ function CheckoutProgress({ step }) {
   );
 }
 
-function WingOrderUI({ order, setOrder, sizes, flavors, dips, extraDipCharge, toggleFlavor, updateDipQty, dipTotalQty, dipExtraCharge, emptyOrder }) {
+function WingOrderUI({ order, setOrder, sizes, flavors, dips, extraDipCharge, toggleFlavor, updateDipQty, dipTotalQty, dipExtraCharge, emptyOrder, bakeOptions }) {
   return (
     <div className="bg-zinc-900 rounded-2xl p-4">
       <Label>🔢 Choose Size</Label>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
         {sizes.map(s => (
-          <button key={s.pcs} onClick={() => setOrder(prev => ({ size:s, flavors:[], dips:{}, notes:prev.notes }))}
+          <button key={s.pcs} onClick={() => setOrder(prev => ({ size:s, flavors:[], dips:{}, bake:prev.bake, notes:prev.notes }))}
             className={`p-2.5 rounded-xl border-2 transition text-left ${order.size?.pcs===s.pcs?"bg-red-600 border-red-600 text-white":"bg-zinc-800 border-zinc-700 text-gray-300 hover:border-red-500"}`}>
             <p className="font-black text-sm">{s.pcs}</p>
             <p className="text-[10px] opacity-80">{s.desc}</p>
             <p className={`font-black text-sm mt-0.5 ${order.size?.pcs===s.pcs?"text-white":"text-yellow-400"}`}>${s.price.toFixed(2)}</p>
+          </button>
+        ))}
+      </div>
+      <Label>🔥 Cook Preference</Label>
+      <div className="flex gap-2 mb-4">
+        {bakeOptions.map(opt => (
+          <button key={opt} onClick={() => setOrder(prev => ({ ...prev, bake: prev.bake === opt ? "" : opt }))}
+            className={`flex-1 py-2 rounded-xl text-xs font-black border-2 transition ${order.bake===opt?"bg-red-600 border-red-600 text-white":"bg-zinc-800 border-zinc-700 text-gray-300 hover:border-red-500"}`}>
+            {order.bake===opt?"✅ ":""}{opt}
           </button>
         ))}
       </div>
@@ -2585,6 +2594,7 @@ function WingOrderUI({ order, setOrder, sizes, flavors, dips, extraDipCharge, to
       {order.size && (
         <SummaryBox>
           <SummaryRow label={`🍗 ${order.size.pcs}`} value={`$${order.size.price.toFixed(2)}`} />
+          {order.bake && <SummaryRow label={`🔥 ${order.bake}`} />}
           {order.flavors.length>0 && <SummaryRow label={`🌶️ ${order.flavors.join(", ")}`} />}
           {dipTotalQty(order)>0 && <SummaryRow label={`🥣 ${Object.entries(order.dips).map(([d,q])=>q>1?`${d} x${q}`:d).join(", ")}`} value={dipExtraCharge(order)>0?`+$${dipExtraCharge(order).toFixed(2)}`:undefined} valueClass="text-green-400" />}
           {order.flavors.length < order.size.maxFlavors && <p className="text-orange-400 text-xs mt-1">⚠️ Select {order.size.maxFlavors-order.flavors.length} more flavor{order.size.maxFlavors-order.flavors.length>1?"s":""}</p>}
