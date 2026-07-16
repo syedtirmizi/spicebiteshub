@@ -203,7 +203,10 @@ const [slide, setSlide] = useState(0);
   const toggleBuildTopping = (i, t) => setBuildOrders(p => p.map((o, idx) => idx === i ? { ...o, toppings: o.toppings.includes(t) ? o.toppings.filter(x => x !== t) : [...o.toppings, t] } : o));
   const toggleBuildHalfTopping = (i, half, t) => setBuildOrders(p => p.map((o, idx) => idx === i ? { ...o, [half]: o[half].includes(t) ? o[half].filter(x => x !== t) : [...o[half], t] } : o));
 
-  const emptySpec = { name: "", name2: "", size: "", crust: "", isHalf: false, toppings: [], sauceType: "", sauceAmount: "", bake: "", cut: "", notes: "" };
+  const specialtyFreeToppings = { "Customer's Choice Pizza": 4 };
+const getSpecFreeCount = (order) => (order.name === "Customer's Choice Pizza" || order.name2 === "Customer's Choice Pizza") ? (specialtyFreeToppings["Customer's Choice Pizza"] || 0) : 0;
+const getSpecExtraCount = (order) => Math.max(0, order.toppings.length - getSpecFreeCount(order));
+const emptySpec = { name: "", name2: "", size: "", crust: "", isHalf: false, toppings: [], sauceType: "", sauceAmount: "", bake: "", cut: "", notes: "" };
   const [specOrders, setSpecOrders] = useState([{ ...emptySpec }]);
   const updateSpec = (i, f, v) => setSpecOrders(p => p.map((o, idx) => idx === i ? { ...o, [f]: v } : o));
   const toggleSpecTopping = (i, t) => setSpecOrders(p => p.map((o, idx) => idx === i ? { ...o, toppings: o.toppings.includes(t) ? o.toppings.filter(x => x !== t) : [...o.toppings, t] } : o));
@@ -480,10 +483,12 @@ const getCalzoneExtraCount = (name, tops) => Math.max(0, tops.length - (calzoneF
       if (!o.name || !o.size) return;
       if (o.isHalf && !o.name2) return;
       const base = parseFloat(specSizes.find(s=>s.size===o.size)?.price.replace("$","") || 0);
-      const topCost = o.toppings.length * parseFloat((toppingPrices[o.size]||"$0").replace("$",""));
+      const rate = parseFloat((toppingPrices[o.size]||"$0").replace("$",""));
+      const extraCount = getSpecExtraCount(o);
+      const topCost = extraCount * rate;
       const pizzaName = o.isHalf ? `${o.name} / ${o.name2} (Half & Half)` : o.name;
       const cookingStr = [o.sauceType, o.sauceAmount, o.bake, o.cut].filter(Boolean).join(", ");
-      let details = o.toppings.length > 0 ? `Extra: ${o.toppings.join(", ")}` : "";
+      let details = o.toppings.length > 0 ? `Toppings: ${o.toppings.join(", ")}` : "";
       if (cookingStr) details = details ? `${details} | 🍅 ${cookingStr}` : `🍅 ${cookingStr}`;
       lines.push({
         id: `spec-${i}`, category:"🍕 Pizza",
@@ -1334,12 +1339,36 @@ Object.entries(calzoneToppings).forEach(([name, tops]) => {
                     <div className="flex gap-2 mb-4">
                       {crustTypes.map(c => <Chip key={c} active={order.crust === c} onClick={() => updateSpec(index,"crust",c)} color="yellow">{c}</Chip>)}
                     </div>
-                    <CookingInstructions order={order} onUpdate={(f,v) => updateSpec(index,f,v)} />
-                    <Label>🧄 Extra Toppings {order.size && <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">({toppingPrices[order.size]} each)</span>}</Label>
+                   <CookingInstructions order={order} onUpdate={(f,v) => updateSpec(index,f,v)} />
+                    <Label>🧄 Extra Toppings {order.size && <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">({toppingPrices[order.size]} each{getSpecFreeCount(order) > 0 ? `, first ${getSpecFreeCount(order)} free` : ""})</span>}</Label>
+                    {getSpecFreeCount(order) > 0 && <p className="text-yellow-400 text-xs font-bold mb-2">✅ First {getSpecFreeCount(order)} toppings included free — additional toppings {toppingPrices[order.size] || ""} each</p>}
                     <ToppingGrid selectedToppings={order.toppings} onToggle={t => toggleSpecTopping(index,t)} toppingList={toppings} />
                     <SpecialRequests value={order.notes} onChange={v => updateSpec(index,"notes",v)} />
-                    {order.size && (
-                      <SummaryBox>
+                    {order.size && (() => {
+                      const rate = parseFloat((toppingPrices[order.size]||"$0").replace("$",""));
+                      const freeCount = getSpecFreeCount(order);
+                      const extraCount = getSpecExtraCount(order);
+                      const total = parseFloat(specSizes.find(s=>s.size===order.size)?.price.replace("$","")||0) + extraCount * rate;
+                      return (
+                        <SummaryBox>
+                          {order.isHalf ? (
+                            <>
+                              {order.name && <SummaryRow label={`🍕 1st Half: ${order.name}`} />}
+                              {order.name2 && <SummaryRow label={`🍕 2nd Half: ${order.name2}`} />}
+                              {!order.name2 && <p className="text-orange-400 text-xs mt-1 mb-1">⚠️ Select a second half pizza</p>}
+                            </>
+                          ) : (
+                            order.name && <SummaryRow label={`🍕 ${order.name}`} />
+                          )}
+                          <SummaryRow label={`📏 ${order.size} Base`} value={specSizes.find(s=>s.size===order.size)?.price} />
+                          {order.crust && <SummaryRow label={`🫓 ${order.crust}`} />}
+                          {[order.sauceType, order.sauceAmount, order.bake, order.cut].filter(Boolean).length > 0 && <SummaryRow label={`🍅 ${[order.sauceType, order.sauceAmount, order.bake, order.cut].filter(Boolean).join(", ")}`} />}
+                          {freeCount > 0 && order.toppings.length > 0 && <SummaryRow label={`🧄 ${Math.min(order.toppings.length, freeCount)} topping${Math.min(order.toppings.length, freeCount)>1?"s":""} (included)`} value="FREE" valueClass="text-green-400" />}
+                          {extraCount > 0 && <SummaryRow label={`🧄 ${extraCount} extra topping${extraCount>1?"s":""} x ${toppingPrices[order.size]}`} value={`+$${(extraCount*rate).toFixed(2)}`} valueClass="text-green-400" />}
+                          <SummaryTotal value={`$${total.toFixed(2)}`} />
+                        </SummaryBox>
+                      );
+                    })()}
                         {order.isHalf ? (
                           <>
                             {order.name && <SummaryRow label={`🍕 1st Half: ${order.name}`} />}
