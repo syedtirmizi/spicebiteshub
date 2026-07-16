@@ -257,8 +257,10 @@ const [slide, setSlide] = useState(0);
   const [selectedDeal, setSelectedDeal] = useState("family");
 
   // ── Calzone / Pasta / Mac ───────────────────────────────────────────────────
-  const [calzoneToppings, setCalzoneToppings] = useState({});
-  const [calzoneNotes, setCalzoneNotes] = useState({});
+ const [calzoneToppings, setCalzoneToppings] = useState({});
+const [calzoneNotes, setCalzoneNotes] = useState({});
+const calzoneFreeToppings = { "Customer's Choice": 4 };
+const getCalzoneExtraCount = (name, tops) => Math.max(0, tops.length - (calzoneFreeToppings[name] || 0));
   const [pastaToppings, setPastaToppings] = useState({});
   const [pastaNotes, setPastaNotes] = useState({});
   const [macToppings, setMacToppings] = useState({});
@@ -567,16 +569,17 @@ const [slide, setSlide] = useState(0);
     });
 
     // Calzones
-    Object.entries(calzoneToppings).forEach(([name, tops]) => {
-      if (!tops || tops.length === 0) return;
-      const price = 10.99 + tops.length * 0.99;
-      lines.push({
-        id: `cal-${name}`, category:"🫓 Calzone",
-        name, details: tops.length > 0 ? `Extra: ${tops.join(", ")}` : "",
-        notes: calzoneNotes[name] || "", qty: 1, price,
-        onRemove: () => setCalzoneToppings(p => ({ ...p, [name]: [] }))
-      });
-    });
+Object.entries(calzoneToppings).forEach(([name, tops]) => {
+  if (!tops || tops.length === 0) return;
+  const extraCount = getCalzoneExtraCount(name, tops);
+  const price = 10.99 + extraCount * 0.99;
+  lines.push({
+    id: `cal-${name}`, category:"🫓 Calzone",
+    name, details: tops.length > 0 ? `Toppings: ${tops.join(", ")}` : "",
+    notes: calzoneNotes[name] || "", qty: 1, price,
+    onRemove: () => setCalzoneToppings(p => ({ ...p, [name]: [] }))
+  });
+});
     // Calzones with no extra toppings but notes
     Object.entries(calzoneNotes).forEach(([name, note]) => {
       if (!note) return;
@@ -1429,26 +1432,31 @@ const [slide, setSlide] = useState(0);
                   { img:"calzone.jpg",  name:"Italian Sausage", desc:"Sausage, fresh mushroom & green pepper, mozzarella." },
                 ].map(item => {
                   const itemToppings = calzoneToppings[item.name] || [];
-                  const extra = itemToppings.length * 0.99;
-                  return (
-                    <div key={item.name} className="bg-zinc-900 rounded-2xl overflow-hidden">
-                      <img src={item.img} alt={item.name} className="h-36 w-full object-cover" />
-                      <div className="p-4">
-                        <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">$10.99</span></div>
-                        <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
-                        <ToppingGrid selectedToppings={itemToppings} onToggle={t => setCalzoneToppings(prev => { const c = prev[item.name]||[]; return {...prev,[item.name]:c.includes(t)?c.filter(x=>x!==t):[...c,t]}; })} toppingList={toppings} />
-                        <SpecialRequests value={calzoneNotes[item.name]||""} onChange={v => setCalzoneNotes(p => ({...p,[item.name]:v}))} />
-                        {itemToppings.length > 0 && (
-                          <SummaryBox>
-                            <SummaryRow label="Base" value="$10.99" />
-                            <SummaryRow label={`🧄 ${itemToppings.length} topping${itemToppings.length>1?"s":""} x $0.99`} value={`+$${extra.toFixed(2)}`} valueClass="text-green-400" />
-                            <SummaryTotal value={`$${(10.99+extra).toFixed(2)}`} />
-                            <button onClick={() => setCalzoneToppings(p => ({...p,[item.name]:[]}))} className="text-xs text-red-400 hover:text-red-300 font-bold mt-1">🔄 Reset</button>
-                          </SummaryBox>
-                        )}
-                      </div>
-                    </div>
-                  );
+const freeCount = calzoneFreeToppings[item.name] || 0;
+const extraCount = getCalzoneExtraCount(item.name, itemToppings);
+const extra = extraCount * 0.99;
+return (
+  <div key={item.name} className="bg-zinc-900 rounded-2xl overflow-hidden">
+    <img src={item.img} alt={item.name} className="h-36 w-full object-cover" />
+    <div className="p-4">
+      <div className="flex justify-between items-center mb-1"><h3 className="text-base font-bold text-yellow-400">{item.name}</h3><span className="text-red-400 font-black">$10.99</span></div>
+      <p className="text-gray-400 text-xs mb-3">{item.desc}</p>
+      {freeCount > 0 && <p className="text-yellow-400 text-xs font-bold mb-2">✅ First {freeCount} toppings included free — additional toppings $0.99 each</p>}
+      <ToppingGrid selectedToppings={itemToppings} onToggle={t => setCalzoneToppings(prev => { const c = prev[item.name]||[]; return {...prev,[item.name]:c.includes(t)?c.filter(x=>x!==t):[...c,t]}; })} toppingList={toppings} />
+      <SpecialRequests value={calzoneNotes[item.name]||""} onChange={v => setCalzoneNotes(p => ({...p,[item.name]:v}))} />
+      {itemToppings.length > 0 && (
+        <SummaryBox>
+          <SummaryRow label="Base" value="$10.99" />
+          {freeCount > 0 && <SummaryRow label={`🧄 ${Math.min(itemToppings.length, freeCount)} topping${Math.min(itemToppings.length, freeCount)>1?"s":""} (included)`} value="FREE" valueClass="text-green-400" />}
+          {extraCount > 0 && <SummaryRow label={`🧄 ${extraCount} extra topping${extraCount>1?"s":""} x $0.99`} value={`+$${extra.toFixed(2)}`} valueClass="text-green-400" />}
+          {freeCount === 0 && itemToppings.length > 0 && <SummaryRow label={`🧄 ${itemToppings.length} topping${itemToppings.length>1?"s":""} x $0.99`} value={`+$${extra.toFixed(2)}`} valueClass="text-green-400" />}
+          <SummaryTotal value={`$${(10.99+extra).toFixed(2)}`} />
+          <button onClick={() => setCalzoneToppings(p => ({...p,[item.name]:[]}))} className="text-xs text-red-400 hover:text-red-300 font-bold mt-1">🔄 Reset</button>
+        </SummaryBox>
+      )}
+    </div>
+  </div>
+);
                 })}
               </div>
             </section>
