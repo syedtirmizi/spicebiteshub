@@ -1339,7 +1339,7 @@ Object.entries(calzoneToppings).forEach(([name, tops]) => {
                     <div className="flex gap-2 mb-4">
                       {crustTypes.map(c => <Chip key={c} active={order.crust === c} onClick={() => updateSpec(index,"crust",c)} color="yellow">{c}</Chip>)}
                     </div>
-                   <CookingInstructions order={order} onUpdate={(f,v) => updateSpec(index,f,v)} />
+                    <CookingInstructions order={order} onUpdate={(f,v) => updateSpec(index,f,v)} />
                     <Label>🧄 Extra Toppings {order.size && <span className="text-yellow-400 normal-case font-normal text-[10px] ml-1">({toppingPrices[order.size]} each{getSpecFreeCount(order) > 0 ? `, first ${getSpecFreeCount(order)} free` : ""})</span>}</Label>
                     {getSpecFreeCount(order) > 0 && <p className="text-yellow-400 text-xs font-bold mb-2">✅ First {getSpecFreeCount(order)} toppings included free — additional toppings {toppingPrices[order.size] || ""} each</p>}
                     <ToppingGrid selectedToppings={order.toppings} onToggle={t => toggleSpecTopping(index,t)} toppingList={toppings} />
@@ -1369,22 +1369,6 @@ Object.entries(calzoneToppings).forEach(([name, tops]) => {
                         </SummaryBox>
                       );
                     })()}
-                        {order.isHalf ? (
-                          <>
-                            {order.name && <SummaryRow label={`🍕 1st Half: ${order.name}`} />}
-                            {order.name2 && <SummaryRow label={`🍕 2nd Half: ${order.name2}`} />}
-                            {!order.name2 && <p className="text-orange-400 text-xs mt-1 mb-1">⚠️ Select a second half pizza</p>}
-                          </>
-                        ) : (
-                          order.name && <SummaryRow label={`🍕 ${order.name}`} />
-                        )}
-                        <SummaryRow label={`📏 ${order.size} Base`} value={specSizes.find(s=>s.size===order.size)?.price} />
-                        {order.crust && <SummaryRow label={`🫓 ${order.crust}`} />}
-                        {[order.sauceType, order.sauceAmount, order.bake, order.cut].filter(Boolean).length > 0 && <SummaryRow label={`🍅 ${[order.sauceType, order.sauceAmount, order.bake, order.cut].filter(Boolean).join(", ")}`} />}
-                        {order.toppings.length > 0 && <SummaryRow label={`🧄 ${order.toppings.length} extra topping${order.toppings.length>1?"s":""} x ${toppingPrices[order.size]}`} value={`+$${(order.toppings.length*parseFloat(toppingPrices[order.size].replace("$",""))).toFixed(2)}`} valueClass="text-green-400" />}
-                        <SummaryTotal value={`$${(parseFloat(specSizes.find(s=>s.size===order.size)?.price.replace("$","")||0)+(order.toppings.length*parseFloat((toppingPrices[order.size]||"$0").replace("$","")))).toFixed(2)}`} />
-                      </SummaryBox>
-                    )}
                   </div>
                 ))}
                 <button onClick={() => setSpecOrders(p => [...p, { ...emptySpec }])} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black text-sm py-3 rounded-2xl transition">➕ Add Another Pizza</button>
