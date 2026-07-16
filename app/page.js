@@ -183,7 +183,6 @@ const wingBakeOptions = ["Lite", "Well Done"];
     "Lean Ground Beef","Pepperoni","Smoked Bacon","Spinach Leaves","Sweet Pineapple","White Onions"
   ];
   const specialtyPizzas = [
-    { name: "Pepperoni Pizza", img: "pep pizza.jpg", desc: "Signature pizza sauce with pepperoni, melted mozzarella." },
     { name: "Signature Pizza", img: "signature p.png", desc: "Pepperoni, sausage, onion, mushrooms, green peppers & black olive." },
     { name: "Double Sausage & Double Pepperoni", img: "psp.jpg", desc: "Double sausage & double pepperoni, melted mozzarella." },
     { name: "Buffalo Chicken Pizza", img: "buffalo chicken pizza.jpg", desc: "Hot sauce, Bermuda onions & fresh chicken, melted mozzarella." },
