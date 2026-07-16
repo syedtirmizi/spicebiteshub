@@ -329,17 +329,17 @@ const getCalzoneExtraCount = (name, tops) => Math.max(0, tops.length - (calzoneF
   // ── Starters ─────────────────────────────────────────────────────────────────
   
     const starterItems = [
-  { img:"g knots.jpg", name:"Garlic Knots", price:7.49, desc:"Made-to-order dough knots smothered in garlic butter, topped with parmesan, served with marinara.", sizes:[{ label:"6 pcs", price:7.49 }, { label:"12 pcs", price:10.99 }] },
+  { img:"g knots.jpg", name:"Garlic Knots", price:7.49, desc:"Made-to-order dough knots smothered in garlic butter, topped with parmesan, served with marinara.", sizes:[{ label:"Small", price:7.49 }, { label:"Large", price:10.99 }] },
   { img:"m sticks.jpg", name:"Mozzarella Stix", price:7.49, desc:"Battered sticks filled with mozzarella cheese, served with marinara.", sizes:[{ label:"6 pcs", price:7.49 }, { label:"12 pcs", price:10.99 }] },
   { img:"poppers.jpg", name:"Jalapeno Poppers", price:7.49, desc:"Cream cheese filled peppers, served with ranch.", sizes:[{ label:"6 pcs", price:7.49 }, { label:"12 pcs", price:10.99 }] },
   { img:"toasted.jpg", name:"Toasted Ravioli", price:7.49, desc:"Toasted Italian ravioli served with marinara sauce.", sizes:[{ label:"6 pcs", price:7.49 }, { label:"12 pcs", price:10.99 }] },
   { img:"bosco.jpg", name:"Bosco Breadsticks", price:7.99, desc:"Breadsticks stuffed with mozzarella cheese, topped with garlic butter & parmesan, served with a side of marinara.", sizes:[{ label:"6 pcs", price:7.99 }, { label:"8 pcs", price:10.99 }] },
   { img:"cgb.jpg", name:"Cheesy Garlic Bread", price:7.99, desc:"Freshly made bread topped with our special garlic butter sauce and a generous amount of mozzarella, baked and served with marinara.", sizes:[{ label:"Small", price:7.99 }, { label:"Large", price:8.99 }] },
-  { img:"chicken f.png", name:"Chicken Fingers", price:8.49, desc:"Tender chicken fingers served with your choice of dipping sauce.", sizes:[{ label:"5 pcs", price:8.49 }, { label:"10 pcs", price:10.99 }] },
+  { img:"chicken f.png", name:"Chicken Fingers", price:8.49, desc:"Tender chicken fingers served with your choice of dipping sauce.", sizes:[{ label:"5 pcs", price:8.49 }, { label:"8 pcs", price:10.99 }] },
   { img:"fries1.jpg", name:"Fries", price:3.99, desc:"Crispy golden fries, lightly salted.", sizes:[{ label:"Small", price:3.99 }, { label:"Large", price:5.49 }] },
   { img:"cheese f.jpg", name:"Cheesy Fries", price:4.79, desc:"Hot crispy fries topped with rich melted cheese.", sizes:[{ label:"Small", price:4.79 }, { label:"Large", price:6.49 }] },
   { img:"bcf.png", name:"Bacon Cheese Fries", price:5.79, desc:"Crispy fries loaded with bacon and melted cheese.", sizes:[{ label:"Small", price:5.79 }, { label:"Large", price:7.49 }] },
-  { img:"season f.jpg", name:"Seasoned Fries", price:4.49, desc:"Fries tossed in our special house seasoning blend.", sizes:[{ label:"Small", price:4.49 }, { label:"Large", price:5.49 }] },
+  { img:"season f.jpg", name:"Seasoned Fries", price:4.49, desc:"Fries tossed in our special house seasoning blend.", sizes:[{ label:"Small", price:4.49 }, { label:"Large", price:5.99 }] },
 ];
   const [starterCart, setStarterCart] = useState({});
   const [starterNotes, setStarterNotes] = useState("");
