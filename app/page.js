@@ -2,6 +2,15 @@
 import { useState, useEffect, useRef } from "react";
 import Script from "next/script";
 
+// ─── Google Ads conversion: Order Now Click ───────────────────────────────────
+const trackOrderClick = () => {
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
+    window.gtag("event", "conversion", {
+      send_to: "AW-18420654533/YCb2CNTB6LsdEMXD089E",
+    });
+  }
+};
+
 // ─── Sidebar nav items ────────────────────────────────────────────────────────
 const NAV_SECTIONS = [
   { id: "section-deals",      label: "🔥 Deals",            group: "deals"    },
@@ -97,7 +106,7 @@ export default function Home() {
           );
         })}
         <div className="mt-auto px-2 pt-4 border-t border-zinc-700">
-          <a href="https://spiceandbiteshub.hungerrush.com" target="_blank" rel="noopener noreferrer" className="block bg-red-600 hover:bg-red-700 text-white font-black text-xs text-center py-3 rounded-xl transition">🛒 Order Now</a>
+          <a onClick={trackOrderClick} href="https://spiceandbiteshub.hungerrush.com" target="_blank" rel="noopener noreferrer" className="block bg-red-600 hover:bg-red-700 text-white font-black text-xs text-center py-3 rounded-xl transition">🛒 Order Now</a>
         </div>
       </nav>
     );
@@ -142,7 +151,7 @@ export default function Home() {
             <p className="text-gray-400 text-[10px]">American • Pakistani &amp; Indian</p>
           </div>
         </div>
-        <a href="https://spiceandbiteshub.hungerrush.com" target="_blank" rel="noopener noreferrer" className="bg-red-600 hover:bg-red-700 text-white font-black text-xs px-4 py-2 rounded-xl transition">🛒 Order Now</a>
+        <a onClick={trackOrderClick} href="https://spiceandbiteshub.hungerrush.com" target="_blank" rel="noopener noreferrer" className="bg-red-600 hover:bg-red-700 text-white font-black text-xs px-4 py-2 rounded-xl transition">🛒 Order Now</a>
       </header>
 
       {/* ── MOBILE TAB BAR ── */}
@@ -177,7 +186,7 @@ export default function Home() {
                   <p className="text-red-400 font-black text-lg md:text-2xl mt-1">{deal.price}</p>
                   <p className="text-gray-300 text-xs md:text-sm mt-1 max-w-md">{deal.desc}</p>
                   <div className="flex items-center gap-2 mt-3">
-                    <a href="https://spiceandbiteshub.hungerrush.com" target="_blank" rel="noopener noreferrer"
+                    <a onClick={trackOrderClick} href="https://spiceandbiteshub.hungerrush.com" target="_blank" rel="noopener noreferrer"
                       className="bg-red-600 hover:bg-red-700 text-white font-black text-xs md:text-sm px-5 py-2.5 rounded-xl transition w-fit">
                       🛒 Order Now
                     </a>
@@ -314,7 +323,7 @@ export default function Home() {
                   <p className="text-gray-300 text-sm leading-relaxed mb-2">Located at 7235 Fishers Landing Dr in Fishers, Indiana, we are proud to serve families, professionals, students and food lovers of all backgrounds.</p>
                   <p className="text-gray-300 text-sm leading-relaxed">Our doors are open seven days a week from 11 AM to midnight. We are not just feeding appetites — we are building memories, one plate at a time.</p>
                   <div className="mt-4 flex flex-wrap gap-3">
-                    <a href="https://spiceandbiteshub.hungerrush.com" target="_blank" rel="noopener noreferrer" className="inline-block bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-xl transition text-sm">🛒 Order Now</a>
+                    <a onClick={trackOrderClick} href="https://spiceandbiteshub.hungerrush.com" target="_blank" rel="noopener noreferrer" className="inline-block bg-red-600 hover:bg-red-700 text-white font-black px-6 py-3 rounded-xl transition text-sm">🛒 Order Now</a>
                   </div>
                 </div>
               </div>
@@ -329,7 +338,7 @@ export default function Home() {
                 <p>🕒 Mon–Sun: 11:00 AM – 12:00 AM</p>
               </div>
               <div className="mt-5 flex flex-wrap justify-center gap-3">
-                <a href="https://spiceandbiteshub.hungerrush.com" target="_blank" rel="noopener noreferrer" className="inline-block bg-red-600 hover:bg-red-700 text-white font-black px-8 py-3 rounded-xl transition">🛒 Order Now</a>
+                <a onClick={trackOrderClick} href="https://spiceandbiteshub.hungerrush.com" target="_blank" rel="noopener noreferrer" className="inline-block bg-red-600 hover:bg-red-700 text-white font-black px-8 py-3 rounded-xl transition">🛒 Order Now</a>
               </div>
             </section>
 
@@ -339,7 +348,7 @@ export default function Home() {
 
       {/* MOBILE STICKY BOTTOM BAR */}
       <div className="lg:hidden flex-shrink-0 bg-black/95 border-t border-zinc-800 p-3">
-        <a href="https://spiceandbiteshub.hungerrush.com" target="_blank" rel="noopener noreferrer" className="block bg-red-600 hover:bg-red-700 text-white font-black text-sm py-3 rounded-xl text-center transition">🛒 Order Now</a>
+        <a onClick={trackOrderClick} href="https://spiceandbiteshub.hungerrush.com" target="_blank" rel="noopener noreferrer" className="block bg-red-600 hover:bg-red-700 text-white font-black text-sm py-3 rounded-xl text-center transition">🛒 Order Now</a>
       </div>
 
     </div>
