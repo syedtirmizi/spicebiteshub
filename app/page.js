@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import Script from "next/script";
 
 // ─── Sidebar nav items ────────────────────────────────────────────────────────
 const NAV_SECTIONS = [
@@ -119,6 +120,18 @@ export default function Home() {
   // ─────────────────────────────────────────────────────────────────────────────
   return (
     <div className="bg-black text-white h-screen flex flex-col overflow-hidden">
+       <Script
+      src="https://www.googletagmanager.com/gtag/js?id=AW-18420654533"
+      strategy="afterInteractive"
+    />
+    <Script id="google-tag" strategy="afterInteractive">
+      {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-18420654533');
+      `}
+    </Script>
 
       {/* ── TOP NAV BAR ── */}
       <header className="flex-shrink-0 z-30 bg-black/95 border-b border-zinc-800 flex items-center justify-between px-4 py-3">
